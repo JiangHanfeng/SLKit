@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of SLKit.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/wiwi/SLKit",
+  "homepage": "https://github.com/JiangHanfeng/SLKit",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,11 +12,11 @@
     "wiwi": "809941200@qq.com"
   },
   "source": {
-    "git": "https://github.com/wiwi/SLKit.git",
+    "git": "https://github.com/JiangHanfeng/SLKit.git",
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0"
   },
-  "source_files": "SLKit/Classes/**/*"
+  "source_files": "SLKit/Classes/*.swift"
 }
