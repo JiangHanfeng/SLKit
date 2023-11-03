@@ -10,15 +10,15 @@ import CoreLocation
 import NetworkExtension
 import SystemConfiguration.CaptiveNetwork
 
-final class SLConnectivityManager {
-    static let shared = {
+public final class SLConnectivityManager {
+    public static let shared = {
         let singleInstance = SLConnectivityManager()
         return singleInstance
     }()
     
     private init() {}
     
-    func connectWiFi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
+    public func connectWiFi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
         guard !ssid.isEmpty && !passphrase.isEmpty else {
             DispatchQueue.main.async {
                 let error = NSError(domain: "SLKit.SLConnectivityManager", code: -999)
@@ -37,7 +37,7 @@ final class SLConnectivityManager {
         }
     }
     
-    func getConnectedWiFi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
+    public func getConnectedWiFi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
         guard CLLocationManager.authorizationStatus() == .authorized || CLLocationManager.authorizationStatus() == .authorizedAlways ||
                 CLLocationManager.authorizationStatus() == .authorizedWhenInUse else {
             CLLocationManager().requestAlwaysAuthorization()
