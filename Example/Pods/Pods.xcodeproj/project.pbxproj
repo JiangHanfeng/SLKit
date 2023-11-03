@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0C90E078991B893A4A407CE29D786FED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		43908E526CA2FCC4529A3AB7DC331D1F /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F901BEAB1067FE23B55E1888E4CCA521 /* ReplaceMe.swift */; };
+		43908E526CA2FCC4529A3AB7DC331D1F /* SLKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F901BEAB1067FE23B55E1888E4CCA521 /* SLKit.swift */; };
+		4BD765862AF4A7A6007422FE /* SLConnectivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD765852AF4A7A6007422FE /* SLConnectivityManager.swift */; };
 		56E0F1ECAE442198F1DD75CDF6C8F6F6 /* Pods-SLKit_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E0B67DE7B3983B776C3C82A4CC2F2BEE /* Pods-SLKit_Example-dummy.m */; };
 		7A4FE8F4E4369C294448BF3AE250A69B /* Pods-SLKit_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8120F6EB145C2E5550D95CA8FCC4DDB8 /* Pods-SLKit_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		95A0516158A09D7C282070EDEAA1722F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
@@ -39,14 +40,15 @@
 /* Begin PBXFileReference section */
 		05A36B1A066146D16735F020736AC1B5 /* Pods-SLKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SLKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		0B6A45BEAF6B9E91C97F837688F42724 /* SLKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SLKit-prefix.pch"; sourceTree = "<group>"; };
-		0EF96451540B1B8E7B78D06059934E99 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		0EF96451540B1B8E7B78D06059934E99 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		18CBB625D7AF9E2BBC0D56A46A708DE6 /* SLKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SLKit.debug.xcconfig; sourceTree = "<group>"; };
 		1C721DB498D1352C00B5C8E4C5E0C0EB /* SLKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SLKit.modulemap; sourceTree = "<group>"; };
-		300EE8E3AD8283A189093A171C6DAC39 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		300EE8E3AD8283A189093A171C6DAC39 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		347E116B3401CA3F3FCF8B0464D92EC2 /* Pods-SLKit_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-SLKit_Example-frameworks.sh"; sourceTree = "<group>"; };
 		37AA676ADF6C2A477A0AB25F71A1CB1F /* Pods-SLKit_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SLKit_Tests-Info.plist"; sourceTree = "<group>"; };
 		40DAFBEE9A3A39C1F35DE5408FB46479 /* Pods-SLKit_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SLKit_Example-umbrella.h"; sourceTree = "<group>"; };
-		4307A0032C3A9FC7398F7902F2169630 /* SLKit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SLKit; path = SLKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4307A0032C3A9FC7398F7902F2169630 /* SLKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SLKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4BD765852AF4A7A6007422FE /* SLConnectivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLConnectivityManager.swift; sourceTree = "<group>"; };
 		57206C6C6468E6375D5890833C2EB9BB /* Pods-SLKit_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SLKit_Tests.modulemap"; sourceTree = "<group>"; };
 		6B8B8933A3648217B2222241EE98D21A /* Pods-SLKit_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-SLKit_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -54,21 +56,21 @@
 		7A02D4321AA7DE928E93278B945B6D5E /* SLKit-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SLKit-dummy.m"; sourceTree = "<group>"; };
 		8120F6EB145C2E5550D95CA8FCC4DDB8 /* Pods-SLKit_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-SLKit_Tests-umbrella.h"; sourceTree = "<group>"; };
 		8ED6077C4344E4002309082FC7D3D4B0 /* SLKit-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SLKit-umbrella.h"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BAC2254FEB12007C3FC25966D3F9F0BF /* Pods-SLKit_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SLKit_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		BB605B4FA515B3B30E34D32921021F42 /* Pods-SLKit_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SLKit_Tests-dummy.m"; sourceTree = "<group>"; };
 		BC38216CCC24A430E0EBC41E6E605970 /* Pods-SLKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SLKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C5D8D3765E454E3EBC4C0EB53C285132 /* Pods-SLKit_Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-SLKit_Tests"; path = Pods_SLKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7FC9D943EF69517A58005C8BD1C2FD6 /* Pods-SLKit_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SLKit_Example-Info.plist"; sourceTree = "<group>"; };
-		C89E67098E5A489921C6FC2CB881C0E1 /* SLKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = SLKit.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C89E67098E5A489921C6FC2CB881C0E1 /* SLKit.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = SLKit.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CA7BDE744E7F459BE9805FE61A112285 /* Pods-SLKit_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SLKit_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		CB257A9F0B4C8B6D840DFF59E246E90E /* Pods-SLKit_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-SLKit_Example.modulemap"; sourceTree = "<group>"; };
 		CBC3D904AD008249264289BD895D8648 /* Pods-SLKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SLKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		D9D18FF5EED1ABB201ED2B44E7148610 /* Pods-SLKit_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-SLKit_Example"; path = Pods_SLKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9D18FF5EED1ABB201ED2B44E7148610 /* Pods_SLKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SLKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0B67DE7B3983B776C3C82A4CC2F2BEE /* Pods-SLKit_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SLKit_Example-dummy.m"; sourceTree = "<group>"; };
 		E4F3479FBE98DC97B57C00CA71C0D91D /* SLKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SLKit.release.xcconfig; sourceTree = "<group>"; };
 		F7C5706AC0A8280FDA6C18A661AFA37F /* Pods-SLKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SLKit_Example.release.xcconfig"; sourceTree = "<group>"; };
-		F901BEAB1067FE23B55E1888E4CCA521 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = SLKit/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
+		F901BEAB1067FE23B55E1888E4CCA521 /* SLKit.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SLKit.swift; path = SLKit/Classes/SLKit.swift; sourceTree = "<group>"; };
 		FD145832895EF14D977A294F48330862 /* SLKit-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SLKit-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +116,14 @@
 			);
 			name = "Pods-SLKit_Tests";
 			path = "Target Support Files/Pods-SLKit_Tests";
+			sourceTree = "<group>";
+		};
+		4BD765842AF4A782007422FE /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4BD765852AF4A7A6007422FE /* SLConnectivityManager.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
@@ -168,7 +178,8 @@
 		990050905E040A08E56E93824E0D6D9C /* SLKit */ = {
 			isa = PBXGroup;
 			children = (
-				F901BEAB1067FE23B55E1888E4CCA521 /* ReplaceMe.swift */,
+				4BD765842AF4A782007422FE /* Classes */,
+				F901BEAB1067FE23B55E1888E4CCA521 /* SLKit.swift */,
 				DECF3CA1FE0A3BFE489AB06E8BCB2833 /* Pod */,
 				6D8DD7F59F69CECCA05DA5D6CC20A001 /* Support Files */,
 			);
@@ -179,9 +190,9 @@
 		A9611503CE24951B2F89FAB7A36BB536 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D9D18FF5EED1ABB201ED2B44E7148610 /* Pods-SLKit_Example */,
+				D9D18FF5EED1ABB201ED2B44E7148610 /* Pods_SLKit_Example.framework */,
 				C5D8D3765E454E3EBC4C0EB53C285132 /* Pods-SLKit_Tests */,
-				4307A0032C3A9FC7398F7902F2169630 /* SLKit */,
+				4307A0032C3A9FC7398F7902F2169630 /* SLKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -269,7 +280,7 @@
 			);
 			name = "Pods-SLKit_Example";
 			productName = Pods_SLKit_Example;
-			productReference = D9D18FF5EED1ABB201ED2B44E7148610 /* Pods-SLKit_Example */;
+			productReference = D9D18FF5EED1ABB201ED2B44E7148610 /* Pods_SLKit_Example.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		65D9AB8E543414E16BAA2338CD53C71F /* Pods-SLKit_Tests */ = {
@@ -306,7 +317,7 @@
 			);
 			name = SLKit;
 			productName = SLKit;
-			productReference = 4307A0032C3A9FC7398F7902F2169630 /* SLKit */;
+			productReference = 4307A0032C3A9FC7398F7902F2169630 /* SLKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -317,6 +328,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					42EC7080BA411CB839F131AAE252F206 = {
+						LastSwiftMigration = 1500;
+					};
+				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -375,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BD765862AF4A7A6007422FE /* SLConnectivityManager.swift in Sources */,
 				56E0F1ECAE442198F1DD75CDF6C8F6F6 /* Pods-SLKit_Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -383,7 +400,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43908E526CA2FCC4529A3AB7DC331D1F /* ReplaceMe.swift in Sources */,
+				43908E526CA2FCC4529A3AB7DC331D1F /* SLKit.swift in Sources */,
 				CC8B1059F5CB89AD81238649D98EEA88 /* SLKit-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,6 +461,7 @@
 			baseConfigurationReference = F7C5706AC0A8280FDA6C18A661AFA37F /* Pods-SLKit_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -466,6 +484,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -489,7 +508,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/SLKit/SLKit-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/SLKit/SLKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SLKit/SLKit.modulemap";
 				PRODUCT_MODULE_NAME = SLKit;
@@ -593,8 +612,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -605,6 +623,7 @@
 			baseConfigurationReference = BC38216CCC24A430E0EBC41E6E605970 /* Pods-SLKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -627,6 +646,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -649,7 +670,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/SLKit/SLKit-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/SLKit/SLKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SLKit/SLKit.modulemap";
 				PRODUCT_MODULE_NAME = SLKit;
