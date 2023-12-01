@@ -30,40 +30,50 @@ class TestViewController: UIViewController {
         super.viewDidAppear(animated)
         guard isFirstAppear else { return }
         isFirstAppear = false
-        do {
-            try SLConnectivityManager.shared.startScanDevices { [weak self] isScanning in
-                self?.log(msg: "ble scan did \(isScanning ? "started" : "stopped")")
-            } filter: { peripheral, advertisementData, rssi in
-                if let services = advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID], !services.isEmpty {
-                    for uuid in services {
-                        let uuidString = uuid.uuidString
-                        if uuidString.hasPrefix("A6DDE9") && uuidString.contains("-") {
-                            print("uuidString = \(uuidString)")
-                            let components = uuid.uuidString.components(separatedBy: "-")
-//                            if components.count == 5 {
-//                                let
-//                                let mac = components[4]
-//                                let port = components[3]
-//                            }
-                        }
-                    }
-                    return true
-                } else {
-                    return false
-                }
-            } devicesUpdated: { array in
-                
+        SLNetworkManager.shared.getGatewayAddress { [weak self] gateway, error in
+            if let error {
+                self?.log("获取网关失败：\(error.localizedDescription)")
+            } else if let gateway {
+                self?.log("获取网关成功：\(gateway)")
+            } else {
+                self?.log("获取网关异常：未找到网关地址")
             }
-        } catch {
-            
         }
+//        SLConnectivityManager.shared.prepare()
+//        do {
+//            try SLConnectivityManager.shared.startScanDevices { [weak self] isScanning in
+//                self?.log(msg: "ble scan did \(isScanning ? "started" : "stopped")")
+//            } filter: { peripheral, advertisementData, rssi in
+//                if let services = advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID], !services.isEmpty {
+//                    for uuid in services {
+//                        let uuidString = uuid.uuidString
+//                        if uuidString.hasPrefix("A6DDE9") && uuidString.contains("-") {
+//                            print("uuidString = \(uuidString)")
+//                            let components = uuid.uuidString.components(separatedBy: "-")
+////                            if components.count == 5 {
+////                                let
+////                                let mac = components[4]
+////                                let port = components[3]
+////                            }
+//                        }
+//                    }
+//                    return true
+//                } else {
+//                    return false
+//                }
+//            } devicesUpdated: { array in
+//                
+//            }
+//        } catch {
+//            
+//        }
     }
     
-    private func log(msg: String) {
-        print("\n\(msg)\n")
+    private func log(_ msg: String) {
+        SLLog.debug(msg)
     }
     
     deinit {
-        log(msg: "\(self) deinit")
+        log("\(self) deinit")
     }
 }

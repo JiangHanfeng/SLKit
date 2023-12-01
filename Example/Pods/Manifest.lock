@@ -1,11 +1,19 @@
 PODS:
+  - ObjcExceptionBridging (1.0.1):
+    - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
+  - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
   - RxCocoa (6.6.0):
     - RxRelay (= 6.6.0)
     - RxSwift (= 6.6.0)
   - RxRelay (6.6.0):
     - RxSwift (= 6.6.0)
   - RxSwift (6.6.0)
-  - SLKit (0.1.1)
+  - SLKit (0.1.1):
+    - XCGLogger
+  - XCGLogger (7.0.1):
+    - XCGLogger/Core (= 7.0.1)
+  - XCGLogger/Core (7.0.1):
+    - ObjcExceptionBridging
 
 DEPENDENCIES:
   - RxCocoa
@@ -14,19 +22,23 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - ObjcExceptionBridging
     - RxCocoa
     - RxRelay
     - RxSwift
+    - XCGLogger
 
 EXTERNAL SOURCES:
   SLKit:
     :path: "../"
 
 SPEC CHECKSUMS:
+  ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
-  SLKit: dba5c121fc88234b36b980ce95a4be4000245ee3
+  SLKit: a48247ad908141a3f514443236cc8c670eede2e1
+  XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
 PODFILE CHECKSUM: 7f185edb98187e178cdb50e4dc75a53538038389
 
