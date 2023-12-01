@@ -1,16 +1,33 @@
 PODS:
-  - SLKit (0.1.0)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
+  - SLKit (0.1.1)
 
 DEPENDENCIES:
+  - RxCocoa
+  - RxSwift
   - SLKit (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - RxCocoa
+    - RxRelay
+    - RxSwift
 
 EXTERNAL SOURCES:
   SLKit:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SLKit: 31e132f3a361ceb691898aa682cd5948def6c0cd
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
+  SLKit: dba5c121fc88234b36b980ce95a4be4000245ee3
 
-PODFILE CHECKSUM: f72b4982b5f4e46401eb19f97a10b66b47562768
+PODFILE CHECKSUM: 7f185edb98187e178cdb50e4dc75a53538038389
 
 COCOAPODS: 1.13.0

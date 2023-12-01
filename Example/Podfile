@@ -4,6 +4,8 @@ platform :ios, '11.0'
 
 target 'SLKit_Example' do
   pod 'SLKit', :path => '../'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 
   target 'SLKit_Tests' do
     inherit! :search_paths
