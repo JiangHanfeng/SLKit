@@ -7,8 +7,6 @@
 
 import Foundation
 import CoreLocation
-import NetworkExtension
-import SystemConfiguration.CaptiveNetwork
 import CoreBluetooth
 
 public final class SLConnectivityManager {
@@ -17,68 +15,92 @@ public final class SLConnectivityManager {
         return singleInstance
     }()
     
-    private init() {}
-    
-    public func connectWiFi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
-        guard !ssid.isEmpty && !passphrase.isEmpty else {
-            DispatchQueue.main.async {
-                let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled, userInfo: [NSLocalizedDescriptionKey:"请指定要连接WiFi的名称及密码"])
-                completionHandler(error)
-            }
-            return
-        }
-        if #available(iOS 11.0, *) {
-            let configuration = NEHotspotConfiguration(ssid: ssid, passphrase: passphrase, isWEP: false)
-            NEHotspotConfigurationManager.shared.apply(configuration, completionHandler: completionHandler)
-        } else {
-            DispatchQueue.main.async {
-                let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled, userInfo: [NSLocalizedDescriptionKey:"系统版本低于iOS11，暂不支持连接指定WiFi"])
-                completionHandler(error)
-            }
+    var a2dpDevice: SLA2DPDevice? {
+        get {
+            return SLA2DPMonitor.shared.connectedDevice()
         }
     }
     
-    public func getConnectedWiFi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
-        guard CLLocationManager.authorizationStatus() == .authorized || CLLocationManager.authorizationStatus() == .authorizedAlways ||
-                CLLocationManager.authorizationStatus() == .authorizedWhenInUse else {
-            CLLocationManager().requestAlwaysAuthorization()
-            let error = NSError(domain: NSURLErrorDomain, code: NSURLErrorUserAuthenticationRequired, userInfo: [NSLocalizedDescriptionKey:"获取已连接WiFi信息需定位权限"])
-            completionHandler(nil, nil, error)
-            return
-        }
-        if #available(iOS 14.0, *) {
-            NEHotspotNetwork.fetchCurrent { network in
-                completionHandler(network?.ssid, network?.bssid, nil)
-            }
-        } else {
-            guard let interfaceNames = CNCopySupportedInterfaces() as? [String] else { return }
-            guard let name = interfaceNames.first, let info = CNCopyCurrentNetworkInfo(name as CFString) as? [String: Any] else {
-                completionHandler(nil, nil, nil)
-                return
-            }
-            let ssid = info["ssid"] as? String
-            let bssid = info["bssid"] as? String
-            completionHandler(ssid, bssid, nil)
-        }
+    private init() {
+        
     }
     
-    public func startScanDevices(
-        scanStateUpdated: @escaping ((_ isScanning: Bool) -> Void),
-        filter: @escaping ((_ peripheral: CBPeripheral, _ advertisementData: [String : Any], _ rssi: NSNumber) -> Bool),
-        devicesUpdated: @escaping ((_ array: [SLDevice]) -> Void)
-    ) throws {
-        do {
-            try SLBleScanTask { isScanning in
-                scanStateUpdated(isScanning)
-            } peripheralDiscoveredCallback: { peripheral, advertisementData, rssi in
-                if filter(peripheral, advertisementData, rssi) {
-                    
-                } else {
-                    
+    public func connectWifi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
+        SLNetworkManager.shared.connectWifi(ssid: ssid, passphrase: passphrase, completionHandler: completionHandler)
+    }
+           
+    public func getConnectedWifi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
+        SLNetworkManager.shared.getConnectedWifi(completionHandler: completionHandler)
+    }
+    
+    public func startScan<U: SLDeviceBuilder>(
+        deviceBuilder: U.Type,
+        timeout: SLTimeInterval = .infinity,
+        filter: ((U.Device) -> Bool)? = nil,
+        discovered: @escaping ((_ devices: [U.Device]) -> Bool),
+        errored: @escaping ((SLError) -> Void),
+        finished: @escaping (() -> Void)
+    ) {
+        SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
+            .start(timeout: timeout, filter: filter, discovered: discovered, errored: errored, finished: finished)
+    }
+    
+    public func stopScan() {
+        SLBleManager.shared.stopScan()
+    }
+    
+    public func connectDevice<T: SLBaseDevice>(_ device: T) {
+        switch device.type {
+        case .freestyle(key: _):
+            let connection = SLBleConnection(peripheral: device.peripheral) { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    break
                 }
-            }.resume()
-        } catch let e {
-            throw e
+            } disconnectedCallback: { error in
+                
+            }
+        default:
+            break
         }
+    }
+    
+    public func disconnectDevice() {
+        SLBleManager.shared.disconnectAll()
+    }
+    
+    public func asyncScan<U: SLDeviceBuilder>(
+        deviceBuilder: U.Type,
+        timeout: SLTimeInterval = .infinity,
+        filter: @escaping ((U.Device) -> Bool)
+    ) async throws -> U.Device {
+        let task = SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
+        return try await task.asyncStart(timeout: timeout, filter: filter)
+    }
+    
+    public func asyncBleConnection<U: SLDeviceBuilder>(
+        deviceBuilder: U.Type,
+        timeout: SLTimeInterval = .seconds(15),
+        target: @escaping ((U.Device) -> Bool)
+    ) async throws -> Bool {
+        let device = try await asyncScan(deviceBuilder: deviceBuilder, timeout: timeout) { target($0) }
+        return try await withCheckedThrowingContinuation { continuation in
+            let task = SLBleConnection(peripheral: device.peripheral, timeout: timeout) { result in
+                switch result {
+                case .success(_):
+                    continuation.resume(returning: true)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            } disconnectedCallback: { error in
+                
+            }
+        }
+    }
+    
+    public func asyncTcpSocketConnection() {
+        
     }
 }

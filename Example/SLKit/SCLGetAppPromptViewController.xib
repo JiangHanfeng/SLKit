@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLGetAppPromptViewController" customModule="SLKit_Example" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="kMm-ht-Hwv">
+                    <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vA9-L5-Pbe" userLabel="Content View">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="294.66666666666669"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="获取应用" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2t2-Ni-zFa">
+                                    <rect key="frame" x="157.66666666666666" y="92" width="77.666666666666657" height="26"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="26" id="heH-N2-8pq"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yov-2R-1mO">
+                                    <rect key="frame" x="32" y="150" width="329" height="89.666666666666686"/>
+                                    <string key="text">您可以打开链接下载超级互联客户端，请确保进入到下一步前，您的联想电脑出厂时已预装此应用。
+
+此应用为限定功能，感谢您对联想的品牌支持。</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="下载地址:  www.freestyle.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u2l-b0-1FA">
+                                    <rect key="frame" x="32" y="263.66666666666669" width="204" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.34509803921568627" green="0.42352941176470588" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y7y-cZ-YZU">
+                                    <rect key="frame" x="236" y="250.66666666666669" width="44" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="1vg-iC-Wjl"/>
+                                        <constraint firstAttribute="width" constant="44" id="6Ml-4H-QSQ"/>
+                                    </constraints>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" image="icon_copy"/>
+                                    <connections>
+                                        <action selector="onCopy" destination="-1" eventType="touchUpInside" id="C64-wJ-E8T"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="yov-2R-1mO" secondAttribute="trailing" constant="32" id="6DT-0h-2ed"/>
+                                <constraint firstItem="2t2-Ni-zFa" firstAttribute="centerX" secondItem="vA9-L5-Pbe" secondAttribute="centerX" id="AFB-3i-pTc"/>
+                                <constraint firstItem="yov-2R-1mO" firstAttribute="top" secondItem="2t2-Ni-zFa" secondAttribute="bottom" constant="32" id="EUJ-h9-7GE"/>
+                                <constraint firstItem="yov-2R-1mO" firstAttribute="leading" secondItem="vA9-L5-Pbe" secondAttribute="leading" constant="32" id="FGb-Sj-xTP"/>
+                                <constraint firstItem="2t2-Ni-zFa" firstAttribute="top" secondItem="vA9-L5-Pbe" secondAttribute="top" constant="92" id="g2r-zN-mSD"/>
+                                <constraint firstItem="Y7y-cZ-YZU" firstAttribute="leading" secondItem="u2l-b0-1FA" secondAttribute="trailing" id="jhO-vn-zmw"/>
+                                <constraint firstItem="Y7y-cZ-YZU" firstAttribute="centerY" secondItem="u2l-b0-1FA" secondAttribute="centerY" id="lCW-23-4dT"/>
+                                <constraint firstAttribute="bottom" secondItem="Y7y-cZ-YZU" secondAttribute="bottom" id="uk9-Iw-oEK"/>
+                                <constraint firstItem="u2l-b0-1FA" firstAttribute="leading" secondItem="vA9-L5-Pbe" secondAttribute="leading" constant="32" id="ye8-8j-Qh8"/>
+                                <constraint firstItem="u2l-b0-1FA" firstAttribute="top" secondItem="yov-2R-1mO" secondAttribute="bottom" constant="24" id="zep-OQ-T7B"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="bLA-fy-c2Y"/>
+                    <constraints>
+                        <constraint firstItem="vA9-L5-Pbe" firstAttribute="leading" secondItem="J4h-Xf-Tdg" secondAttribute="leading" id="BDw-5Y-ZDo"/>
+                        <constraint firstItem="vA9-L5-Pbe" firstAttribute="top" secondItem="J4h-Xf-Tdg" secondAttribute="top" id="IkJ-Lk-Kpv"/>
+                        <constraint firstItem="vA9-L5-Pbe" firstAttribute="trailing" secondItem="J4h-Xf-Tdg" secondAttribute="trailing" id="S6c-80-J0O"/>
+                    </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="J4h-Xf-Tdg"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="Xnt-NG-kAx"/>
+                </scrollView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="vA9-L5-Pbe" firstAttribute="width" secondItem="fnl-2z-Ty3" secondAttribute="width" id="RMx-m8-w4Q"/>
+            </constraints>
+            <point key="canvasLocation" x="223.66412213740458" y="-27.464788732394368"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_copy" width="20" height="20"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

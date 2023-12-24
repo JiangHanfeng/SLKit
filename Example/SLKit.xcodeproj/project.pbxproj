@@ -7,7 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */; };
+		4B23D1F02B330381008724E5 /* SCLGetAppPromptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */; };
+		4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */; };
+		4B23D1F42B3306D8008724E5 /* SCLRequestPermissionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B23D1F22B3306D8008724E5 /* SCLRequestPermissionViewController.xib */; };
+		4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1F52B330B5C008724E5 /* SCLWelcomeViewController.swift */; };
+		4B23D1F82B330B5C008724E5 /* SCLWelcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B23D1F62B330B5C008724E5 /* SCLWelcomeViewController.xib */; };
+		4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */; };
+		4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2694EE2B30448200B116BA /* SCLSettingCellModel.swift */; };
+		4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2694F02B304BB400B116BA /* SCLSettingCell.swift */; };
+		4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2694F12B304BB500B116BA /* SCLSettingCell.xib */; };
+		4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */; };
+		4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2694F62B31347400B116BA /* SCLBaseViewController.swift */; };
+		4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */; };
+		4B2CA3832B2FD6A700D7F024 /* SCLHomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */; };
+		4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */; };
+		4B2CA3872B301C6C00D7F024 /* SCLConnectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */; };
+		4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */; };
+		4B2CA38F2B301DCA00D7F024 /* SCLDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */; };
+		4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */; };
+		4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */; };
+		4B4290DE2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */; };
+		4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */; };
+		4B4290E22B38196E000EE7AD /* SCLPhonePickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4290E02B38196E000EE7AD /* SCLPhonePickerCell.xib */; };
+		4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290E32B386083000EE7AD /* SCLPairViewController.swift */; };
+		4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */; };
+		4B4290EB2B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4290E92B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib */; };
 		4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */; };
+		4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */; };
+		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
+		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
+		4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */; };
+		4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34072B3441CB00E14D40 /* SCLUtil.swift */; };
+		4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34092B34436C00E14D40 /* SCLQRResult.swift */; };
+		4BDE22E42B31407600D1A50C /* SCLPairAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */; };
+		4BDE22E52B31407600D1A50C /* SCLPairAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */; };
+		4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */; };
+		4BDE22EF2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */; };
+		4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */; };
+		4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -32,7 +70,45 @@
 		0EAC628545CAA7CE11A3FDBE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Example.debug.xcconfig"; path = "Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		18CE967A18D972234CC35A2A /* Pods_SLKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SLKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetAppPromptViewController.swift; sourceTree = "<group>"; };
+		4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLGetAppPromptViewController.xib; sourceTree = "<group>"; };
+		4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLRequestPermissionViewController.swift; sourceTree = "<group>"; };
+		4B23D1F22B3306D8008724E5 /* SCLRequestPermissionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLRequestPermissionViewController.xib; sourceTree = "<group>"; };
+		4B23D1F52B330B5C008724E5 /* SCLWelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLWelcomeViewController.swift; sourceTree = "<group>"; };
+		4B23D1F62B330B5C008724E5 /* SCLWelcomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLWelcomeViewController.xib; sourceTree = "<group>"; };
+		4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSettingViewController.swift; sourceTree = "<group>"; };
+		4B2694EE2B30448200B116BA /* SCLSettingCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSettingCellModel.swift; sourceTree = "<group>"; };
+		4B2694F02B304BB400B116BA /* SCLSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSettingCell.swift; sourceTree = "<group>"; };
+		4B2694F12B304BB500B116BA /* SCLSettingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLSettingCell.xib; sourceTree = "<group>"; };
+		4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSettingSectionBackgroundView.swift; sourceTree = "<group>"; };
+		4B2694F62B31347400B116BA /* SCLBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLBaseViewController.swift; sourceTree = "<group>"; };
+		4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLHomeViewController.swift; sourceTree = "<group>"; };
+		4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLHomeViewController.xib; sourceTree = "<group>"; };
+		4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLConnectionViewController.swift; sourceTree = "<group>"; };
+		4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLConnectionViewController.xib; sourceTree = "<group>"; };
+		4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLDeviceViewController.swift; sourceTree = "<group>"; };
+		4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLDeviceViewController.xib; sourceTree = "<group>"; };
+		4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLExtension.swift; sourceTree = "<group>"; };
+		4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPhonePickerAlertViewController.swift; sourceTree = "<group>"; };
+		4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPhonePickerAlertViewController.xib; sourceTree = "<group>"; };
+		4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPhonePickerCell.swift; sourceTree = "<group>"; };
+		4B4290E02B38196E000EE7AD /* SCLPhonePickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPhonePickerCell.xib; sourceTree = "<group>"; };
+		4B4290E32B386083000EE7AD /* SCLPairViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairViewController.swift; sourceTree = "<group>"; };
+		4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLAirPlayGuideViewController.swift; sourceTree = "<group>"; };
+		4B4290E92B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLAirPlayGuideViewController.xib; sourceTree = "<group>"; };
 		4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDevice.swift; sourceTree = "<group>"; };
+		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
+		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
+		4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDeviceBuilder.swift; sourceTree = "<group>"; };
+		4BCE34072B3441CB00E14D40 /* SCLUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLUtil.swift; sourceTree = "<group>"; };
+		4BCE34092B34436C00E14D40 /* SCLQRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLQRResult.swift; sourceTree = "<group>"; };
+		4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairAlertViewController.swift; sourceTree = "<group>"; };
+		4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPairAlertViewController.xib; sourceTree = "<group>"; };
+		4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPrivacyPolicyViewController.swift; sourceTree = "<group>"; };
+		4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPrivacyPolicyViewController.xib; sourceTree = "<group>"; };
+		4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLWebViewController.swift; sourceTree = "<group>"; };
+		4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		540536ACE968C6C213F41F95 /* Pods-SLKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Tests.release.xcconfig"; path = "Target Support Files/Pods-SLKit_Tests/Pods-SLKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SLKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SLKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,12 +169,50 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */,
+				4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */,
+				4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */,
+				4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
+				4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */,
+				4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */,
+				4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */,
+				4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */,
+				4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */,
+				4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */,
+				4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */,
+				4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */,
+				4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */,
+				4B2694EE2B30448200B116BA /* SCLSettingCellModel.swift */,
+				4B2694F02B304BB400B116BA /* SCLSettingCell.swift */,
+				4B2694F12B304BB500B116BA /* SCLSettingCell.xib */,
+				4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */,
+				4B2694F62B31347400B116BA /* SCLBaseViewController.swift */,
+				4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */,
+				4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */,
+				4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */,
+				4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */,
+				4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */,
+				4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */,
+				4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */,
+				4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */,
+				4B23D1F22B3306D8008724E5 /* SCLRequestPermissionViewController.xib */,
+				4B23D1F52B330B5C008724E5 /* SCLWelcomeViewController.swift */,
+				4B23D1F62B330B5C008724E5 /* SCLWelcomeViewController.xib */,
+				4BCE34072B3441CB00E14D40 /* SCLUtil.swift */,
+				4BCE34092B34436C00E14D40 /* SCLQRResult.swift */,
+				4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */,
+				4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */,
+				4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */,
+				4B4290E02B38196E000EE7AD /* SCLPhonePickerCell.xib */,
+				4B4290E32B386083000EE7AD /* SCLPairViewController.swift */,
+				4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */,
+				4B4290E92B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -248,8 +362,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B2CA3832B2FD6A700D7F024 /* SCLHomeViewController.xib in Resources */,
+				4B2CA38F2B301DCA00D7F024 /* SCLDeviceViewController.xib in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				4BDE22EF2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib in Resources */,
+				4B4290DE2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib in Resources */,
+				4B4290E22B38196E000EE7AD /* SCLPhonePickerCell.xib in Resources */,
+				4B2CA3872B301C6C00D7F024 /* SCLConnectionViewController.xib in Resources */,
+				4B23D1F42B3306D8008724E5 /* SCLRequestPermissionViewController.xib in Resources */,
+				4BDE22E52B31407600D1A50C /* SCLPairAlertViewController.xib in Resources */,
+				4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				4B4290EB2B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib in Resources */,
+				4B23D1F02B330381008724E5 /* SCLGetAppPromptViewController.xib in Resources */,
+				4B23D1F82B330B5C008724E5 /* SCLWelcomeViewController.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,20 +419,30 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/LLNetworkAccessibility-Swift/LLNetworkAccessibility_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjcExceptionBridging/ObjcExceptionBridging.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SLKit/SLKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/XCGLogger/XCGLogger.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LLNetworkAccessibility_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjcExceptionBridging.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SLKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XCGLogger.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -343,8 +479,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */,
+				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
+				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
+				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
+				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
+				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
+				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
+				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
+				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
+				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
+				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
+				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
+				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
+				4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */,
+				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
+				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
+				4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */,
+				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
+				4BDE22E42B31407600D1A50C /* SCLPairAlertViewController.swift in Sources */,
+				4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */,
+				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
+				4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */,
+				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,
+				4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */,
+				4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,7 +593,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -477,7 +639,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -492,10 +654,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CU2MX8X5N6;
 				INFOPLIST_FILE = SLKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.igrs.demo.SLKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -509,10 +671,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = CU2MX8X5N6;
 				INFOPLIST_FILE = SLKit/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.igrs.demo.SLKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -533,7 +695,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -553,7 +715,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

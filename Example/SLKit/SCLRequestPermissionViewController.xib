@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLRequestPermissionViewController" customModule="SLKit_Example" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEa-K1-FR5">
+                    <rect key="frame" x="0.0" y="59" width="393" height="743"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYX-OU-28c" userLabel="Content View">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="524"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启权限" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGH-J6-I4j">
+                                    <rect key="frame" x="157.66666666666666" y="92" width="77.666666666666657" height="26"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="26" id="ZHc-Et-meT"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="在使用本应用过程中，我们将访问并向您申请以下权限：" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-xg-Zda">
+                                    <rect key="frame" x="32" y="150" width="329" height="36"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="必要权限：" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oDj-95-BDb">
+                                    <rect key="frame" x="32" y="218" width="69" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_auth_location" translatesAutoresizingMaskIntoConstraints="NO" id="SKT-jZ-O2d">
+                                    <rect key="frame" x="32" y="268" width="40" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="40" id="8wr-Pe-K7d"/>
+                                        <constraint firstAttribute="height" constant="40" id="Sfd-Tr-RaS"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="获取设备的位置信息" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CFm-aJ-eto">
+                                    <rect key="frame" x="80" y="268" width="138" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于开启并连接附近设备的WLAN" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ORY-4W-h5L">
+                                    <rect key="frame" x="80" y="293.66666666666669" width="184" height="14.333333333333314"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_auth_bt" translatesAutoresizingMaskIntoConstraints="NO" id="1Zs-qw-bXZ">
+                                    <rect key="frame" x="32" y="340" width="40" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="40" id="7xh-sw-XNr"/>
+                                        <constraint firstAttribute="height" constant="40" id="CsS-3R-reQ"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启/关闭蓝牙" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHr-dX-LyJ">
+                                    <rect key="frame" x="80" y="340" width="100" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于快速发现附近需要连接的设备" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R3L-sM-n4m">
+                                    <rect key="frame" x="80" y="365.66666666666669" width="184" height="14.333333333333314"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_auth_wlan" translatesAutoresizingMaskIntoConstraints="NO" id="Xmc-Ks-J8s">
+                                    <rect key="frame" x="32" y="412" width="40" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="Gvo-s7-BRA"/>
+                                        <constraint firstAttribute="width" constant="40" id="khe-Va-ccv"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启/关闭WLAN" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSB-rN-hKm">
+                                    <rect key="frame" x="80" y="412" width="114.66666666666669" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于投屏和传输文件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JT0-2l-GdR">
+                                    <rect key="frame" x="80" y="437.66666666666669" width="110.33333333333331" height="14.333333333333314"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_auth_file" translatesAutoresizingMaskIntoConstraints="NO" id="dnH-mv-f9X">
+                                    <rect key="frame" x="32" y="484" width="40" height="40"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="5xd-3S-Wh7"/>
+                                        <constraint firstAttribute="width" constant="40" id="7bO-46-rwN"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文件访问权限" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-N3-sj7">
+                                    <rect key="frame" x="80" y="484" width="92" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于向附近的设备传输文件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HhQ-sN-7Ay">
+                                    <rect key="frame" x="80.000000000000014" y="509.66666666666657" width="147.33333333333337" height="14.333333333333314"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="dnH-mv-f9X" firstAttribute="top" secondItem="Xmc-Ks-J8s" secondAttribute="bottom" constant="32" id="102-UO-PXl"/>
+                                <constraint firstItem="dnH-mv-f9X" firstAttribute="leading" secondItem="eYX-OU-28c" secondAttribute="leading" constant="32" id="23l-jd-psJ"/>
+                                <constraint firstItem="ORY-4W-h5L" firstAttribute="leading" secondItem="SKT-jZ-O2d" secondAttribute="trailing" constant="8" symbolic="YES" id="3Z7-2z-DJb"/>
+                                <constraint firstItem="JT0-2l-GdR" firstAttribute="leading" secondItem="Xmc-Ks-J8s" secondAttribute="trailing" constant="8" symbolic="YES" id="48J-8J-Phf"/>
+                                <constraint firstItem="kSB-rN-hKm" firstAttribute="leading" secondItem="Xmc-Ks-J8s" secondAttribute="trailing" constant="8" symbolic="YES" id="5zz-zf-kKx"/>
+                                <constraint firstItem="1Zs-qw-bXZ" firstAttribute="leading" secondItem="eYX-OU-28c" secondAttribute="leading" constant="32" id="Dgn-wP-y9h"/>
+                                <constraint firstItem="SsF-xg-Zda" firstAttribute="top" secondItem="CGH-J6-I4j" secondAttribute="bottom" constant="32" id="ErN-8j-Xu8"/>
+                                <constraint firstItem="CGH-J6-I4j" firstAttribute="centerX" secondItem="eYX-OU-28c" secondAttribute="centerX" id="G7l-Xx-vUR"/>
+                                <constraint firstItem="1Zs-qw-bXZ" firstAttribute="top" secondItem="SKT-jZ-O2d" secondAttribute="bottom" constant="32" id="KWP-30-mXL"/>
+                                <constraint firstItem="SKT-jZ-O2d" firstAttribute="top" secondItem="oDj-95-BDb" secondAttribute="bottom" constant="32" id="Nz7-PF-CJn"/>
+                                <constraint firstItem="kSB-rN-hKm" firstAttribute="top" secondItem="Xmc-Ks-J8s" secondAttribute="top" id="WoK-fX-mXr"/>
+                                <constraint firstItem="CFm-aJ-eto" firstAttribute="leading" secondItem="SKT-jZ-O2d" secondAttribute="trailing" constant="8" symbolic="YES" id="XnB-FI-KpE"/>
+                                <constraint firstItem="aHr-dX-LyJ" firstAttribute="leading" secondItem="1Zs-qw-bXZ" secondAttribute="trailing" constant="8" symbolic="YES" id="YOg-SH-mOc"/>
+                                <constraint firstItem="ORY-4W-h5L" firstAttribute="bottom" secondItem="SKT-jZ-O2d" secondAttribute="bottom" id="YTd-Pi-ieb"/>
+                                <constraint firstItem="HhQ-sN-7Ay" firstAttribute="leading" secondItem="dnH-mv-f9X" secondAttribute="trailing" constant="8" symbolic="YES" id="ZZs-1o-GOK"/>
+                                <constraint firstItem="aYO-N3-sj7" firstAttribute="top" secondItem="dnH-mv-f9X" secondAttribute="top" id="cXI-Ov-NGz"/>
+                                <constraint firstItem="Xmc-Ks-J8s" firstAttribute="leading" secondItem="eYX-OU-28c" secondAttribute="leading" constant="32" id="cch-pT-NWf"/>
+                                <constraint firstItem="aHr-dX-LyJ" firstAttribute="top" secondItem="1Zs-qw-bXZ" secondAttribute="top" id="drE-l6-kgp"/>
+                                <constraint firstItem="Xmc-Ks-J8s" firstAttribute="top" secondItem="1Zs-qw-bXZ" secondAttribute="bottom" constant="32" id="gQU-QM-QuR"/>
+                                <constraint firstItem="aYO-N3-sj7" firstAttribute="leading" secondItem="dnH-mv-f9X" secondAttribute="trailing" constant="8" symbolic="YES" id="hJS-eh-7zh"/>
+                                <constraint firstItem="CFm-aJ-eto" firstAttribute="top" secondItem="SKT-jZ-O2d" secondAttribute="top" id="hgf-cQ-VhP"/>
+                                <constraint firstAttribute="bottom" secondItem="HhQ-sN-7Ay" secondAttribute="bottom" id="jOY-IX-3wd"/>
+                                <constraint firstItem="HhQ-sN-7Ay" firstAttribute="bottom" secondItem="dnH-mv-f9X" secondAttribute="bottom" id="k0z-Ki-N9Y"/>
+                                <constraint firstItem="R3L-sM-n4m" firstAttribute="bottom" secondItem="1Zs-qw-bXZ" secondAttribute="bottom" id="kIV-nN-6cd"/>
+                                <constraint firstItem="oDj-95-BDb" firstAttribute="top" secondItem="SsF-xg-Zda" secondAttribute="bottom" constant="32" id="ny8-Yd-EDw"/>
+                                <constraint firstItem="JT0-2l-GdR" firstAttribute="bottom" secondItem="Xmc-Ks-J8s" secondAttribute="bottom" id="rzv-hp-U2E"/>
+                                <constraint firstItem="R3L-sM-n4m" firstAttribute="leading" secondItem="1Zs-qw-bXZ" secondAttribute="trailing" constant="8" symbolic="YES" id="vIv-Ds-Egy"/>
+                                <constraint firstItem="CGH-J6-I4j" firstAttribute="top" secondItem="eYX-OU-28c" secondAttribute="top" constant="92" id="wm8-2m-04c"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="SsF-xg-Zda" firstAttribute="leading" secondItem="U3O-NI-ZJE" secondAttribute="leading" constant="32" id="CQ4-n0-oRy"/>
+                        <constraint firstItem="eYX-OU-28c" firstAttribute="leading" secondItem="U3O-NI-ZJE" secondAttribute="leading" id="G6v-0X-gv5"/>
+                        <constraint firstItem="SKT-jZ-O2d" firstAttribute="leading" secondItem="U3O-NI-ZJE" secondAttribute="leading" constant="32" id="Pzj-ZX-Rc5"/>
+                        <constraint firstItem="oDj-95-BDb" firstAttribute="leading" secondItem="U3O-NI-ZJE" secondAttribute="leading" constant="32" id="Xx3-IU-JI1"/>
+                        <constraint firstItem="eYX-OU-28c" firstAttribute="bottom" secondItem="U3O-NI-ZJE" secondAttribute="bottom" id="aEd-3O-Z2b"/>
+                        <constraint firstItem="U3O-NI-ZJE" firstAttribute="trailing" secondItem="SsF-xg-Zda" secondAttribute="trailing" constant="32" id="gwC-fV-2fu"/>
+                        <constraint firstItem="eYX-OU-28c" firstAttribute="top" secondItem="U3O-NI-ZJE" secondAttribute="top" id="lbH-dM-Nom"/>
+                        <constraint firstItem="U3O-NI-ZJE" firstAttribute="trailing" secondItem="eYX-OU-28c" secondAttribute="trailing" id="nQQ-7h-QdW"/>
+                    </constraints>
+                    <viewLayoutGuide key="contentLayoutGuide" id="U3O-NI-ZJE"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="z0W-0Y-B29"/>
+                </scrollView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="eYX-OU-28c" firstAttribute="width" secondItem="fnl-2z-Ty3" secondAttribute="width" id="TXt-Jd-5ea"/>
+            </constraints>
+            <point key="canvasLocation" x="342.74809160305341" y="-41.549295774647888"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="icon_auth_bt" width="36" height="36"/>
+        <image name="icon_auth_file" width="36" height="36"/>
+        <image name="icon_auth_location" width="36" height="36"/>
+        <image name="icon_auth_wlan" width="36" height="36"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

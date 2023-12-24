@@ -1,4 +1,7 @@
 PODS:
+  - CocoaAsyncSocket (7.6.5)
+  - HandyJSON (5.0.2)
+  - LLNetworkAccessibility-Swift (1.0.3)
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
   - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
@@ -9,23 +12,40 @@ PODS:
     - RxSwift (= 6.6.0)
   - RxSwift (6.6.0)
   - SLKit (0.1.1):
+    - CocoaAsyncSocket
+    - HandyJSON
+    - RxCocoa
+    - RxSwift
     - XCGLogger
+  - SnapKit (5.6.0)
+  - Toast-Swift (5.0.1)
   - XCGLogger (7.0.1):
     - XCGLogger/Core (= 7.0.1)
   - XCGLogger/Core (7.0.1):
     - ObjcExceptionBridging
 
 DEPENDENCIES:
+  - CocoaAsyncSocket
+  - HandyJSON
+  - LLNetworkAccessibility-Swift
   - RxCocoa
   - RxSwift
   - SLKit (from `../`)
+  - SnapKit
+  - Toast-Swift
+  - XCGLogger
 
 SPEC REPOS:
   trunk:
+    - CocoaAsyncSocket
+    - HandyJSON
+    - LLNetworkAccessibility-Swift
     - ObjcExceptionBridging
     - RxCocoa
     - RxRelay
     - RxSwift
+    - SnapKit
+    - Toast-Swift
     - XCGLogger
 
 EXTERNAL SOURCES:
@@ -33,13 +53,18 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
+  HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
+  LLNetworkAccessibility-Swift: f9d237d2589f92eaa9baaa5351a1043e730c4773
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
-  SLKit: a48247ad908141a3f514443236cc8c670eede2e1
+  SLKit: e673ee93413f816e15f730d879cdce98e15d2085
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
-PODFILE CHECKSUM: 82689dbf507835dc1728736a71e85c716646a263
+PODFILE CHECKSUM: 30f6614a62c8aedd9bcff1bb0829f2592237d490
 
 COCOAPODS: 1.13.0

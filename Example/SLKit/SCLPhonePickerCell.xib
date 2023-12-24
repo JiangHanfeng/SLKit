@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="52" id="KGk-i7-Jjw" customClass="SCLPhonePickerCell" customModule="SLKit_Example" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="52"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="52"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y23-hz-NpK">
+                        <rect key="frame" x="16" y="0.0" width="40" height="40"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_device_phone" translatesAutoresizingMaskIntoConstraints="NO" id="7HT-7V-DH2">
+                                <rect key="frame" x="1" y="1" width="38" height="38"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="QwH-HA-eSV"/>
+                                    <constraint firstAttribute="width" constant="38" id="vdn-Qw-ekO"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="DaU-BZ-ZRw"/>
+                            <constraint firstAttribute="width" constant="40" id="Ki2-5K-QUJ"/>
+                            <constraint firstItem="7HT-7V-DH2" firstAttribute="centerX" secondItem="y23-hz-NpK" secondAttribute="centerX" id="h2b-4s-2OH"/>
+                            <constraint firstItem="7HT-7V-DH2" firstAttribute="centerY" secondItem="y23-hz-NpK" secondAttribute="centerY" id="hcd-hR-cqh"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jSo-jo-da4">
+                        <rect key="frame" x="66" y="4.3333333333333339" width="244" height="31.333333333333329"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wgw-p9-pwp">
+                                <rect key="frame" x="0.0" y="0.0" width="244" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="验证中..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6gf-t2-v9b">
+                                <rect key="frame" x="0.0" y="17" width="47.666666666666664" height="14.333333333333336"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.5490196078431373" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Wgw-p9-pwp" firstAttribute="leading" secondItem="jSo-jo-da4" secondAttribute="leading" id="6cS-hK-mMa"/>
+                            <constraint firstItem="6gf-t2-v9b" firstAttribute="top" secondItem="Wgw-p9-pwp" secondAttribute="bottom" id="DwP-C3-uBg"/>
+                            <constraint firstItem="6gf-t2-v9b" firstAttribute="leading" secondItem="jSo-jo-da4" secondAttribute="leading" id="MGd-P0-PL1"/>
+                            <constraint firstItem="Wgw-p9-pwp" firstAttribute="top" secondItem="jSo-jo-da4" secondAttribute="top" id="R8E-dr-AQC"/>
+                            <constraint firstAttribute="bottom" secondItem="6gf-t2-v9b" secondAttribute="bottom" id="Z3v-PT-YVK"/>
+                            <constraint firstAttribute="trailing" secondItem="Wgw-p9-pwp" secondAttribute="trailing" id="qv7-fm-mC2"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="y23-hz-NpK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="0rl-vF-O4a"/>
+                    <constraint firstItem="y23-hz-NpK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="4lu-dC-jDc"/>
+                    <constraint firstItem="jSo-jo-da4" firstAttribute="leading" secondItem="y23-hz-NpK" secondAttribute="trailing" constant="10" id="Tun-yf-ohO"/>
+                    <constraint firstItem="jSo-jo-da4" firstAttribute="centerY" secondItem="y23-hz-NpK" secondAttribute="centerY" id="coT-Aj-J8f"/>
+                    <constraint firstAttribute="trailing" secondItem="jSo-jo-da4" secondAttribute="trailing" constant="10" id="diq-9F-RXd"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <inset key="separatorInset" minX="9000" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="iconView" destination="y23-hz-NpK" id="6Na-Ed-kO0"/>
+                <outlet property="nameLabel" destination="Wgw-p9-pwp" id="WaD-Ta-bPY"/>
+            </connections>
+            <point key="canvasLocation" x="56" y="61"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="icon_device_phone" width="40.333332061767578" height="40.333332061767578"/>
+    </resources>
+</document>

@@ -1,0 +1,6 @@
+framework module LLNetworkAccessibility_Swift {
+  umbrella header "LLNetworkAccessibility-Swift-umbrella.h"
+
+  export *
+  module * { export * }
+}
