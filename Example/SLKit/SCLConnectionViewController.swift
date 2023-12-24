@@ -65,15 +65,15 @@ class SCLConnectionViewController: SCLBaseViewController {
     }()
     
     private var rectOfInterest: CGRect {
-        let spacing: CGFloat = 12
-        let width = (cameraView.bounds.width < cameraView.bounds.height ? cameraView.bounds.width : cameraView.bounds.height) - spacing * 2
-        return CGRect(x: (cameraView.bounds.width - width) / 2, y: (cameraView.bounds.height - width) / 2, width: width, height: width)
+        let spacing: CGFloat = 20
+//        let width = (cameraView.bounds.width < cameraView.bounds.height ? cameraView.bounds.width : cameraView.bounds.height) - spacing * 2
+        return CGRect(x: spacing, y: spacing, width: cameraView.bounds.width - spacing * 2, height: cameraView.bounds.height - spacing * 2)
     }
     
     private var maskLayer: CAShapeLayer {
         let maskRect = rectOfInterest
         let path = UIBezierPath(roundedRect: cameraView.bounds, cornerRadius: 0)
-        path.append(UIBezierPath(roundedRect: maskRect, cornerRadius: 12))
+        path.append(UIBezierPath(roundedRect: maskRect, cornerRadius: 4))
         
         let layer = CAShapeLayer()
         layer.path = path.cgPath
@@ -89,30 +89,30 @@ class SCLConnectionViewController: SCLBaseViewController {
         let shape = CAShapeLayer()
         let path = UIBezierPath()
         
-        path.move(to: CGPoint(x: rect.origin.x, y: rect.origin.y + 36))
-        path.addLine(to: CGPoint(x: rect.origin.x, y: rect.origin.y + 12))
-        path.addArc(withCenter: CGPoint(x: rect.origin.x + 12, y: rect.origin.y + 12), radius: 12, startAngle: Double.pi, endAngle: Double.pi * 1.5, clockwise: true)
-        path.addLine(to: CGPoint(x: rect.origin.x + 36, y: rect.origin.y))
+        path.move(to: CGPoint(x: rect.origin.x, y: rect.origin.y + 16))
+        path.addLine(to: CGPoint(x: rect.origin.x, y: rect.origin.y + 4))
+        path.addArc(withCenter: CGPoint(x: rect.origin.x + 4, y: rect.origin.y + 4), radius: 4, startAngle: Double.pi, endAngle: Double.pi * 1.5, clockwise: true)
+        path.addLine(to: CGPoint(x: rect.origin.x + 16, y: rect.origin.y))
         
-        path.move(to: CGPoint(x: rect.origin.x + rect.width - 36, y: rect.origin.y))
-        path.addLine(to: CGPoint(x: rect.origin.x + rect.width - 12, y: rect.origin.y))
-        path.addArc(withCenter: CGPoint(x: rect.origin.x + rect.width - 12, y: rect.origin.y + 12), radius: 12, startAngle: Double.pi * 1.5, endAngle: 0, clockwise: true)
-        path.addLine(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + 36))
+        path.move(to: CGPoint(x: rect.origin.x + rect.width - 16, y: rect.origin.y))
+        path.addLine(to: CGPoint(x: rect.origin.x + rect.width - 4, y: rect.origin.y))
+        path.addArc(withCenter: CGPoint(x: rect.origin.x + rect.width - 4, y: rect.origin.y + 4), radius: 4, startAngle: Double.pi * 1.5, endAngle: 0, clockwise: true)
+        path.addLine(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + 16))
         
-        path.move(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + rect.height - 36))
-        path.addLine(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + rect.height - 12))
-        path.addArc(withCenter: CGPoint(x: rect.origin.x + rect.width - 12, y: rect.origin.y + rect.height - 12), radius: 12, startAngle: 0, endAngle: Double.pi / 2.0, clockwise: true)
-        path.addLine(to: CGPoint(x: rect.origin.x + rect.width - 36, y: rect.origin.y + rect.height))
+        path.move(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + rect.height - 16))
+        path.addLine(to: CGPoint(x: rect.origin.x + rect.width, y: rect.origin.y + rect.height - 4))
+        path.addArc(withCenter: CGPoint(x: rect.origin.x + rect.width - 4, y: rect.origin.y + rect.height - 4), radius: 4, startAngle: 0, endAngle: Double.pi / 2.0, clockwise: true)
+        path.addLine(to: CGPoint(x: rect.origin.x + rect.width - 16, y: rect.origin.y + rect.height))
         
-        path.move(to: CGPoint(x: rect.origin.x + 36, y: rect.origin.y + rect.height))
-        path.addLine(to: CGPoint(x: rect.origin.x + 12, y: rect.origin.y + rect.height))
-        path.addArc(withCenter: CGPoint(x: rect.origin.x + 12, y: rect.origin.y + rect.height - 12), radius: 12, startAngle: Double.pi / 2.0, endAngle: Double.pi, clockwise: true)
-        path.addLine(to: CGPoint(x: rect.origin.x, y: rect.origin.y + rect.height - 36))
+        path.move(to: CGPoint(x: rect.origin.x + 16, y: rect.origin.y + rect.height))
+        path.addLine(to: CGPoint(x: rect.origin.x + 4, y: rect.origin.y + rect.height))
+        path.addArc(withCenter: CGPoint(x: rect.origin.x + 4, y: rect.origin.y + rect.height - 4), radius: 4, startAngle: Double.pi / 2.0, endAngle: Double.pi, clockwise: true)
+        path.addLine(to: CGPoint(x: rect.origin.x, y: rect.origin.y + rect.height - 16))
         
         shape.path = path.cgPath
         shape.strokeColor = UIColor.init(red: 54/255.0, green: 120/255.0, blue: 1, alpha: 1).cgColor
         shape.fillColor = UIColor.clear.cgColor
-        shape.lineWidth = 3
+        shape.lineWidth = 2.5
         return shape
     }
     
@@ -176,8 +176,8 @@ class SCLConnectionViewController: SCLBaseViewController {
     @IBAction func onBottomBtn() {
         switch state {
         case .initialize:
-            connectedCallback?()
-            break
+//            connectedCallback?()
+//            break
             state = .scanStarting
             startCamera(previewSize: CGSize(width: cameraView.bounds.width, height: cameraView.bounds.height), rectOfInterest: rectOfInterest) { error, previewLayer in
                 if let error {
