@@ -19,12 +19,11 @@
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEa-K1-FR5">
-                    <rect key="frame" x="0.0" y="59" width="393" height="743"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uEa-K1-FR5">
+                    <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eYX-OU-28c" userLabel="Content View">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="524"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="452"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启权限" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGH-J6-I4j">
                                     <rect key="frame" x="157.66666666666666" y="92" width="77.666666666666657" height="26"/>
@@ -105,20 +104,20 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_auth_file" translatesAutoresizingMaskIntoConstraints="NO" id="dnH-mv-f9X">
-                                    <rect key="frame" x="32" y="484" width="40" height="40"/>
+                                    <rect key="frame" x="32" y="452" width="40" height="0.0"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="40" id="5xd-3S-Wh7"/>
+                                        <constraint firstAttribute="height" id="5xd-3S-Wh7"/>
                                         <constraint firstAttribute="width" constant="40" id="7bO-46-rwN"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文件访问权限" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-N3-sj7">
-                                    <rect key="frame" x="80" y="484" width="92" height="18"/>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文件访问权限" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aYO-N3-sj7">
+                                    <rect key="frame" x="80" y="452" width="92" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于向附近的设备传输文件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HhQ-sN-7Ay">
-                                    <rect key="frame" x="80.000000000000014" y="509.66666666666657" width="147.33333333333337" height="14.333333333333314"/>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="用于向附近的设备传输文件" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HhQ-sN-7Ay">
+                                    <rect key="frame" x="80.000000000000014" y="437.66666666666669" width="147.33333333333337" height="14.333333333333314"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -126,7 +125,7 @@
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstItem="dnH-mv-f9X" firstAttribute="top" secondItem="Xmc-Ks-J8s" secondAttribute="bottom" constant="32" id="102-UO-PXl"/>
+                                <constraint firstItem="dnH-mv-f9X" firstAttribute="top" secondItem="Xmc-Ks-J8s" secondAttribute="bottom" id="102-UO-PXl"/>
                                 <constraint firstItem="dnH-mv-f9X" firstAttribute="leading" secondItem="eYX-OU-28c" secondAttribute="leading" constant="32" id="23l-jd-psJ"/>
                                 <constraint firstItem="ORY-4W-h5L" firstAttribute="leading" secondItem="SKT-jZ-O2d" secondAttribute="trailing" constant="8" symbolic="YES" id="3Z7-2z-DJb"/>
                                 <constraint firstItem="JT0-2l-GdR" firstAttribute="leading" secondItem="Xmc-Ks-J8s" secondAttribute="trailing" constant="8" symbolic="YES" id="48J-8J-Phf"/>
@@ -174,7 +173,11 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="uEa-K1-FR5" secondAttribute="bottom" id="7Ak-R2-5ZG"/>
+                <constraint firstItem="uEa-K1-FR5" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="RYg-nj-ZBG"/>
                 <constraint firstItem="eYX-OU-28c" firstAttribute="width" secondItem="fnl-2z-Ty3" secondAttribute="width" id="TXt-Jd-5ea"/>
+                <constraint firstItem="uEa-K1-FR5" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="mwF-me-Iez"/>
+                <constraint firstItem="uEa-K1-FR5" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="uRU-Gl-ucV"/>
             </constraints>
             <point key="canvasLocation" x="342.74809160305341" y="-41.549295774647888"/>
         </view>

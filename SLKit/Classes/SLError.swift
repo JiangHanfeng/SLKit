@@ -17,6 +17,9 @@ public enum SLError: Error, LocalizedError {
     case socketConnectionErrorState
     case socketConnectionFailure(Error)
     case socketDisconnected(Error?)
+    case socketSendFailureNotConnected
+    case socketSendFailureDataError
+    case socketNotConnectedYet
     
     public var errorDescription: String? {
         switch self {
@@ -38,6 +41,12 @@ public enum SLError: Error, LocalizedError {
             return error.localizedDescription
         case .socketDisconnected(let error):
             return error != nil ? error!.localizedDescription : "socket disconnected"
+        case .socketSendFailureNotConnected:
+            return "send data failed because the socket hasn't been connected yet"
+        case .socketSendFailureDataError:
+            return "send data failed because the string can't convert to Data"
+        case .socketNotConnectedYet:
+            return "socket hasn't been connected yet"
         }
     }
 }

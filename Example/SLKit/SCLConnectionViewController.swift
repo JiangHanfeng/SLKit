@@ -133,6 +133,7 @@ class SCLConnectionViewController: SCLBaseViewController {
     private func updateViews() {
         switch self.state {
         case .initialize:
+            bottomButton.setImage(UIImage(named: "icon_camera_scan"), for: .normal)
             bottomButton.setTitle("扫码连接", for: .normal)
             bottomButton.setTitleColor(.white, for: .normal)
             bottomButton.backgroundColor = UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
@@ -145,12 +146,14 @@ class SCLConnectionViewController: SCLBaseViewController {
             }
             cameraView.isHidden = true
         case .scanStarting:
+            bottomButton.setImage(nil, for: .normal)
             bottomButton.setTitle("取消", for: .normal)
             bottomButton.setTitleColor(UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1), for: .normal)
             bottomButton.backgroundColor = .white
             bottomButton.layer.borderColor = UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1).cgColor
             bottomButton.layer.borderWidth = 1
         case .scanning(let previewLayer):
+            bottomButton.setImage(nil, for: .normal)
             bottomButton.setTitle("取消", for: .normal)
             bottomButton.setTitleColor(UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1), for: .normal)
             bottomButton.backgroundColor = .white
@@ -181,8 +184,23 @@ class SCLConnectionViewController: SCLBaseViewController {
             state = .scanStarting
             startCamera(previewSize: CGSize(width: cameraView.bounds.width, height: cameraView.bounds.height), rectOfInterest: rectOfInterest) { error, previewLayer in
                 if let error {
-                    print(error.localizedDescription)
-                    self.state = .initialize
+                    let e = error as NSError
+                    if e.code == NSURLErrorUserCancelledAuthentication {
+                        self.state = .initialize
+                        let alert = UIAlertController(title: "提示", message: "未授权使用相机，请设置允许访问相机", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "取消", style: .cancel)
+                        let ok = UIAlertAction(title: "好的", style: .default) { _ in
+                            let scheme = "App-Prefs:root=General"
+                            if let url = URL(string: scheme) {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                        alert.addAction(cancel)
+                        alert.addAction(ok)
+                        self.present(alert, animated: true)
+                    } else {
+                        self.toast(error.localizedDescription)
+                    }
                 } else if let previewLayer {
                     self.state = .scanning(previewLayer)
                 }
@@ -202,18 +220,22 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
     private func startCamera(previewSize: CGSize, rectOfInterest: CGRect, completion: @escaping (_ error: Error?, _ previewLayer: AVCaptureVideoPreviewLayer?) -> Void) {
         guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else {
             AVCaptureDevice.requestAccess(for: .video) { result in
-                if result {
-                    self.startCamera(previewSize: previewSize, rectOfInterest: rectOfInterest, completion: completion)
-                } else {
-                    let error = NSError(domain: NSErrorDomain(string: "SCLHomeViewController.startCamera.AVCaptureDevice.requestAccess") as String, code: NSURLErrorUserCancelledAuthentication, userInfo: [NSLocalizedDescriptionKey:"您拒绝了本应用使用相机"])
-                    completion(error, nil)
+                DispatchQueue.main.async {
+                    if result {
+                        self.startCamera(previewSize: previewSize, rectOfInterest: rectOfInterest, completion: completion)
+                    } else {
+                        let error = NSError(domain: NSErrorDomain(string: "SCLHomeViewController.startCamera.AVCaptureDevice.requestAccess") as String, code: NSURLErrorUserCancelledAuthentication, userInfo: [NSLocalizedDescriptionKey:"您拒绝了本应用使用相机"])
+                        completion(error, nil)
+                    }
                 }
             }
             return
         }
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
             let error = NSError(domain: NSErrorDomain(string: "SCLHomeViewController.startCamera.AVCaptureDevice.requestAccess") as String, code: NSURLErrorUnknown, userInfo: [NSLocalizedDescriptionKey:"无法获取广角镜头"])
-            completion(error, nil)
+            DispatchQueue.main.async {
+                completion(error, nil)
+            }
             return
         }
         

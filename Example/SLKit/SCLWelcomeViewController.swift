@@ -21,9 +21,9 @@ class SCLWelcomeViewController: SCLBaseViewController {
         }
     }()
     
-    private lazy var getAppPromptController = {
-        return SCLGetAppPromptViewController()
-    }()
+//    private lazy var getAppPromptController = {
+//        return SCLGetAppPromptViewController()
+//    }()
     
     private lazy var requestPermissionController = {
         return SCLRequestPermissionViewController()
@@ -46,10 +46,11 @@ class SCLWelcomeViewController: SCLBaseViewController {
             }
             switch self.childViewControllers.last {
             case self.privacyPolicyController:
-                self.transitionToChild(self.getAppPromptController, configChildViewRect: configChildView)
-            case self.getAppPromptController:
                 self.transitionToChild(self.requestPermissionController, configChildViewRect: configChildView)
                 self.nsBtn.setTitle("开始吧", for: .normal)
+//            case self.getAppPromptController:
+//                self.transitionToChild(self.requestPermissionController, configChildViewRect: configChildView)
+//                self.nsBtn.setTitle("开始吧", for: .normal)
             case self.requestPermissionController:
                 let requestBt = Observable.create { observer in
                     SLBleManager.shared.requestPermission { state in
@@ -64,11 +65,11 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     return Disposables.create()
                 }
                 let requestNetwork = Observable.create { observer in
+                    LLNetworkAccessibility.start()
                     let currentState = LLNetworkAccessibility.getCurrentAuthState()
-                    if currentState == .unknown || currentState == .checking {
-                        LLNetworkAccessibility.stop()
-                        LLNetworkAccessibility.start()
+                    if currentState == .unknown {
                         LLNetworkAccessibility.reachabilityUpdateCallBack = { state in
+                            LLNetworkAccessibility.stop()
                             if let state {
                                 switch state {
                                 case .available:
@@ -78,7 +79,7 @@ class SCLWelcomeViewController: SCLBaseViewController {
                                     let error = NSError(domain: NSCocoaErrorDomain, code: NSURLErrorNotConnectedToInternet, userInfo: [NSLocalizedDescriptionKey:"网络未授权"])
                                     observer.onError(error)
                                 default:
-                                    observer.onNext(false)
+                                    observer.onNext(true)
                                     observer.onCompleted()
                                 }
                             }
@@ -96,7 +97,7 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     UserDefaults.standard.synchronize()
                     self?.navigationController?.show(SCLHomeViewController(), sender: nil)
                 }, onError: { [weak self] error in
-                    self?.toast(error.localizedDescription)
+                    
                 }, onCompleted: {
                     
                 }).disposed(by: disposeBag)

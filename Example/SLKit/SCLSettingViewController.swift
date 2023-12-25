@@ -71,10 +71,18 @@ class SCLSettingViewController: SCLBaseViewController {
         snapshot.appendItems(items.last!, toSection: .two)
         
         dataSource.apply(snapshot)
+        
+        collectionView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+}
+
+extension SCLSettingViewController : UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.toast(items[indexPath.section][indexPath.row].title ?? "")
     }
 }

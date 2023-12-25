@@ -9,6 +9,8 @@ import Foundation
 import CocoaAsyncSocket
 import RxSwift
 
+public typealias SLSocketDataHandler = ((Data) -> Void)
+
 public class SLSocketClient: SLSocket {
     
     fileprivate static let queue = DispatchQueue(label: "com.slkit.slsocket.client")
@@ -16,6 +18,11 @@ public class SLSocketClient: SLSocket {
     fileprivate var connectionCompletion: ((SLResult<Void, SLError>) -> Void)?
     fileprivate var disconnectedCallback: ((SLError?) -> Void)?
     fileprivate var socket: GCDAsyncSocket?
+    
+    private var dataHandler: SLSocketDataHandler?
+    var isConnected : Bool {
+        return socket?.isConnected ?? false
+    }
     
     override private init(host: String, port: UInt16, role: SLSocket.Role) {
         super.init(host: host, port: port, role: role)
@@ -45,6 +52,27 @@ public class SLSocketClient: SLSocket {
         }
     }
     
+    public func send(_ text: String, timeout: SLTimeInterval = .seconds(15)) throws {
+        guard let socket, socket.isConnected else {
+            throw SLError.socketSendFailureNotConnected
+        }
+        guard let data = text.data(using: .utf8), data.count > 0 else {
+            throw SLError.socketSendFailureDataError
+        }
+        var time = TimeInterval.infinity
+        switch timeout {
+        case .seconds(let value):
+            time = TimeInterval(value)
+        default:
+            break
+        }
+        socket.write(data, withTimeout: time, tag: 0)
+    }
+    
+    func setReceivedDataHandler(_ handler: SLSocketDataHandler?) {
+        dataHandler = handler
+    }
+    
     deinit {
         SLLog.debug("\(self) deinit")
     }
@@ -52,11 +80,16 @@ public class SLSocketClient: SLSocket {
 
 extension SLSocketClient: GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
+        sock.readData(withTimeout: -1, tag: 0)
         connectionCompletion?(.success(Void()))
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         disconnectedCallback?(.socketDisconnected(err))
+    }
+    
+    public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
+        dataHandler?(data)
     }
 }
 

@@ -65,7 +65,8 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
                 self?.navigationController?.show(SLWebViewController(userAgreementText.string, "https://support.lenovo.com/us/en/solutions/ht100141"), sender: nil)
             } else if let isSelected = self?.privacyPolicyCheckBtn.isSelected {
                 self?.privacyPolicyCheckBtn.isSelected = !isSelected
-                self?.agreedAll?((self?.dataCollectionCheckBtn.isSelected ?? false) && !isSelected)
+//                self?.agreedAll?((self?.dataCollectionCheckBtn.isSelected ?? false) && !isSelected)
+                self?.agreedAll?(!isSelected)
             }
         }.disposed(by: disposeBag)
         
@@ -76,7 +77,7 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
         tap2.rx.event.bind { [weak self] ges in
             if let isSelected = self?.dataCollectionCheckBtn.isSelected {
                 self?.dataCollectionCheckBtn.isSelected = !isSelected
-                self?.agreedAll?((self?.privacyPolicyCheckBtn.isSelected ?? false) && !isSelected)
+//                self?.agreedAll?((self?.privacyPolicyCheckBtn.isSelected ?? false) && !isSelected)
             }
         }.disposed(by: disposeBag)
         
@@ -91,7 +92,7 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
         for (button, select) in zip(btns, selects) {
             select.bind(to: button.rx.isSelected).disposed(by: disposeBag)
         }
-        Observable.combineLatest(selects)
+        Observable.combineLatest(selects[0..<1])
             .subscribe(onNext: { [weak self] in
                 self?.agreedAll?($0.allSatisfy { selected in
                     selected

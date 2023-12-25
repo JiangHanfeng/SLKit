@@ -147,6 +147,7 @@
 		49D02A2015F327161F6D4EF3C370148B /* Repeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14509DBB6D136C21C4B80144828F2298 /* Repeat.swift */; };
 		4AE993E21C5B46158ECF1C93DAB42F2A /* RxSearchBarDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11327692A48164A475F4EF688F21D993 /* RxSearchBarDelegateProxy.swift */; };
 		4B26F9202B0A60FCDED92B1D7B88EC7C /* Dematerialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7119E7E377648405161ABD8B933E82 /* Dematerialize.swift */; };
+		4B2E00192B39690B00E2191E /* SLTCPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2E00182B39690B00E2191E /* SLTCPManager.swift */; };
 		4B4841192B35AB9100FE3C6F /* SLTcpLoginReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4841182B35AB9100FE3C6F /* SLTcpLoginReq.swift */; };
 		4B48411B2B35AE5900FE3C6F /* SLTcpLoginResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48411A2B35AE5900FE3C6F /* SLTcpLoginResp.swift */; };
 		4B48411D2B35B00600FE3C6F /* SLInitPlatformReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48411C2B35B00600FE3C6F /* SLInitPlatformReq.swift */; };
@@ -768,6 +769,7 @@
 		49E8B3449C18F106BC7CDDF21593E6CD /* ConstraintMakerRelatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintMakerRelatable.swift; path = Sources/ConstraintMakerRelatable.swift; sourceTree = "<group>"; };
 		4AF40ED18E798B0C786188C9BFE1A4E5 /* .swift-version */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		4B1E6D2DEC90017C46726EB329AFF1C6 /* NSTextField+Rx.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSTextField+Rx.swift"; path = "RxCocoa/macOS/NSTextField+Rx.swift"; sourceTree = "<group>"; };
+		4B2E00182B39690B00E2191E /* SLTCPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLTCPManager.swift; sourceTree = "<group>"; };
 		4B4841182B35AB9100FE3C6F /* SLTcpLoginReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLTcpLoginReq.swift; sourceTree = "<group>"; };
 		4B48411A2B35AE5900FE3C6F /* SLTcpLoginResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLTcpLoginResp.swift; sourceTree = "<group>"; };
 		4B48411C2B35B00600FE3C6F /* SLInitPlatformReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLInitPlatformReq.swift; sourceTree = "<group>"; };
@@ -1662,6 +1664,7 @@
 				4B48411A2B35AE5900FE3C6F /* SLTcpLoginResp.swift */,
 				4B48411C2B35B00600FE3C6F /* SLInitPlatformReq.swift */,
 				4B48411E2B35B71600FE3C6F /* SLTcpBaseReq.swift */,
+				4B2E00182B39690B00E2191E /* SLTCPManager.swift */,
 			);
 			name = SLKit;
 			path = ../..;
@@ -3082,6 +3085,7 @@
 				BB80B5F0264B59EEBBB4CA37CBC0EBCE /* SLA2DPMonitorTask.swift in Sources */,
 				B7244E655C1943C6D7EE0D2923460A61 /* SLAnyDevice.swift in Sources */,
 				50B84CA1184EBF0D74C35B9B7F3151EB /* SLAsync.swift in Sources */,
+				4B2E00192B39690B00E2191E /* SLTCPManager.swift in Sources */,
 				720C21B2E983981260FAA094720A06B2 /* SLTcpResp.swift in Sources */,
 				3962E7151C4B23E30A11A8D8898F5828 /* SLBleCharacteristicDiscoverTask.swift in Sources */,
 				4B48411F2B35B71600FE3C6F /* SLTcpBaseReq.swift in Sources */,

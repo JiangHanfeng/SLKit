@@ -42,7 +42,10 @@ extension UIViewController {
             if !targetViewAdded {
                 view.addSubview(targetView)
                 configChildViewRect(targetView)
-                targetView.transform = CGAffineTransform(translationX: view.bounds.width, y: 0)
+                if childViewControllers.count > 1 {
+                    // 只有在切换两个子controller时才有平移
+                    targetView.transform = CGAffineTransform(translationX: view.bounds.width, y: 0)
+                }
             }
         }
         var currentChildView: UIView?
@@ -57,10 +60,18 @@ extension UIViewController {
             if let tx = targetView?.transform.tx, tx < 0 {
                 moveTo = CGAffineTransform(translationX: self.view.bounds.width, y: 0)
             }
+            if targetView?.transform.tx != 0 {
+                // 有平移才会有透明变化
+                targetView?.alpha = 0
+            }
             UIView.animate(withDuration: 0.25) {
                 targetView?.transform = CGAffineTransform(translationX: 0, y: 0)
+                targetView?.alpha = 1
                 currentChildView?.transform = moveTo
+                currentChildView?.alpha = 0
             } completion: { _ in
+                targetView?.alpha = 1
+                currentChildView?.alpha = 0
                 if removeCurrent {
                     currentChildView?.removeFromSuperview()
                 }

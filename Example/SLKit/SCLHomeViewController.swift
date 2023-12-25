@@ -68,7 +68,17 @@ class SCLHomeViewController: SCLBaseViewController {
     }
     
     @IBAction private func onFileTransfer() {
-        
+//        navigationController?.show(SCLFileHistoryViewController(), sender: nil)
+        Task {
+            do {
+                let response = try await SLTCPManager.shared().asyncRequest(host: "192.168.3.170", port: 8088, taskId: "", text: "heart")
+                if let string = String(data: response, encoding: .utf8) {
+                    self.toast("收到响应:\(string)")
+                }
+            } catch let error {
+                self.toast(error.localizedDescription)
+            }
+        }
     }
     
     @IBAction private func onSetting() {
