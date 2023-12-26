@@ -18,6 +18,7 @@ public class SLSocketClient: SLSocket {
     fileprivate var connectionCompletion: ((SLResult<Void, SLError>) -> Void)?
     fileprivate var disconnectedCallback: ((SLError?) -> Void)?
     fileprivate var socket: GCDAsyncSocket?
+    fileprivate var connectionTimeoutChecker: SLCancelableWork?
     
     private var dataHandler: SLSocketDataHandler?
     var isConnected : Bool {
@@ -33,8 +34,12 @@ public class SLSocketClient: SLSocket {
     }
     
     public func startConnection(timeout: SLTimeInterval = .seconds(15), completion: @escaping ((_ result: SLResult<Void, SLError>) -> Void)) {
-        guard self.state != .connecting || self.state != .connected else {
-            completion(.failure(.socketConnectionErrorState))
+//        guard self.state != .connecting || self.state != .connected else {
+//            completion(.failure(.socketConnectionErrorState))
+//            return
+//        }
+        if self.state == .connected {
+            completion(.success(Void()))
             return
         }
         self.connectionCompletion = completion
@@ -45,6 +50,13 @@ public class SLSocketClient: SLSocket {
                 try self.socket?.connect(toHost: self.host, onPort: self.port)
             case .seconds(let value):
                 try self.socket?.connect(toHost: self.host, onPort: self.port, withTimeout: TimeInterval(value))
+                self.connectionTimeoutChecker?.cancel()
+                self.connectionTimeoutChecker = SLCancelableWork(delayTime: .seconds(value), closure: { [weak self] in
+                    if let state = self?.state, state == .connecting {
+                        completion(.failure(SLError.socketConnectionErrorState))
+                    }
+                })
+                self.connectionTimeoutChecker?.start(at: Self.queue)
             }
             self.state = .connecting
         } catch let error {
@@ -69,6 +81,21 @@ public class SLSocketClient: SLSocket {
         socket.write(data, withTimeout: time, tag: 0)
     }
     
+    public func send(_ data: Data, timeout: SLTimeInterval = .seconds(15)) throws {
+        guard let socket, socket.isConnected else {
+            throw SLError.socketSendFailureNotConnected
+        }
+        var time = TimeInterval.infinity
+        switch timeout {
+        case .seconds(let value):
+            time = TimeInterval(value)
+        default:
+            break
+        }
+        socket.write(data, withTimeout: time, tag: 0)
+        socket.readData(withTimeout: -1, tag: 0)
+    }
+    
     func setReceivedDataHandler(_ handler: SLSocketDataHandler?) {
         dataHandler = handler
     }
@@ -81,14 +108,26 @@ public class SLSocketClient: SLSocket {
 extension SLSocketClient: GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         sock.readData(withTimeout: -1, tag: 0)
+        state = .connected
+        connectionTimeoutChecker?.cancel()
         connectionCompletion?(.success(Void()))
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        disconnectedCallback?(.socketDisconnected(err))
+        if state == .connecting {
+            connectionTimeoutChecker?.cancel()
+            state = .disconnected
+            connectionCompletion?(.failure(.bleConnectionFailure(err)))
+        } else if state == .connected {
+            state = .disconnected
+            disconnectedCallback?(.socketDisconnected(err))
+        }
     }
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
+        if let string = String(data: data, encoding: .utf8) {
+            print("\nreceived string from '\(sock.connectedHost != nil ? sock.connectedHost! + ":\(sock.connectedPort)" : "")':\n\(string)\n")
+        }
         dataHandler?(data)
     }
 }

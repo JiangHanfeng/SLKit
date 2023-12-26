@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B14ACA12B3AB1A800FD0F9A /* SCLTCPLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B14ACA02B3AB1A800FD0F9A /* SCLTCPLoginModel.swift */; };
+		4B14ACA32B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B14ACA22B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift */; };
+		4B14ACA52B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B14ACA42B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift */; };
 		4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */; };
 		4B23D1F02B330381008724E5 /* SCLGetAppPromptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */; };
 		4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */; };
@@ -75,6 +78,9 @@
 		0EAC628545CAA7CE11A3FDBE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Example.debug.xcconfig"; path = "Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		18CE967A18D972234CC35A2A /* Pods_SLKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SLKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B14ACA02B3AB1A800FD0F9A /* SCLTCPLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLTCPLoginModel.swift; sourceTree = "<group>"; };
+		4B14ACA22B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLTCPSocketRequest.swift; sourceTree = "<group>"; };
+		4B14ACA42B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLTCPSocketResponse.swift; sourceTree = "<group>"; };
 		4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetAppPromptViewController.swift; sourceTree = "<group>"; };
 		4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLGetAppPromptViewController.xib; sourceTree = "<group>"; };
 		4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLRequestPermissionViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +234,9 @@
 				4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */,
 				4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */,
 				4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */,
+				4B14ACA02B3AB1A800FD0F9A /* SCLTCPLoginModel.swift */,
+				4B14ACA22B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift */,
+				4B14ACA42B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -502,6 +511,7 @@
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
 				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
+				4B14ACA32B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
 				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
@@ -515,6 +525,7 @@
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
 				4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */,
 				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
+				4B14ACA52B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift in Sources */,
 				4BDE22E42B31407600D1A50C /* SCLPairAlertViewController.swift in Sources */,
 				4B2E00162B394B8D00E2191E /* SCLFileHistoryViewController.swift in Sources */,
 				4B4AF9692B391255001C8214 /* SCLFileRecordViewController.swift in Sources */,
@@ -522,6 +533,7 @@
 				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
 				4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				4B14ACA12B3AB1A800FD0F9A /* SCLTCPLoginModel.swift in Sources */,
 				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
 				4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */,
 				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,

@@ -69,16 +69,58 @@ class SCLHomeViewController: SCLBaseViewController {
     
     @IBAction private func onFileTransfer() {
 //        navigationController?.show(SCLFileHistoryViewController(), sender: nil)
-        Task {
-            do {
-                let response = try await SLTCPManager.shared().asyncRequest(host: "192.168.3.170", port: 8088, taskId: "", text: "heart")
-                if let string = String(data: response, encoding: .utf8) {
-                    self.toast("收到响应:\(string)")
+        let connect = Observable.create { subscriber in
+            Task {
+                do {
+                    let sock = try await SLSocketManager.shared.connect(host: "192.168.3.170", port: 8088)
+                    subscriber.onNext(sock)
+                    subscriber.onCompleted()
+                } catch let e {
+                    subscriber.onError(e)
                 }
-            } catch let error {
-                self.toast(error.localizedDescription)
+            }
+            return Disposables.create()
+        }
+        // 并发100个请求
+        let concurrencyRequests: ((_ sock: SLSocketClient) -> Observable) = { sock in
+            return Observable.create { subscriber in
+                for i in 0..<100 {
+                    DispatchQueue.global().async {
+                        Task {
+                            do {
+                                let response = try await SLSocketManager.shared.send(SCLTCPSocketRequest(model: SCLTCPLoginModel(code: i)), to: sock, for: SCLTCPSocketResponse.self)
+                            } catch let e {
+                                
+                            }
+                        }
+                    }
+                }
+                subscriber.onNext(Void())
+                subscriber.onCompleted()
+                return Disposables.create()
             }
         }
+        connect.flatMap { sock in
+            print("socket连接成功")
+            return concurrencyRequests(sock)
+        }.subscribe (onNext: {
+            print("并发请求")
+        }, onError: { _ in
+            
+        }, onCompleted: {
+            
+        }).disposed(by: disposeBag)
+
+//        Task {
+//            do {
+//                let response = try await SLTCPManager.shared().asyncRequest(host: "192.168.3.170", port: 8088, taskId: "", text: "heart")
+//                if let string = String(data: response, encoding: .utf8) {
+//                    self.toast("收到响应:\(string)")
+//                }
+//            } catch let error {
+//                self.toast(error.localizedDescription)
+//            }
+//        }
     }
     
     @IBAction private func onSetting() {

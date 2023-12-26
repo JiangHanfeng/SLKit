@@ -16,10 +16,13 @@ public enum SLError: Error, LocalizedError {
     case bleDisconnected(Error?)
     case socketConnectionErrorState
     case socketConnectionFailure(Error)
+    case socketConnectionTimeout
     case socketDisconnected(Error?)
     case socketSendFailureNotConnected
+    case socketSendFailureEmptyData
     case socketSendFailureDataError
     case socketNotConnectedYet
+    case socketDisconnectedWaitingForResponse
     
     public var errorDescription: String? {
         switch self {
@@ -39,14 +42,20 @@ public enum SLError: Error, LocalizedError {
             return "socket wrong state"
         case .socketConnectionFailure(let error):
             return error.localizedDescription
+        case .socketConnectionTimeout:
+            return "socket connect timeout"
         case .socketDisconnected(let error):
             return error != nil ? error!.localizedDescription : "socket disconnected"
         case .socketSendFailureNotConnected:
             return "send data failed because the socket hasn't been connected yet"
+        case .socketSendFailureEmptyData:
+            return "send data failed because the data can't be empty or nil"
         case .socketSendFailureDataError:
             return "send data failed because the string can't convert to Data"
         case .socketNotConnectedYet:
             return "socket hasn't been connected yet"
+        case .socketDisconnectedWaitingForResponse:
+            return "socket has disconected when waiting for the response"
         }
     }
 }

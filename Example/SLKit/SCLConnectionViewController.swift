@@ -314,15 +314,15 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             let object = metadataObjects.first! as! AVMetadataMachineReadableCodeObject
             if let string = object.stringValue, let url = URL(string: string), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
-                Task {
-                    do {
-                        let socket = try await SLSocketManager.shared.asyncConnectServer(host: "192.168.3.170", port: 8088)
-                        self.toast("socket连接成功")
-                    } catch let error {
-                        self.toast("socket连接失败")
-                        SLLog.debug("socket连接失败:\n\(error.localizedDescription)")
-                    }
-                }
+//                Task {
+//                    do {
+//                        let socket = try await SLSocketManager.shared.asyncConnectServer(host: "192.168.3.170", port: 8088)
+//                        self.toast("socket连接成功")
+//                    } catch let error {
+//                        self.toast("socket连接失败")
+//                        SLLog.debug("socket连接失败:\n\(error.localizedDescription)")
+//                    }
+//                }
 //                let scan = Observable.create { subscriber in
 //                    Task {
 //                        do {
@@ -358,7 +358,6 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
 //                    .disposed(by: self.disposeBag)
 
             } else {
-                
                 self.toast("请扫描超级互联Lite二维码")
             }
         }
