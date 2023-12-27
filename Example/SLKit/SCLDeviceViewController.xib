@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLDeviceViewController" customModule="SLKit_Example" customModuleProvider="target">
             <connections>
                 <outlet property="disconenctBtn" destination="Eai-do-Bfr" id="VEZ-qA-6GP"/>
+                <outlet property="nameLabel" destination="l0V-cS-fgv" id="Bhh-aX-5AO"/>
                 <outlet property="view" destination="RA0-fE-toV" id="97A-vR-lFM"/>
             </connections>
         </placeholder>
@@ -98,6 +99,9 @@
                                             <integer key="value" value="16"/>
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onAirplay" destination="-1" eventType="touchUpInside" id="fYj-Le-4gC"/>
+                                    </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="文件传输" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v94-Rd-cgA">
                                     <rect key="frame" x="20.000000000000004" y="228" width="49.333333333333343" height="16"/>

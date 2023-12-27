@@ -13,6 +13,8 @@
             <connections>
                 <outlet property="bottomButton" destination="rfH-kX-xS6" id="Y4e-pn-LbG"/>
                 <outlet property="cameraView" destination="CFU-PE-3WA" id="DS1-yp-SiQ"/>
+                <outlet property="connectingAnimationImageView" destination="ycV-xb-DUF" id="jZQ-Q3-Pte"/>
+                <outlet property="connectingView" destination="QGF-Yn-h1f" id="yBi-Vu-3Hk"/>
                 <outlet property="view" destination="fFO-aR-MPM" id="AGF-Sh-iLr"/>
             </connections>
         </placeholder>
@@ -27,7 +29,7 @@
                         <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WKp-Fo-lp4" userLabel="Content View">
                             <rect key="frame" x="20" y="20" width="390" height="711"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_connection_placeholder@" translatesAutoresizingMaskIntoConstraints="NO" id="RYN-IV-FYE">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_qr_scan_sample" translatesAutoresizingMaskIntoConstraints="NO" id="RYN-IV-FYE">
                                     <rect key="frame" x="19" y="20" width="352" height="469.33333333333331"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="RYN-IV-FYE" secondAttribute="height" multiplier="3:4" id="MmT-9y-3aP"/>
@@ -156,6 +158,27 @@
                                         <action selector="onBottomBtn" destination="-1" eventType="touchUpInside" id="0BZ-sy-28d"/>
                                     </connections>
                                 </button>
+                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QGF-Yn-h1f" userLabel="Connecting View">
+                                    <rect key="frame" x="19" y="247.66666666666669" width="352" height="14"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_connecting_animation1" translatesAutoresizingMaskIntoConstraints="NO" id="ycV-xb-DUF">
+                                            <rect key="frame" x="162" y="0.0" width="28" height="18"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="连接中，请稍后" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Hc-9N-S1d">
+                                            <rect key="frame" x="126" y="50" width="100" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.14901960784313725" green="0.14901960784313725" blue="0.14901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="3Hc-9N-S1d" firstAttribute="centerX" secondItem="QGF-Yn-h1f" secondAttribute="centerX" id="3zQ-zZ-1NU"/>
+                                        <constraint firstItem="ycV-xb-DUF" firstAttribute="top" secondItem="QGF-Yn-h1f" secondAttribute="top" id="47q-JD-mQD"/>
+                                        <constraint firstItem="3Hc-9N-S1d" firstAttribute="top" secondItem="ycV-xb-DUF" secondAttribute="bottom" constant="32" id="EyC-Nf-hJm"/>
+                                        <constraint firstItem="ycV-xb-DUF" firstAttribute="centerX" secondItem="QGF-Yn-h1f" secondAttribute="centerX" id="TEu-Xv-CB8"/>
+                                        <constraint firstAttribute="bottom" secondItem="3Hc-9N-S1d" secondAttribute="bottom" constant="-53" id="opG-9k-PDD"/>
+                                    </constraints>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
@@ -163,6 +186,9 @@
                                 <constraint firstItem="rfH-kX-xS6" firstAttribute="top" secondItem="NOf-tF-KLF" secondAttribute="bottom" constant="24" id="3Rq-Af-N7g"/>
                                 <constraint firstItem="RYN-IV-FYE" firstAttribute="leading" secondItem="WKp-Fo-lp4" secondAttribute="leading" constant="19" id="4mq-hC-dN3"/>
                                 <constraint firstItem="CFU-PE-3WA" firstAttribute="trailing" secondItem="zHC-fM-VXd" secondAttribute="trailing" constant="30" id="702-ai-MbZ"/>
+                                <constraint firstItem="QGF-Yn-h1f" firstAttribute="centerX" secondItem="CFU-PE-3WA" secondAttribute="centerX" id="H4D-q7-4zj"/>
+                                <constraint firstItem="QGF-Yn-h1f" firstAttribute="centerY" secondItem="CFU-PE-3WA" secondAttribute="centerY" id="Hck-rv-Q5H"/>
+                                <constraint firstItem="QGF-Yn-h1f" firstAttribute="width" secondItem="CFU-PE-3WA" secondAttribute="width" id="KHa-mR-l3k"/>
                                 <constraint firstAttribute="trailing" secondItem="rfH-kX-xS6" secondAttribute="trailing" constant="46" id="Nsr-kz-UUK"/>
                                 <constraint firstItem="Wbd-s5-7Uy" firstAttribute="top" secondItem="CFU-PE-3WA" secondAttribute="bottom" constant="19" id="O7e-Yb-8eA"/>
                                 <constraint firstItem="CFU-PE-3WA" firstAttribute="leading" secondItem="WKp-Fo-lp4" secondAttribute="leading" constant="19" id="X3i-Fu-o5g"/>
@@ -213,7 +239,8 @@
         </view>
     </objects>
     <resources>
-        <image name="img_connection_placeholder@" width="300" height="400"/>
+        <image name="icon_connecting_animation1" width="28" height="18"/>
+        <image name="img_qr_scan_sample" width="300.33334350585938" height="400.33334350585938"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

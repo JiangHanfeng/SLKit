@@ -38,6 +38,7 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
             .disposed(by: disposeBag)
         scrollView.rx.currentPage
             .subscribe(onNext: { [weak self] in
+                print($0)
                 self?.pageControl.currentPage = $0
             })
             .disposed(by: disposeBag)
@@ -103,7 +104,7 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
 
 }
 
-fileprivate extension Reactive where Base: UIScrollView {
+public extension Reactive where Base: UIScrollView {
     var currentPage: Observable<Int> {
         return didEndDecelerating.map {
             let pageWidth = self.base.bounds.width
@@ -113,7 +114,7 @@ fileprivate extension Reactive where Base: UIScrollView {
     }
 }
 
-fileprivate extension UIScrollView {
+public extension UIScrollView {
     func setCurrentPage(_ page: Int, animated: Bool = true) {
         var rect = bounds
         rect.origin.x = rect.width * CGFloat(page)

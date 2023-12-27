@@ -7,35 +7,62 @@
 //
 
 import UIKit
+import SLKit
 
-class SCLDeviceViewController: UIViewController {
-
-//    @IBOutlet weak var deviceIconView: UIView!
+class SCLDeviceViewController: SCLBaseViewController {
+    
+    enum State {
+        case connected
+        case airplayRequesting
+        case airplay
+        case airplayTeminating
+    }
+    
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
     
+    private var mac: String!
+    private var name: String!
+    private var socket: SLSocketClient?
     private var disconnectedCallback: (() -> Void)?
+    private var state = State.connected
     
-    convenience init(_ disconnectedCallback: @escaping () -> Void) {
-        self.init(nibName: "SCLDeviceViewController", bundle: Bundle.main)
+    convenience init(socket: SLSocketClient, mac: String, name: String, disconnectedCallback: @escaping () -> Void) {
+        self.init()
+        self.socket = socket
+        self.mac = mac
+        self.name = name
         self.disconnectedCallback = disconnectedCallback
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        deviceIconView.setGradientBackgroundColors(colors: [
-//            UIColor(red: 111/255.0, green: 129/255.0, blue: 1, alpha: 1),
-//            UIColor(red: 71/255.0, green: 93/255.0, blue: 241/255.0, alpha: 1)
-//        ], locations: [NSNumber(value: 0), NSNumber(value: 1)])
-        
         disconenctBtn.setBorder(width: 1, cornerRadius: 15, color: UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1))
+        nameLabel.text = name
     }
 
 
     @IBAction private func onDisconnect() {
-//        disconnectedCallback?()
-//        present(SCLPairViewController(), animated: true)
-        present(SCLAirPlayGuideViewController(), animated: true)
+        if let socket {
+            SLSocketManager.shared.disconnect(socket) { [weak self] in
+                self?.disconnectedCallback?()
+            }
+        } else {
+            disconnectedCallback?()
+        }
     }
-
+    
+    @IBAction private func onAirplay() {
+        switch state {
+        case .connected:
+            let pairedMacAddresses = SCLDBManager.getPairedMacAddresses()
+            if pairedMacAddresses.contains(mac) {
+                
+            } else {
+                present(SCLPairViewController(), animated: true)
+            }
+        default:
+            break
+        }
+    }
 }

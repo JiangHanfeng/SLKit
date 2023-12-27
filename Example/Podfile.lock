@@ -1,10 +1,16 @@
 PODS:
   - CocoaAsyncSocket (7.6.5)
   - HandyJSON (5.0.2)
+  - KeychainAccess (4.2.2)
   - LLNetworkAccessibility-Swift (1.0.3)
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
   - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
+  - Realm (10.45.2):
+    - Realm/Headers (= 10.45.2)
+  - Realm/Headers (10.45.2)
+  - RealmSwift (10.45.2):
+    - Realm (= 10.45.2)
   - RxCocoa (6.6.0):
     - RxRelay (= 6.6.0)
     - RxSwift (= 6.6.0)
@@ -27,7 +33,9 @@ PODS:
 DEPENDENCIES:
   - CocoaAsyncSocket
   - HandyJSON
+  - KeychainAccess
   - LLNetworkAccessibility-Swift
+  - RealmSwift (~> 10)
   - RxCocoa
   - RxSwift
   - SLKit (from `../`)
@@ -39,8 +47,11 @@ SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
     - HandyJSON
+    - KeychainAccess
     - LLNetworkAccessibility-Swift
     - ObjcExceptionBridging
+    - Realm
+    - RealmSwift
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -55,8 +66,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
+  KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   LLNetworkAccessibility-Swift: f9d237d2589f92eaa9baaa5351a1043e730c4773
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
+  Realm: bc4fc31783a0b3e355edca05f167f6a49c544dc2
+  RealmSwift: 234003b5fdb187c4b439d478662636d62a1f9de0
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
@@ -65,6 +79,6 @@ SPEC CHECKSUMS:
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
   XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
-PODFILE CHECKSUM: 30f6614a62c8aedd9bcff1bb0829f2592237d490
+PODFILE CHECKSUM: 946fb3bf692903a604bb4fe453efe429e7e086a6
 
 COCOAPODS: 1.13.0

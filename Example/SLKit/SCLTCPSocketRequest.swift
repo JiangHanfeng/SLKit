@@ -23,6 +23,7 @@ enum SCLTCPCmd: Int, HandyJSONEnum {
     case startAirplay = 20
     case hidConnected = 21
     case airplayUpdated = 23
+    case getPairedDevices = 30
     case requestPair = 201
     case requestScreen = 203
     case requestFileTransfer = 204
@@ -47,7 +48,7 @@ struct SCLTCPSocketRequest<T: SCLTCPSocketModel> {
     }
 }
 
-extension SCLTCPSocketRequest: SLTCPSocketSessionItem {
+extension SCLTCPSocketRequest: SLSocketSessionItem {
     var id: String {
         return taskId
     }

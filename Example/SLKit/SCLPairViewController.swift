@@ -11,7 +11,7 @@ import UIKit
 class SCLPairViewController: SCLBaseViewController {
     
     private lazy var pairAlertVc = {
-        return SCLPairAlertViewController { [unowned self] in
+        return SCLPairGuideViewController { [unowned self] in
             self.dismiss(animated: true)
         } onPair: { [weak self] in
             let scheme = "App-Prefs:root=General"

@@ -42,7 +42,6 @@ class TestViewController: UIViewController {
             }
             self?.heartBeatWork.start(at: DispatchQueue.main)
         })
-        heartBeatWork.identifier = "定时读取charateristic"
         bleStatusLabel.backgroundColor = UIColor(displayP3Red: 0, green: 84/255.0, blue: 166/255.0, alpha: 0.4)
         bleOperationBtn.addTarget(self, action: #selector(onBleOperation), for: .touchUpInside)
         

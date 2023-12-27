@@ -21,7 +21,7 @@ class SCLSettingViewController: SCLBaseViewController {
     
     private var items = [
         [
-            SCLSettingCellModel(image: UIImage(named: "icon_phone"), title: "设备名称", content: ""),
+            SCLSettingCellModel(image: UIImage(named: "icon_phone"), title: "设备名称", content: UIDevice.current.name),
             SCLSettingCellModel(image: UIImage(named: "icon_ calibration"), title: "屏幕校准", content: "")
         ],
         [

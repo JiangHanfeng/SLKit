@@ -17,6 +17,8 @@ class SCLConnectionViewController: SCLBaseViewController {
         case initialize
         case scanStarting
         case scanning(_ previewLayer: AVCaptureVideoPreviewLayer)
+        case connecting(_ host: String, _ port: UInt16, _ mac: String, _ name: String)
+        case cancelConnect
         
         var rawValue: Int {
             switch self {
@@ -26,17 +28,37 @@ class SCLConnectionViewController: SCLBaseViewController {
                 return 1
             case .scanning(_):
                 return 2
+            case .connecting(_, _, _, _):
+                return 3
+            case .cancelConnect:
+                return 4
             }
         }
     }
     
     @IBOutlet weak var cameraView: UIView!
+    @IBOutlet weak var connectingView: UIView!
+    @IBOutlet weak var connectingAnimationImageView: UIImageView!
     @IBOutlet weak var bottomButton: UIButton!
     
     private var state = State.initialize {
         didSet {
             if state.rawValue != oldValue.rawValue {
                 updateViews()
+                switch state {
+                case .connecting(let host, let port, let mac, let name):
+                    SLSocketManager.shared.connect(host: host, port: port) { [weak self] result in
+                        switch result {
+                        case .success(let socket):
+                            self?.connectedCallback?(socket, mac, name)
+                        case .failure(_):
+                            self?.state = .initialize
+                            self?.toast("连接失败，请查看连接须知")
+                        }
+                    }
+                default:
+                    break
+                }
             } else {
                 switch state {
                 case .scanning(let newLayer):
@@ -116,10 +138,10 @@ class SCLConnectionViewController: SCLBaseViewController {
         return shape
     }
     
-    private var connectedCallback: (() -> Void)?
+    private var connectedCallback: ((SLSocketClient, String, String) -> Void)?
     
-    convenience init(_ connectedCallback: @escaping () -> Void) {
-        self.init(nibName: "SCLConnectionViewController", bundle: Bundle.main)
+    convenience init(_ connectedCallback: @escaping (_ socket: SLSocketClient, _ mac: String, _ name: String) -> Void) {
+        self.init()
         self.connectedCallback = connectedCallback
     }
     
@@ -145,6 +167,7 @@ class SCLConnectionViewController: SCLBaseViewController {
                 }
             }
             cameraView.isHidden = true
+            stopAnimation()
         case .scanStarting:
             bottomButton.setImage(nil, for: .normal)
             bottomButton.setTitle("取消", for: .normal)
@@ -173,6 +196,25 @@ class SCLConnectionViewController: SCLBaseViewController {
             cameraView.layer.addSublayer(maskLayer)
             cameraView.layer.addSublayer(cornerBorderLayer)
             cameraView.isHidden = false
+        case .connecting(_, _, _, _):
+            bottomButton.setImage(nil, for: .normal)
+            bottomButton.setTitle("取消", for: .normal)
+            bottomButton.setTitleColor(UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1), for: .normal)
+            bottomButton.backgroundColor = .white
+            bottomButton.layer.borderColor = UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1).cgColor
+            bottomButton.layer.borderWidth = 1
+            if let sublayers = cameraView.layer.sublayers {
+                for sublayer in sublayers {
+                    sublayer.removeFromSuperlayer()
+                }
+            }
+            for subview in cameraView.subviews {
+                subview.removeFromSuperview()
+            }
+            cameraView.isHidden = true
+            startAnimation()
+        case .cancelConnect:
+            stopAnimation()
         }
     }
     
@@ -211,9 +253,34 @@ class SCLConnectionViewController: SCLBaseViewController {
             stopCamera {
                 self.state = .initialize
             }
+        case .connecting(let host, let port, _, _):
+            state = .cancelConnect
+            SLSocketManager.shared.cancelConnect(host: host, port: port) { [weak self] in
+                self?.state = .initialize
+            }
+        case .cancelConnect:
+            break
         }
     }
-
+    
+    private func startAnimation() {
+        var animationImages: [UIImage] = []
+        for i in 0..<35 {
+            guard let img = UIImage.init(named: "icon_connecting_animation\(i)") else {
+                continue
+            }
+            animationImages.append(img)
+        }
+        connectingAnimationImageView.animationImages = animationImages
+        connectingAnimationImageView.startAnimating()
+        connectingView.isHidden = false
+    }
+    
+    private func stopAnimation() {
+        connectingView.isHidden = true
+        connectingAnimationImageView.stopAnimating()
+        connectingAnimationImageView.animationImages = nil
+    }
 }
 
 extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
@@ -276,8 +343,9 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
             
             let captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
             captureVideoPreviewLayer.frame = CGRect(origin: .zero, size: previewSize)
-
-            DispatchQueue.global(qos: .background).async { [weak self] in
+            
+            let queue = DispatchQueue(label: Bundle.main.bundleIdentifier ?? "" + ".callCamera")
+            queue.async { [weak self] in
 //                DispatchQueue.main.async {
 //                    completion(nil, captureVideoPreviewLayer)
 //                }
@@ -296,7 +364,8 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
     }
     
     func stopCamera(completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        let queue = DispatchQueue(label: Bundle.main.bundleIdentifier ?? "" + ".callCamera")
+        queue.async { [weak self] in
             self?.session.stopRunning()
             DispatchQueue.main.async {
                 completion()
@@ -314,49 +383,12 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             let object = metadataObjects.first! as! AVMetadataMachineReadableCodeObject
             if let string = object.stringValue, let url = URL(string: string), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
-//                Task {
-//                    do {
-//                        let socket = try await SLSocketManager.shared.asyncConnectServer(host: "192.168.3.170", port: 8088)
-//                        self.toast("socket连接成功")
-//                    } catch let error {
-//                        self.toast("socket连接失败")
-//                        SLLog.debug("socket连接失败:\n\(error.localizedDescription)")
-//                    }
-//                }
-//                let scan = Observable.create { subscriber in
-//                    Task {
-//                        do {
-//                            let device = try await SLConnectivityManager.shared.asyncScan(deviceBuilder: SLFreeStyleDeviceBuilder.self, timeout: .seconds(10)) { device in
-//                                device.macString?.elementsEqual(result.deviceMac) == true
-//                            }
-//                            subscriber.onNext(device)
-//                            subscriber.onCompleted()
-//                        } catch let error {
-//                            subscriber.onError(error)
-//                        }
-//                    }
-//                    return Disposables.create()
-//                }
-//            
-//                scan.flatMap({ device in
-//                        SLLog.debug("已找到设备：\(device.name)")
-//                        return Observable.create { observer in
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-//                                observer.onNext(device)
-//                                observer.onCompleted()
-//                            })
-//                            return Disposables.create()
-//                        }
-//                    })
-//                    .subscribe(onNext: { device in
-//                        SLLog.debug("已连接设备：\(device.name)")
-//                    }, onError: { error in
-//                        (error as? SLError).map {
-//                            self.toast($0.localizedDescription)
-//                        }
-//                    })
-//                    .disposed(by: self.disposeBag)
-
+                print("识别到可连接设备:\(result.deviceName)")
+                if let port = UInt16(result.port) {
+                    self.state = .connecting(result.ip, port, result.deviceMac, result.deviceName)
+                } else {
+                    self.toast("端口号错误")
+                }
             } else {
                 self.toast("请扫描超级互联Lite二维码")
             }

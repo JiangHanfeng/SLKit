@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //        dateFormatter.dateFormat = "yy年MM月dd日 HH时mm分ss秒"
-        
+        _ = SCLUtil.getUUID()
         if let backImage = UIImage(named: "icon_back_dark") {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage.withRenderingMode(.alwaysOriginal)

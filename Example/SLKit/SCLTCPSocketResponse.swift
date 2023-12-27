@@ -9,7 +9,7 @@
 import Foundation
 import SLKit
 
-struct SCLTCPSocketResponse: SLTCPSocketResponse {
+struct SCLTCPSocketResponse: SLSocketResponse {
     var id: String
     var data: Data?
     

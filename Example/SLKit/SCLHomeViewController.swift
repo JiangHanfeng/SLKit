@@ -15,41 +15,11 @@ class SCLHomeViewController: SCLBaseViewController {
     
     @IBOutlet weak var topBar: UIView!
     
-    private lazy var connectionVc: SCLConnectionViewController = {
-        return SCLConnectionViewController { [weak self] in
-            guard let self else {
-                return
-            }
-            self.transitionToChild(deviceVc, removeCurrent: false) { childView in
-                childView.snp.makeConstraints { make in
-                    make.top.equalTo(self.topBar.snp.bottom)
-                    make.left.right.equalTo(0)
-                    make.bottom.equalTo(-UIDevice.safeDistanceBottom())
-                }
-            }
-        }
-    }()
-    
-    private lazy var deviceVc: SCLDeviceViewController = {
-        return SCLDeviceViewController { [weak self] in
-            guard let self else {
-                return
-            }
-            self.transitionToChild(connectionVc, removeCurrent: false) { childView in
-                childView.snp.makeConstraints { make in
-                    make.top.equalTo(self.topBar.snp.bottom)
-                    make.left.right.equalTo(0)
-                    make.bottom.equalTo(-UIDevice.safeDistanceBottom())
-                }
-            }
-        }
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.delegate = self
         navigationController?.setNavigationBarHidden(true, animated: true)
-        transitionToChild(connectionVc) { childView in
+        transitionToChild(getConnectionVc()) { childView in
             childView.snp.makeConstraints { make in
                 make.top.equalTo(self.topBar.snp.bottom)
                 make.left.right.equalTo(0)
@@ -68,7 +38,56 @@ class SCLHomeViewController: SCLBaseViewController {
     }
     
     @IBAction private func onFileTransfer() {
-//        navigationController?.show(SCLFileHistoryViewController(), sender: nil)
+        navigationController?.show(SCLFileHistoryViewController(), sender: nil)
+    }
+    
+    @IBAction private func onSetting() {
+        navigationController?.show(SCLSettingViewController(), sender: nil)
+    }
+    
+    private func getConnectionVc() -> SCLConnectionViewController {
+        return SCLConnectionViewController { [weak self] (socket, mac, name) in
+            guard let self else {
+                return
+            }
+            self.transitionToChild(self.getDeviceVc(socket, mac, name)) { childView in
+                childView.snp.makeConstraints { make in
+                    make.top.equalTo(self.topBar.snp.bottom)
+                    make.left.right.equalTo(0)
+                    make.bottom.equalTo(-UIDevice.safeDistanceBottom())
+                }
+            }
+        }
+    }
+    
+    private func getDeviceVc(_ sock: SLSocketClient, _ mac: String, _ name: String) -> SCLDeviceViewController {
+        return SCLDeviceViewController(socket: sock, mac: mac, name: name) { [weak self] in
+            guard let self else {
+                return
+            }
+            self.transitionToChild(self.getConnectionVc()) { childView in
+                childView.snp.makeConstraints { make in
+                    make.top.equalTo(self.topBar.snp.bottom)
+                    make.left.right.equalTo(0)
+                    make.bottom.equalTo(-UIDevice.safeDistanceBottom())
+                }
+            }
+        }
+    }
+}
+
+extension SCLHomeViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        if viewController.isEqual(self) {
+            var vcs = navigationController.viewControllers
+            while vcs.count > 1 {
+                vcs.removeFirst()
+            }
+            navigationController.viewControllers = vcs
+        }
+    }
+    
+    func test() {
         let connect = Observable.create { subscriber in
             Task {
                 do {
@@ -110,41 +129,5 @@ class SCLHomeViewController: SCLBaseViewController {
         }, onCompleted: {
             
         }).disposed(by: disposeBag)
-
-//        Task {
-//            do {
-//                let response = try await SLTCPManager.shared().asyncRequest(host: "192.168.3.170", port: 8088, taskId: "", text: "heart")
-//                if let string = String(data: response, encoding: .utf8) {
-//                    self.toast("收到响应:\(string)")
-//                }
-//            } catch let error {
-//                self.toast(error.localizedDescription)
-//            }
-//        }
-    }
-    
-    @IBAction private func onSetting() {
-        navigationController?.show(SCLSettingViewController(), sender: nil)
-    }
-}
-
-extension SCLHomeViewController: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        if viewController.isEqual(self) {
-            var vcs = navigationController.viewControllers
-            while vcs.count > 1 {
-                vcs.removeFirst()
-            }
-            navigationController.viewControllers = vcs
-        }
-    }
-    
-    func test() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.main.async {
-                Thread.sleep(forTimeInterval: 3)
-                continuation.resume(returning: true)
-            }
-        }
     }
 }

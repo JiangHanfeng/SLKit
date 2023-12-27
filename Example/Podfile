@@ -12,6 +12,8 @@ target 'SLKit_Example' do
   pod 'Toast-Swift'
   pod 'LLNetworkAccessibility-Swift'
   pod 'HandyJSON'
+  pod 'KeychainAccess'
+  pod 'RealmSwift', '~>10'
   target 'SLKit_Tests' do
     inherit! :search_paths
 

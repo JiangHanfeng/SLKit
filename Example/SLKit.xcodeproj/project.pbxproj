@@ -48,12 +48,15 @@
 		4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */; };
 		4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34072B3441CB00E14D40 /* SCLUtil.swift */; };
 		4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34092B34436C00E14D40 /* SCLQRResult.swift */; };
-		4BDE22E42B31407600D1A50C /* SCLPairAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */; };
-		4BDE22E52B31407600D1A50C /* SCLPairAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */; };
+		4BDE22E42B31407600D1A50C /* SCLPairGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */; };
+		4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */; };
 		4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */; };
 		4BDE22EF2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */; };
 		4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */; };
 		4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */; };
+		4BE3B94D2B3BF46F00C48A71 /* SCLDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */; };
+		4BE3B94F2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */; };
+		4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -119,12 +122,16 @@
 		4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDeviceBuilder.swift; sourceTree = "<group>"; };
 		4BCE34072B3441CB00E14D40 /* SCLUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLUtil.swift; sourceTree = "<group>"; };
 		4BCE34092B34436C00E14D40 /* SCLQRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLQRResult.swift; sourceTree = "<group>"; };
-		4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairAlertViewController.swift; sourceTree = "<group>"; };
-		4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPairAlertViewController.xib; sourceTree = "<group>"; };
+		4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairGuideViewController.swift; sourceTree = "<group>"; };
+		4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPairGuideViewController.xib; sourceTree = "<group>"; };
 		4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPrivacyPolicyViewController.xib; sourceTree = "<group>"; };
 		4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLWebViewController.swift; sourceTree = "<group>"; };
 		4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
+		4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLDBManager.swift; sourceTree = "<group>"; };
+		4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetPairedDeviceReq.swift; sourceTree = "<group>"; };
+		4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetPairedDeviceResp.swift; sourceTree = "<group>"; };
+		4BE3B9522B3C353700C48A71 /* SLKit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SLKit.entitlements; sourceTree = "<group>"; };
 		540536ACE968C6C213F41F95 /* Pods-SLKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Tests.release.xcconfig"; path = "Target Support Files/Pods-SLKit_Tests/Pods-SLKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SLKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SLKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -209,8 +216,8 @@
 				4B2694F12B304BB500B116BA /* SCLSettingCell.xib */,
 				4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */,
 				4B2694F62B31347400B116BA /* SCLBaseViewController.swift */,
-				4BDE22E22B31407600D1A50C /* SCLPairAlertViewController.swift */,
-				4BDE22E32B31407600D1A50C /* SCLPairAlertViewController.xib */,
+				4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */,
+				4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */,
 				4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */,
 				4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */,
 				4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */,
@@ -237,6 +244,10 @@
 				4B14ACA02B3AB1A800FD0F9A /* SCLTCPLoginModel.swift */,
 				4B14ACA22B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift */,
 				4B14ACA42B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift */,
+				4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */,
+				4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */,
+				4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */,
+				4BE3B9522B3C353700C48A71 /* SLKit.entitlements */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -350,7 +361,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = CU2MX8X5N6;
+						DevelopmentTeam = 9CYW329KHD;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -396,7 +407,7 @@
 				4B2E00172B394B8D00E2191E /* SCLFileHistoryViewController.xib in Resources */,
 				4B4AF96D2B391459001C8214 /* SCLFileRecordCell.xib in Resources */,
 				4B23D1F42B3306D8008724E5 /* SCLRequestPermissionViewController.xib in Resources */,
-				4BDE22E52B31407600D1A50C /* SCLPairAlertViewController.xib in Resources */,
+				4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */,
 				4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				4B4290EB2B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib in Resources */,
@@ -447,8 +458,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
 				"${BUILT_PRODUCTS_DIR}/LLNetworkAccessibility-Swift/LLNetworkAccessibility_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjcExceptionBridging/ObjcExceptionBridging.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
@@ -461,8 +475,11 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LLNetworkAccessibility_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjcExceptionBridging.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
@@ -510,6 +527,7 @@
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
+				4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */,
 				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
 				4B14ACA32B3AB34F00FD0F9A /* SCLTCPSocketRequest.swift in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
@@ -526,13 +544,15 @@
 				4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */,
 				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
 				4B14ACA52B3ABC7000FD0F9A /* SCLTCPSocketResponse.swift in Sources */,
-				4BDE22E42B31407600D1A50C /* SCLPairAlertViewController.swift in Sources */,
+				4BDE22E42B31407600D1A50C /* SCLPairGuideViewController.swift in Sources */,
+				4BE3B94D2B3BF46F00C48A71 /* SCLDBManager.swift in Sources */,
 				4B2E00162B394B8D00E2191E /* SCLFileHistoryViewController.swift in Sources */,
 				4B4AF9692B391255001C8214 /* SCLFileRecordViewController.swift in Sources */,
 				4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */,
 				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
 				4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				4BE3B94F2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift in Sources */,
 				4B14ACA12B3AB1A800FD0F9A /* SCLTCPLoginModel.swift in Sources */,
 				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
 				4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */,
@@ -684,12 +704,13 @@
 			baseConfigurationReference = 15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CU2MX8X5N6;
+				CODE_SIGN_ENTITLEMENTS = "";
+				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.SLKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -701,12 +722,13 @@
 			baseConfigurationReference = 077DEFF2690EF5300F2D240F /* Pods-SLKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CU2MX8X5N6;
+				CODE_SIGN_ENTITLEMENTS = "";
+				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.SLKit;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
