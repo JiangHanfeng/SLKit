@@ -10,13 +10,37 @@ import Foundation
 import UIKit
 import Toast_Swift
 
-extension UIViewController {
-    func toast(_ msg: String) {
+extension UIApplication {
+    func toast(_ msg: String, duration: TimeInterval, tag: Int = 0) throws {
+        var window: UIWindow?
+        if #available(iOS 15.0, *) {
+            window = UIApplication.shared.connectedScenes
+                .lazy
+                .compactMap { $0.activationState == .foregroundActive ? ($0 as? UIWindowScene) : nil}
+                .first(where: { $0.keyWindow != nil })?.keyWindow
+        } else if #available(iOS 13.0, *) {
+            window = UIApplication.shared.windows.first
+        } else {
+            window = UIApplication.shared.keyWindow
+        }
+        guard let window else {
+            throw NSError(domain: NSErrorDomain(string: "UI Error") as String, code: -999, userInfo: [NSLocalizedDescriptionKey:"key window not found"])
+        }
         var style = ToastStyle()
         style.messageColor = .white
         style.backgroundColor = .init(red: 70/255.0, green: 72/255.0, blue: 82/255.0, alpha: 0.8)
         style.messageFont = .systemFont(ofSize: 14)
-        view.makeToast(msg, duration: 3.0, position: .bottom, style: style)
+        window.makeToast(msg, duration: duration, position: .bottom, style: style)
+    }
+}
+
+extension UIViewController {
+    func toast(_ msg: String, image: UIImage? = nil) {
+        var style = ToastStyle()
+        style.messageColor = .white
+        style.backgroundColor = .init(red: 70/255.0, green: 72/255.0, blue: 82/255.0, alpha: 0.8)
+        style.messageFont = .systemFont(ofSize: 14)
+        view.makeToast(msg, duration: 3.0, position: .bottom, image: image, style: style)
     }
     
     func transitionToChild(_ controller: UIViewController, removeCurrent: Bool = true, configChildViewRect: ((_ childView: UIView) -> Void)) {

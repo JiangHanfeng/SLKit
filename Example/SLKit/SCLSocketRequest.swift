@@ -1,5 +1,5 @@
 //
-//  SCLTCPSocketRequest.swift
+//  SCLSocketRequest.swift
 //  SLKit_Example
 //
 //  Created by 蒋函锋 on 2023/12/26.
@@ -10,9 +10,10 @@ import Foundation
 import HandyJSON
 import SLKit
 
-enum SCLTCPCmd: Int, HandyJSONEnum {
-    case login = 0
-    case initPlatform = 1
+enum SCLCmd: Int, HandyJSONEnum {
+    case unknown = 0
+    case login = 1
+//    case initPlatform = 1
     case end = 5
     case requestCalibration = 10
     case submitCalibrationData = 11
@@ -24,37 +25,49 @@ enum SCLTCPCmd: Int, HandyJSONEnum {
     case hidConnected = 21
     case airplayUpdated = 23
     case getPairedDevices = 30
+    case requestPairVerification = 31
     case requestPair = 201
     case requestScreen = 203
     case requestFileTransfer = 204
 }
 
-protocol SCLTCPSocketModel : HandyJSON {
-    var cmd: SCLTCPCmd { get }
+protocol SCLSocketConetent : HandyJSON {
+    var cmd: SCLCmd { get }
 }
 
-struct SCLTCPSocketRequest<T: SCLTCPSocketModel> {
+struct SCLSocketGenericContent: SCLSocketConetent {
+    init() {
+        cmd = .unknown
+    }
+    
+    init(cmd: SCLCmd) {
+        self.cmd = cmd
+    }
+    
+    var cmd: SCLCmd
+}
 
+struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
     let dev_id = UIDevice.current.identifierForVendor?.uuidString ?? ""
     let dev_mac = UIDevice.current.identifierForVendor?.uuidString ?? ""
     let deviceName = UIDevice.current.name
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
-    let model: T
+    let content: T
     
-    init(model: T) {
-        self.model = model
+    init(content: T) {
+        self.content = content
     }
 }
 
-extension SCLTCPSocketRequest: SLSocketSessionItem {
+extension SCLSocketRequest: SLSocketSessionItem {
     var id: String {
         return taskId
     }
     
     var data: Data? {
-        guard var json = model.toJSON() else {
+        guard var json = content.toJSON() else {
             return nil
         }
         json.updateValue(taskId, forKey: "taskId")

@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLDeviceViewController" customModule="SLKit_Example" customModuleProvider="target">
             <connections>
+                <outlet property="connectionStateLabel" destination="Jos-Vk-RCW" id="gsc-RV-Ky9"/>
                 <outlet property="disconenctBtn" destination="Eai-do-Bfr" id="VEZ-qA-6GP"/>
                 <outlet property="nameLabel" destination="l0V-cS-fgv" id="Bhh-aX-5AO"/>
                 <outlet property="view" destination="RA0-fE-toV" id="97A-vR-lFM"/>

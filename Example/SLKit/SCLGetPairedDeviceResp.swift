@@ -7,3 +7,24 @@
 //
 
 import Foundation
+import HandyJSON
+
+struct SCLPCPairedDevice : HandyJSON, Equatable {
+    init() {
+        deviceName = ""
+        deviceMac = ""
+    }
+    
+    let deviceName: String
+    let deviceMac: String
+}
+
+struct SCLGetPairedDeviceResp : SCLSocketConetent {
+    let cmd: SCLCmd
+    let deviceList: [SCLPCPairedDevice]
+    
+    init() {
+        self.cmd = .getPairedDevices
+        self.deviceList = []
+    }
+}

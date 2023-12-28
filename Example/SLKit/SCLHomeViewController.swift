@@ -107,7 +107,7 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
                     DispatchQueue.global().async {
                         Task {
                             do {
-                                let response = try await SLSocketManager.shared.send(SCLTCPSocketRequest(model: SCLTCPLoginModel(code: i)), to: sock, for: SCLTCPSocketResponse.self)
+                                let response = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), to: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
                             } catch let e {
                                 
                             }

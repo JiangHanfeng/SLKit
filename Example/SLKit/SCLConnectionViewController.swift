@@ -47,13 +47,22 @@ class SCLConnectionViewController: SCLBaseViewController {
                 updateViews()
                 switch state {
                 case .connecting(let host, let port, let mac, let name):
-                    SLSocketManager.shared.connect(host: host, port: port) { [weak self] result in
-                        switch result {
-                        case .success(let socket):
-                            self?.connectedCallback?(socket, mac, name)
-                        case .failure(_):
-                            self?.state = .initialize
-                            self?.toast("连接失败，请查看连接须知")
+                    Task {
+                        do {
+                            let sock = try await SLSocketManager.shared.connect(host: host, port: port, heartbeatRule: SLSocketHeartbeatRule(interval: 1, timeout: 10, sendValue: "ping", reponseValue: "pong"))
+                            let resp = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), to: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
+                            if resp.state == 1 {
+                                self.connectedCallback?(sock, mac, name)
+                            } else {
+                                SLLog.debug("TCP登录失败:state != 1")
+                                self.state = .initialize
+                                self.toast("连接失败，请查看连接须知")
+                                sock.disconnect()
+                            }
+                        } catch let e {
+                            SLLog.debug("TCP登录失败:\(e.localizedDescription)")
+                            self.state = .initialize
+                            self.toast("连接失败，请查看连接须知")
                         }
                     }
                 default:
@@ -77,7 +86,8 @@ class SCLConnectionViewController: SCLBaseViewController {
         }
     }
     
-    private lazy var session: AVCaptureSession = {         return AVCaptureSession()
+    private lazy var session: AVCaptureSession = {
+        return AVCaptureSession()
     }()
    
     private lazy var output: AVCaptureMetadataOutput = {
@@ -88,7 +98,6 @@ class SCLConnectionViewController: SCLBaseViewController {
     
     private var rectOfInterest: CGRect {
         let spacing: CGFloat = 20
-//        let width = (cameraView.bounds.width < cameraView.bounds.height ? cameraView.bounds.width : cameraView.bounds.height) - spacing * 2
         return CGRect(x: spacing, y: spacing, width: cameraView.bounds.width - spacing * 2, height: cameraView.bounds.height - spacing * 2)
     }
     
@@ -221,8 +230,6 @@ class SCLConnectionViewController: SCLBaseViewController {
     @IBAction func onBottomBtn() {
         switch state {
         case .initialize:
-//            connectedCallback?()
-//            break
             state = .scanStarting
             startCamera(previewSize: CGSize(width: cameraView.bounds.width, height: cameraView.bounds.height), rectOfInterest: rectOfInterest) { error, previewLayer in
                 if let error {
@@ -338,7 +345,6 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
                 return
             }
 //            session?.beginConfiguration()
-            
             output.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
             
             let captureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
@@ -346,10 +352,6 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
             
             let queue = DispatchQueue(label: Bundle.main.bundleIdentifier ?? "" + ".callCamera")
             queue.async { [weak self] in
-//                DispatchQueue.main.async {
-//                    completion(nil, captureVideoPreviewLayer)
-//                }
-//                self?.session.commitConfiguration()
                 self?.session.startRunning()
                 // 添加识别区域必须在layer有不为0的frame且session已经startRunning过后
                 DispatchQueue.main.async {
@@ -377,19 +379,23 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
         guard metadataObjects.count > 0 else {
             return
         }
-        
-        stopCamera {
-            self.state = .initialize
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            let object = metadataObjects.first! as! AVMetadataMachineReadableCodeObject
-            if let string = object.stringValue, let url = URL(string: string), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
-                print("识别到可连接设备:\(result.deviceName)")
+        session.stopRunning()
+        let soundID = SystemSoundID(kSystemSoundID_Vibrate)
+        AudioServicesPlaySystemSound(soundID)
+        let object = metadataObjects.first! as! AVMetadataMachineReadableCodeObject
+        if let string = object.stringValue, let url = URL(string: string), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
+            print("识别到可连接设备:\(result.deviceName)")
+            DispatchQueue.main.async {
                 if let port = UInt16(result.port) {
                     self.state = .connecting(result.ip, port, result.deviceMac, result.deviceName)
                 } else {
+                    self.state = .initialize
                     self.toast("端口号错误")
                 }
-            } else {
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.state = .initialize
                 self.toast("请扫描超级互联Lite二维码")
             }
         }

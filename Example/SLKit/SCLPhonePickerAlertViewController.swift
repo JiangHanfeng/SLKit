@@ -16,12 +16,13 @@ class SCLPhonePickerAlertViewController: SCLBaseViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
     
-    private var numberOfRows = 0
+    private var devices: [SCLPCPairedDevice] = []
     
     private var back: (() -> Void)?
     
-    convenience init(onBack: @escaping (() -> Void)) {
+    convenience init(devices: [SCLPCPairedDevice], onBack: @escaping (() -> Void)) {
         self.init()
+        self.devices = devices
         self.back = onBack
     }
     
@@ -48,7 +49,6 @@ class SCLPhonePickerAlertViewController: SCLBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        numberOfRows = 3
         tableView.reloadData()
     }
 }
@@ -59,11 +59,13 @@ extension SCLPhonePickerAlertViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfRows
+        return devices.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SCLPhonePickerCell.reuseIdentifier) as! SCLPhonePickerCell
+        let device = devices[indexPath.row]
+        cell.nameLabel.text = device.deviceName
         return cell
     }
     

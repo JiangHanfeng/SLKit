@@ -27,6 +27,12 @@ class SCLAirPlayGuideViewController: SCLBaseViewController {
     }
     
     @IBAction func onCancel(sender: UIButton) {
-        dismiss(animated: true)
+        var rootPresentingVc = presentingViewController
+        var presentingVc = rootPresentingVc
+        while presentingVc != nil {
+            rootPresentingVc = presentingVc
+            presentingVc = presentingVc?.presentingViewController
+        }
+        rootPresentingVc?.dismiss(animated: true)
     }
 }

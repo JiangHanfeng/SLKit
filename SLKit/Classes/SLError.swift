@@ -17,12 +17,14 @@ public enum SLError: Error, LocalizedError {
     case socketConnectionErrorState
     case socketConnectionFailure(Error)
     case socketConnectionTimeout
+    case socketDisconnectedHeartbeatTimeout
     case socketDisconnected(Error?)
     case socketSendFailureNotConnected
     case socketSendFailureEmptyData
     case socketSendFailureDataError
     case socketNotConnectedYet
     case socketDisconnectedWaitingForResponse
+    case socketHasBeenReleased
     
     public var errorDescription: String? {
         switch self {
@@ -44,6 +46,8 @@ public enum SLError: Error, LocalizedError {
             return error.localizedDescription
         case .socketConnectionTimeout:
             return "socket connect timeout"
+        case .socketDisconnectedHeartbeatTimeout:
+            return "socket disconnected because of heartbeat timeout"
         case .socketDisconnected(let error):
             return error != nil ? error!.localizedDescription : "socket disconnected"
         case .socketSendFailureNotConnected:
@@ -56,6 +60,8 @@ public enum SLError: Error, LocalizedError {
             return "socket hasn't been connected yet"
         case .socketDisconnectedWaitingForResponse:
             return "socket has disconected when waiting for the response"
+        case .socketHasBeenReleased:
+            return "socket has been released"
         }
     }
 }

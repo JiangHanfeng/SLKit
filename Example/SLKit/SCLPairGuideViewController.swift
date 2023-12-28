@@ -21,13 +21,13 @@ class SCLPairGuideViewController: SCLBaseViewController {
     
     private var cancel: (() -> Void)?
     private var pair: (() -> Void)?
-    private var paired: (() -> Void)?
+    private var paired: ((_ button: UIButton) -> Void)?
     private var scrollToNext: SLCancelableWork?
     
     convenience init(
         onCancel: @escaping (() -> Void),
         onPair: @escaping (() -> Void),
-        onPaired: @escaping (() -> Void)
+        onPaired: @escaping ((_ button: UIButton) -> Void)
     ) {
         self.init()
         self.cancel = onCancel
@@ -38,6 +38,9 @@ class SCLPairGuideViewController: SCLBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         cancelBtn.layer.borderColor = UIColor.init(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1).cgColor
+        pairedBtn.setBackgroundColor(color: UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1), forState: .disabled)
+        pairedBtn.setBackgroundColor(color: UIColor(red: 54/255.0, green: 120/255.0, blue: 1, alpha: 0.4), forState: .disabled)
+        pairedBtn.setBackgroundColor(color: UIColor(red: 54/255.0, green: 120/255.0, blue: 1, alpha: 0.4), forState: .disabled)
         setPairedBtn(hidden: true)
         scrollView.rx.willBeginDragging.subscribe { [weak self] _ in
             print("scollview willBeginDragging")
@@ -73,7 +76,7 @@ class SCLPairGuideViewController: SCLBaseViewController {
     }
     
     @IBAction private func onPaired() {
-        paired?()
+        paired?(pairBtn)
     }
     
     private func setAutoScroll(enable: Bool) {

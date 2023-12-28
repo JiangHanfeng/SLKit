@@ -19,6 +19,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var connectionStateLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
     
     private var mac: String!
@@ -39,8 +40,17 @@ class SCLDeviceViewController: SCLBaseViewController {
         super.viewDidLoad()
         disconenctBtn.setBorder(width: 1, cornerRadius: 15, color: UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1))
         nameLabel.text = name
+        socket?.unexpectedDisconnectHandler = { [weak self] error in
+            DispatchQueue.main.async {
+                self?.connectionStateLabel.text = "已断开连接"
+                self?.startReconnect()
+            }
+        }
     }
 
+    private func startReconnect() {
+        present(SCLReconnectViewController(duration: 30), animated: true)
+    }
 
     @IBAction private func onDisconnect() {
         if let socket {
@@ -59,7 +69,11 @@ class SCLDeviceViewController: SCLBaseViewController {
             if pairedMacAddresses.contains(mac) {
                 
             } else {
-                present(SCLPairViewController(), animated: true)
+                guard let socket else {
+                    toast("已断开连接")
+                    return
+                }
+                present(SCLPairViewController(sock: socket), animated: true)
             }
         default:
             break

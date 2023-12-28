@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct SCLGetPairedDeviceReq: SCLTCPSocketModel {
-    var cmd: SCLTCPCmd = .getPairedDevices
+struct SCLGetPairedDeviceReq: SCLSocketConetent {
+    var cmd: SCLCmd = .getPairedDevices
 }

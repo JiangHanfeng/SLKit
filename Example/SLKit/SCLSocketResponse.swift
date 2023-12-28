@@ -1,5 +1,5 @@
 //
-//  SCLTCPSocketResponse.swift
+//  SCLSocketResponse.swift
 //  SLKit_Example
 //
 //  Created by 蒋函锋 on 2023/12/26.
@@ -9,13 +9,15 @@
 import Foundation
 import SLKit
 
-struct SCLTCPSocketResponse: SLSocketResponse {
+struct SCLSocketResponse<T: SCLSocketConetent>: SLSocketResponse {
     var id: String
     var data: Data?
     
     var state: Int
     var msg: String
     var dev_mac: String
+    
+    var content: T?
     
     init(data: Data) throws {
         self.data = data
@@ -35,6 +37,7 @@ struct SCLTCPSocketResponse: SLSocketResponse {
                 self.state = state
                 self.msg = msg
                 self.dev_mac = dev_mac
+                self.content = T.deserialize(from: json)
             } else {
                 throw NSError(domain: NSErrorDomain(string: "failed to get taskId/state/msg/dev_mac") as String, code: -999, userInfo: [NSLocalizedDescriptionKey:"转换SCLTCPSocketResponse失败"])
             }
@@ -42,5 +45,4 @@ struct SCLTCPSocketResponse: SLSocketResponse {
             throw e
         }
     }
-    
 }
