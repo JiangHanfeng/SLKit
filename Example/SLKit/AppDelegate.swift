@@ -89,7 +89,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        print("\(self.dateFormatter.string(from: Date())):程序即将退出")
         SLLog.debug("程序即将退出")
     }
-
+    
+    func selectFile() {
+        let documentTypes = ["public.content", "public.text", "public.archive", "public.image",
+                             "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
+                             "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
+        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
+        let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
+        vc.modalPresentationStyle = .fullScreen
+        vc.delegate = self
+        vc.allowsMultipleSelection = true;
+        vc.navigationController?.navigationBar.barTintColor = .white
+        UIApplication.shared.currentController().present(vc, animated: true)
+    }
+    
     private func applyTimeForBackgroundTask() {
         if backgroundId == nil {
             SLLog.debug("开启后台任务")
@@ -107,6 +120,55 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 SLLog.debug("后台任务开启失败")
             }
         }
+    }
+}
+
+extension AppDelegate : UIDocumentPickerDelegate {
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        var files:[SLFileModel] = []
+        _ = urls.map({ url in
+            if url.startAccessingSecurityScopedResource(),
+               let model = try? self.fileModel(with: url) {
+                files.append(model)
+                url.stopAccessingSecurityScopedResource()
+            }
+        })
+        guard files.count > 0 else {
+            /*
+             sometimes the debugger will show "The view service did terminate with error: Error Domain=_UIViewServiceErrorDomain Code=1 "(null)" UserInfo={Terminated=disconnect method}"
+             then the file won't be choosen by app
+             */
+            return
+        }
+    }
+    
+    
+    private func fileModel(with documentUrl: URL) throws -> SLFileModel {
+        var path1 : String
+        if #available(iOS 16.0, *) {
+            path1 = documentUrl.path()
+        } else {
+            path1 = documentUrl.path
+        }
+        let dirs = path1.split(separator: "/")
+        guard !dirs.isEmpty else {
+            throw NSError(domain: NSCocoaErrorDomain, code: -999, userInfo: [NSLocalizedDescriptionKey:"文件路径错误"])
+        }
+        let fileName = String(dirs.last!)
+        let arr = String(dirs.last!).split(separator: ".")
+        guard arr.count > 1 else {
+            throw NSError(domain: NSCocoaErrorDomain, code: -999, userInfo: [NSLocalizedDescriptionKey:"文件名无法解析"])
+        }
+        let name = arr[0..<arr.count - 1].joined()
+        let extensionName = String(arr.last!)
+        let fm = FileManager()
+        let tempPath1 = try FileManager.tempPath()
+        try fm.copy(sourcePath: path1, desDirPath: tempPath1, renamed: fileName)
+        return SLFileModel(path: tempPath1 + "/\(fileName)", name: name, extensionName: extensionName, time: Int(Date().timeIntervalSince1970*1000))
     }
 }
 

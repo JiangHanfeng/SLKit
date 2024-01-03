@@ -9,7 +9,7 @@ import Foundation
 import CoreBluetooth
 import SLKit
 
-class SLFreeStyleDevice {
+@objcMembers class SLFreeStyleDevice : NSObject {
     private let blePeripheral: CBPeripheral
     private let deviceName: String
     private let deviceMac: [UInt8]

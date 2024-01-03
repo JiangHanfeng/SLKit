@@ -48,6 +48,12 @@
 		4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4AF96A2B391459001C8214 /* SCLFileRecordCell.swift */; };
 		4B4AF96D2B391459001C8214 /* SCLFileRecordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */; };
 		4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */; };
+		4B72F5A62B45A2C500074E28 /* SLFileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5A52B45A2C500074E28 /* SLFileModel.swift */; };
+		4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C52B45B3EC00074E28 /* SLFileIOModel.m */; };
+		4B72F5CB2B45B3EC00074E28 /* SLFileTransferManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C62B45B3EC00074E28 /* SLFileTransferManager.mm */; };
+		4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C72B45B3EC00074E28 /* SLFileTransferFileModel.mm */; };
+		4B72F5CD2B45B3EC00074E28 /* libXTunnelFileTransfer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B72F5C92B45B3EC00074E28 /* libXTunnelFileTransfer.a */; };
+		4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */; };
 		4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */; };
 		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
 		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
@@ -130,6 +136,37 @@
 		4B4AF96A2B391459001C8214 /* SCLFileRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLFileRecordCell.swift; sourceTree = "<group>"; };
 		4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLFileRecordCell.xib; sourceTree = "<group>"; };
 		4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		4B72F5A52B45A2C500074E28 /* SLFileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFileModel.swift; sourceTree = "<group>"; };
+		4B72F5A82B45B3EC00074E28 /* SLFileIOModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileIOModel.h; sourceTree = "<group>"; };
+		4B72F5A92B45B3EC00074E28 /* SLFileTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileTransferManager.h; sourceTree = "<group>"; };
+		4B72F5AE2B45B3EC00074E28 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
+		4B72F5AF2B45B3EC00074E28 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		4B72F5B12B45B3EC00074E28 /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPServer.h; sourceTree = "<group>"; };
+		4B72F5B22B45B3EC00074E28 /* ServerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerHelper.h; sourceTree = "<group>"; };
+		4B72F5B32B45B3EC00074E28 /* ClientHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientHelper.h; sourceTree = "<group>"; };
+		4B72F5B42B45B3EC00074E28 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Socket.h; sourceTree = "<group>"; };
+		4B72F5B52B45B3EC00074E28 /* TCPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPClient.h; sourceTree = "<group>"; };
+		4B72F5B72B45B3EC00074E28 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
+		4B72F5B82B45B3EC00074E28 /* MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD5.h; sourceTree = "<group>"; };
+		4B72F5B92B45B3EC00074E28 /* tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tools.h; sourceTree = "<group>"; };
+		4B72F5BA2B45B3EC00074E28 /* SimperSafeMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimperSafeMap.h; sourceTree = "<group>"; };
+		4B72F5BB2B45B3EC00074E28 /* ping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ping.h; sourceTree = "<group>"; };
+		4B72F5BD2B45B3EC00074E28 /* JsonHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonHelper.h; sourceTree = "<group>"; };
+		4B72F5BE2B45B3EC00074E28 /* SubTask_Sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubTask_Sender.h; sourceTree = "<group>"; };
+		4B72F5BF2B45B3EC00074E28 /* FileTransferSenderTaskProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransferSenderTaskProcess.h; sourceTree = "<group>"; };
+		4B72F5C02B45B3EC00074E28 /* FileTransferModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransferModel.h; sourceTree = "<group>"; };
+		4B72F5C12B45B3EC00074E28 /* FileTransferReceiverTaskProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransferReceiverTaskProcess.h; sourceTree = "<group>"; };
+		4B72F5C22B45B3EC00074E28 /* SubTask_Receive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubTask_Receive.h; sourceTree = "<group>"; };
+		4B72F5C32B45B3EC00074E28 /* FileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransfer.h; sourceTree = "<group>"; };
+		4B72F5C42B45B3EC00074E28 /* ReceiveFileInfoUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReceiveFileInfoUnit.h; sourceTree = "<group>"; };
+		4B72F5C52B45B3EC00074E28 /* SLFileIOModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFileIOModel.m; sourceTree = "<group>"; };
+		4B72F5C62B45B3EC00074E28 /* SLFileTransferManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SLFileTransferManager.mm; sourceTree = "<group>"; };
+		4B72F5C72B45B3EC00074E28 /* SLFileTransferFileModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SLFileTransferFileModel.mm; sourceTree = "<group>"; };
+		4B72F5C82B45B3EC00074E28 /* SLFileTransferFileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileTransferFileModel.h; sourceTree = "<group>"; };
+		4B72F5C92B45B3EC00074E28 /* libXTunnelFileTransfer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libXTunnelFileTransfer.a; sourceTree = "<group>"; };
+		4B72F5D12B45B47C00074E28 /* SLKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SLKit-Bridging-Header.h"; sourceTree = "<group>"; };
+		4B72F5D42B45BCC500074E28 /* NSString+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Transition.h"; sourceTree = "<group>"; };
+		4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+Transition.mm"; sourceTree = "<group>"; };
 		4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDevice.swift; sourceTree = "<group>"; };
 		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
 		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
@@ -170,6 +207,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B039E0A6849D89685F8353C4 /* Pods_SLKit_Example.framework in Frameworks */,
+				4B72F5CD2B45B3EC00074E28 /* libXTunnelFileTransfer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,8 +244,104 @@
 			children = (
 				4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */,
 				4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */,
+				4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */,
+				4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */,
+				4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */,
+				4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		4B72F5A72B45B3EC00074E28 /* FileTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5D42B45BCC500074E28 /* NSString+Transition.h */,
+				4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */,
+				4B72F5A82B45B3EC00074E28 /* SLFileIOModel.h */,
+				4B72F5C52B45B3EC00074E28 /* SLFileIOModel.m */,
+				4B72F5C82B45B3EC00074E28 /* SLFileTransferFileModel.h */,
+				4B72F5C72B45B3EC00074E28 /* SLFileTransferFileModel.mm */,
+				4B72F5A92B45B3EC00074E28 /* SLFileTransferManager.h */,
+				4B72F5C62B45B3EC00074E28 /* SLFileTransferManager.mm */,
+				4B72F5AA2B45B3EC00074E28 /* include */,
+				4B72F5C92B45B3EC00074E28 /* libXTunnelFileTransfer.a */,
+			);
+			path = FileTransfer;
+			sourceTree = "<group>";
+		};
+		4B72F5AA2B45B3EC00074E28 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5AB2B45B3EC00074E28 /* XTunnelFileTransfer */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		4B72F5AB2B45B3EC00074E28 /* XTunnelFileTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5AC2B45B3EC00074E28 /* jsoncpp */,
+				4B72F5B02B45B3EC00074E28 /* Sockets */,
+				4B72F5B62B45B3EC00074E28 /* Utils */,
+				4B72F5BC2B45B3EC00074E28 /* FileTransfer */,
+			);
+			path = XTunnelFileTransfer;
+			sourceTree = "<group>";
+		};
+		4B72F5AC2B45B3EC00074E28 /* jsoncpp */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5AD2B45B3EC00074E28 /* json */,
+			);
+			path = jsoncpp;
+			sourceTree = "<group>";
+		};
+		4B72F5AD2B45B3EC00074E28 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5AE2B45B3EC00074E28 /* json-forwards.h */,
+				4B72F5AF2B45B3EC00074E28 /* json.h */,
+			);
+			path = json;
+			sourceTree = "<group>";
+		};
+		4B72F5B02B45B3EC00074E28 /* Sockets */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5B12B45B3EC00074E28 /* TCPServer.h */,
+				4B72F5B22B45B3EC00074E28 /* ServerHelper.h */,
+				4B72F5B32B45B3EC00074E28 /* ClientHelper.h */,
+				4B72F5B42B45B3EC00074E28 /* Socket.h */,
+				4B72F5B52B45B3EC00074E28 /* TCPClient.h */,
+			);
+			path = Sockets;
+			sourceTree = "<group>";
+		};
+		4B72F5B62B45B3EC00074E28 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5B72B45B3EC00074E28 /* base64.h */,
+				4B72F5B82B45B3EC00074E28 /* MD5.h */,
+				4B72F5B92B45B3EC00074E28 /* tools.h */,
+				4B72F5BA2B45B3EC00074E28 /* SimperSafeMap.h */,
+				4B72F5BB2B45B3EC00074E28 /* ping.h */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		4B72F5BC2B45B3EC00074E28 /* FileTransfer */ = {
+			isa = PBXGroup;
+			children = (
+				4B72F5BD2B45B3EC00074E28 /* JsonHelper.h */,
+				4B72F5BE2B45B3EC00074E28 /* SubTask_Sender.h */,
+				4B72F5BF2B45B3EC00074E28 /* FileTransferSenderTaskProcess.h */,
+				4B72F5C02B45B3EC00074E28 /* FileTransferModel.h */,
+				4B72F5C12B45B3EC00074E28 /* FileTransferReceiverTaskProcess.h */,
+				4B72F5C22B45B3EC00074E28 /* SubTask_Receive.h */,
+				4B72F5C32B45B3EC00074E28 /* FileTransfer.h */,
+				4B72F5C42B45B3EC00074E28 /* ReceiveFileInfoUnit.h */,
+			);
+			path = FileTransfer;
 			sourceTree = "<group>";
 		};
 		607FACC71AFB9204008FA782 = {
@@ -235,6 +369,7 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4B72F5A72B45B3EC00074E28 /* FileTransfer */,
 				4B33D24E2B4547AB002B0C5B /* Socket */,
 				4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */,
 				4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */,
@@ -248,10 +383,6 @@
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */,
 				4B33D25D2B457E7C002B0C5B /* Home */,
-				4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */,
-				4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */,
-				4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */,
-				4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */,
 				4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */,
 				4B2694F02B304BB400B116BA /* SCLSettingCell.swift */,
 				4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */,
@@ -288,6 +419,8 @@
 				4BE3B9522B3C353700C48A71 /* SLKit.entitlements */,
 				4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */,
 				4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */,
+				4B72F5A52B45A2C500074E28 /* SLFileModel.swift */,
+				4B72F5D12B45B47C00074E28 /* SLKit-Bridging-Header.h */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -564,6 +697,7 @@
 			files = (
 				4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */,
 				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
+				4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */,
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
 				4B33D2502B4548E4002B0C5B /* SCLSocketLoginReq.swift in Sources */,
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
@@ -576,13 +710,16 @@
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
 				4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */,
 				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
+				4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
 				4BCEEA972B3D8302003C036A /* SCLSocktGenericContent.swift in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
+				4B72F5A62B45A2C500074E28 /* SLFileModel.swift in Sources */,
 				4B33D2562B45729E002B0C5B /* SCLInitReq.swift in Sources */,
+				4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */,
 				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
 				4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */,
 				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
@@ -607,6 +744,7 @@
 				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,
 				4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */,
 				4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */,
+				4B72F5CB2B45B3EC00074E28 /* SLFileTransferManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,9 +895,14 @@
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SLKit/FileTransfer",
+				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SLKit/SLKit-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
@@ -775,9 +918,14 @@
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SLKit/FileTransfer",
+				);
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SLKit/SLKit-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};

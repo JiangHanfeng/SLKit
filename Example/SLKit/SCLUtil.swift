@@ -16,6 +16,7 @@ struct SCLUtil {
     static let UUID_KEY : String = "UUID_KEY"
     static let TEMP_MAC_KEY : String = "TEMP_MAC_KEY"
     static let BT_MAC_KEY : String = "BT_MAC_KEY"
+    static let DEVICE_NAME_KEY : String = "DEVICE_NAME_KEY"
     static func getUUID() -> String {
         var uuid = getStringValue(for: UUID_KEY, description: "设备uuid") ?? ""
         if uuid.isEmpty {
@@ -44,6 +45,21 @@ struct SCLUtil {
     
     static func setBTMac(_ mac: String?) -> Bool {
         return set(stringValue: mac, for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+    }
+    
+    static func getDeviceMac() -> String {
+        if let btMac = getBTMac(), !btMac.isEmpty {
+            return btMac
+        }
+        return getTempMac()
+    }
+    
+    static func getDeviceName() -> String {
+        return getStringValue(for: DEVICE_NAME_KEY) ?? UIDevice.current.name
+    }
+    
+    static func setDeviceName(_ name: String) -> Bool {
+        return set(stringValue: name, for: DEVICE_NAME_KEY, description: "设备名称")
     }
     
     private static func getStringValue(for key: String, description: String? = nil) -> String? {
