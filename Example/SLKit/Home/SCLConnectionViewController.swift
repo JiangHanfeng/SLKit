@@ -63,7 +63,6 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 _ = await try? SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
                                 self.connectedCallback?(sock, mac, name)
                             } else {
-                                SLLog.debug("TCP登录失败:state != 1")
                                 self.state = .initialize
                                 self.toast("连接失败，请查看连接须知")
                                 sock.disconnect()

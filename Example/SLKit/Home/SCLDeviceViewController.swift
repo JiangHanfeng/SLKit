@@ -46,6 +46,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                 self?.startReconnect()
             }
         }
+        SLFileTransferManager.share().activate(withDeviceId: SCLUtil.getDeviceMac(), deviceName: SCLUtil.getDeviceName(), buferSize: 1024 * 1024 * 2, outTime: 5)
     }
 
     private func startReconnect() {
