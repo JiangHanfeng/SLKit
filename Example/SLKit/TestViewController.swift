@@ -72,7 +72,7 @@ class TestViewController: UIViewController {
 //            }
 //        }
 //        return
-//        let scanTask = SLBleScanTask {
+//        let scanTask = SLScanPeripheralTask {
 //            SLLog.debug("开始扫描")
 //        } stoppedCallback: {
 //            SLLog.debug("扫描结束")
@@ -82,21 +82,21 @@ class TestViewController: UIViewController {
 //            if peripheral.name?.elementsEqual("蒋函锋的Mac mini") == true {
 //                SLLog.debug("找到外设:蒋函锋的Mac mini")
 //                scanTask?.stop()
-//                let connection = SLBleConnection(peripheral: peripheral) { _ in
+//                let connection = SLCentralConnection(peripheral: peripheral) { _ in
 //                    SLLog.debug("开始连接\(peripheral.name!)")
 //                } connectionCompletion: { _, result, error in
 //                    if result {
 //                        SLLog.debug("连接\(peripheral.name!)成功")
 //                        self?.peripheral = peripheral
 //                        self?.bleOperationBtn.setTitle("断开连接", for: .normal)
-//                        let discoverService = SLBleServiceDiscoverTask(peripheral: peripheral) {
+//                        let discoverService = SLDiscoverBleServiceTask(peripheral: peripheral) {
 //                            SLLog.debug("开始搜索service")
 //                        } completion: { services, error in
 //                            if let service = services.first(where: { item in
 //                                SLLog.debug("找到service:\(item.uuid.uuidString)")
 //                                return item.uuid.uuidString.elementsEqual("198D")
 //                            }) {
-//                                let discoverCharacteristic = SLBleCharacteristicDiscoverTask(peripheral: peripheral, service: service) {
+//                                let discoverCharacteristic = SLDiscoverBleCharacteristicTask(peripheral: peripheral, service: service) {
 //                                    SLLog.debug("开始搜索charateristic")
 //                                } completion: { charateristics, error in
 //                                    if let charateristic = charateristics.first(where: { item2 in
@@ -135,7 +135,7 @@ class TestViewController: UIViewController {
     }
     
     private func readCharacteristc(peripheral: CBPeripheral, charateristic: CBCharacteristic) {
-        let task = SLReadCharacteristicTask(peripheral: peripheral, characteristic: charateristic) {
+        let task = SLReadBleCharacteristicTask(peripheral: peripheral, characteristic: charateristic) {
             SLLog.debug("开始读取characteristc")
         } completion: { data, error in
             if let data, let string = String(data: data, encoding: .utf8) {

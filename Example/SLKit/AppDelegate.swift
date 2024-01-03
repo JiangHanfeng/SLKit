@@ -25,7 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //        dateFormatter.dateFormat = "yy年MM月dd日 HH时mm分ss秒"
-        _ = SCLUtil.getUUID()
+        if let btMac = SCLUtil.getBTMac(), !btMac.isEmpty {
+            
+        } else {
+            let tempMac = SCLUtil.getTempMac()
+            print("设备临时mac地址：\(tempMac)")
+        }
         if let backImage = UIImage(named: "icon_back_dark") {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage.withRenderingMode(.alwaysOriginal)
@@ -34,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
         var rootVc: UIViewController?
         if UserDefaults.standard.bool(forKey: SCLUserDefaultKey.agreedPrivacyPolicy.rawValue) {
-            SLBleManager.shared.requestPermission { _ in
+            SLCentralManager.shared.requestPermission { _ in
                 
             }
             rootVc = SCLHomeViewController()

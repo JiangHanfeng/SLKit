@@ -1,5 +1,5 @@
 //
-//  SLBleManager.swift
+//  SLCentralManager.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/11/3.
@@ -10,28 +10,42 @@ import CoreBluetooth
 
 typealias SLTaskIdentifier = Int
 
-public final class SLBleManager: NSObject {
+public typealias SLBleStateUpdatedHandlerId = Int
+
+public struct SLBleStateUpdatedHandler {
+    let handle: ((CBManagerState) -> Void)
+    public init(handle: @escaping (CBManagerState) -> Void) {
+        self.handle = handle
+    }
+}
+
+public final class SLCentralManager: NSObject {
     public static let shared = {
-        let singleInstance = SLBleManager()
+        let singleInstance = SLCentralManager()
         return singleInstance
     }()
     
-    private var state: CBManagerState = CBManagerState.unknown
+    public var state: CBManagerState = CBManagerState.unknown
     private var centralManager: CBCentralManager!
     private lazy var queue: dispatch_queue_t = {
         let bundleId = Bundle.main.bundleIdentifier ?? ""
         let label = bundleId + ".ble"
         return DispatchQueue(label: label)
     }()
+    public var stateUpdateHandler: SLBleStateUpdatedHandler?
     private var scanServices: [CBUUID]? = nil
-    private var scanTasks: [SLBleScanTask] = []
-    private var connections: [SLBleConnection] = []
-    private var discoverServicesTasks: [SLBleServiceDiscoverTask] = []
-    private var discoverCharacteristicsTasks: [SLBleCharacteristicDiscoverTask] = []
-    private var readCharacteristicTasks: [SLReadCharacteristicTask] = []
+    private var scanTasks: [SLScanPeripheralTask] = []
+    private var connections: [SLCentralConnection] = []
+    private var discoverServicesTasks: [SLDiscoverBleServiceTask] = []
+    private var discoverCharacteristicsTasks: [SLDiscoverBleCharacteristicTask] = []
+    private var readCharacteristicTasks: [SLReadBleCharacteristicTask] = []
     private var initialState: CBManagerState?
     private var requestPermissionCallback: ((CBManagerState) -> Void)?
     private override init() {}
+    
+    public func available() -> Bool {
+        return centralManager.state == .poweredOn
+    }
     
     public func requestPermission(result: @escaping ((CBManagerState) -> Void)) {
         self.requestPermissionCallback = result
@@ -43,7 +57,7 @@ public final class SLBleManager: NSObject {
         }
     }
     
-    public func startScanTask(_ task: SLBleScanTask) {
+    public func startScanTask(_ task: SLScanPeripheralTask) {
         guard self.centralManager != nil else {
             task.exception(e: SLError.internalStateError("startScanTask should call requestPermission() func to initialize an instance of CBCentralManager"))
             return
@@ -75,7 +89,7 @@ public final class SLBleManager: NSObject {
         }
     }
     
-    func stopScanTask(_ task: SLBleScanTask) {
+    func stopScanTask(_ task: SLScanPeripheralTask) {
         var index = scanTasks.firstIndex { item in
             item.id == task.id
         }
@@ -94,24 +108,11 @@ public final class SLBleManager: NSObject {
     }
     
     func stopScan() {
-//        self.cancelTimer()
         centralManager.stopScan()
         scanTasks.removeAll()
     }
     
-//    private func cancelTimer() {
-//        guard let timer = self.timer else {
-//            return
-//        }
-//        guard !timer.isCancelled else {
-//            return
-//        }
-//        timer.cancel()
-//        self.timer = nil
-//        self.startScanTime = nil
-//    }
-    
-    func startConnection(_ connection: SLBleConnection) throws {
+    func startConnection(_ connection: SLCentralConnection) throws {
         guard self.centralManager != nil else {
             throw SLError.internalStateError("startConnection should call requestPermission() func to initialize an instance of CBCentralManager")
         }
@@ -129,16 +130,11 @@ public final class SLBleManager: NSObject {
         centralManager.connect(connection.peripheral, options: [CBConnectPeripheralOptionNotifyOnConnectionKey:true])
     }
     
-    func stopConnection(_ connection: SLBleConnection) {
-//        var realConnection = connections.first { existedConnection in
-//            existedConnection.peripheral.isEqual(connection.peripheral)
-//        }
-//        realConnection == nil ? realConnection = connection : nil
-//        realConnection?.iState = .initial
+    func stopConnection(_ connection: SLCentralConnection) {
         centralManager.cancelPeripheralConnection(connection.peripheral)
     }
     
-    func startDiscoverServices(_ task: SLBleServiceDiscoverTask) throws {
+    func startDiscoverServices(_ task: SLDiscoverBleServiceTask) throws {
         guard self.centralManager != nil else {
             throw SLError.internalStateError("startDiscoverServices should call requestPermission() func to initialize an instance of CBCentralManager")
         }
@@ -157,7 +153,7 @@ public final class SLBleManager: NSObject {
         }
     }
     
-    func startDiscoverCharacterisics(_ task: SLBleCharacteristicDiscoverTask) throws {
+    func startDiscoverCharacterisics(_ task: SLDiscoverBleCharacteristicTask) throws {
         guard self.centralManager != nil else {
             throw SLError.internalStateError("startDiscoverCharacterisics should call requestPermission() func to initialize an instance of CBCentralManager")
         }
@@ -176,7 +172,7 @@ public final class SLBleManager: NSObject {
         }
     }
     
-    func startReadCharacteristic(_ task: SLReadCharacteristicTask) throws {
+    func startReadCharacteristic(_ task: SLReadBleCharacteristicTask) throws {
         guard self.centralManager != nil else {
             throw SLError.internalStateError("startReadCharacteristic should call requestPermission() func to initialize an instance of CBCentralManager")
         }
@@ -207,7 +203,7 @@ public final class SLBleManager: NSObject {
     }
 }
 
-extension SLBleManager: CBCentralManagerDelegate {
+extension SLCentralManager: CBCentralManagerDelegate {
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if initialState == nil {
             initialState = central.state
@@ -215,7 +211,10 @@ extension SLBleManager: CBCentralManagerDelegate {
                 self.requestPermissionCallback?(central.state)
             }
         }
-        state = central.state
+        if state != central.state {
+            state = central.state
+            stateUpdateHandler?.handle(state)
+        }
     }
     
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -258,7 +257,7 @@ extension SLBleManager: CBCentralManagerDelegate {
     }
 }
 
-extension SLBleManager: CBPeripheralDelegate {
+extension SLCentralManager: CBPeripheralDelegate {
     public func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         var index = discoverServicesTasks.firstIndex { existedTask in
             existedTask.peripheral.isEqual(peripheral)
@@ -310,21 +309,5 @@ extension SLBleManager: CBPeripheralDelegate {
     public func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
         SLLog.debug("外设:\(peripheral.name ?? "")的service发生改变，主动断开连接")
         centralManager.cancelPeripheralConnection(peripheral)
-    }
-    
-    private func test<T>(source: [T], choosenOne: T, handle: (T) -> Void) -> [T] where T: Equatable {
-        var mSource = source
-        var index = source.firstIndex { item in
-            item == choosenOne
-        }
-        while index != nil {
-            let item = mSource[index!]
-            handle(item)
-            mSource.remove(at: index!)
-            index = mSource.firstIndex(where: { existed in
-                existed == item
-            })
-        }
-        return mSource
     }
 }

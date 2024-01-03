@@ -1,5 +1,5 @@
 //
-//  SLBleCharacteristicDiscoverTask.swift
+//  SLDiscoverBleCharacteristicTask.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/12/12.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreBluetooth
 
-public class SLBleCharacteristicDiscoverTask {
+public class SLDiscoverBleCharacteristicTask {
     var peripheral: CBPeripheral
     var service: CBService
     var started: (() -> Void)?
@@ -23,7 +23,7 @@ public class SLBleCharacteristicDiscoverTask {
     
     public func start() throws {
         do {
-            try SLBleManager.shared.startDiscoverCharacterisics(self)
+            try SLCentralManager.shared.startDiscoverCharacterisics(self)
         } catch let e {
             throw e
         }

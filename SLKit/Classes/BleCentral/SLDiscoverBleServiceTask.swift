@@ -1,5 +1,5 @@
 //
-//  SLBleServiceDiscoverTask.swift
+//  SLDiscoverBleServiceTask.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/12/12.
@@ -8,8 +8,8 @@
 import Foundation
 import CoreBluetooth
 
-public class SLBleServiceDiscoverTask: Equatable {
-    public static func == (lhs: SLBleServiceDiscoverTask, rhs: SLBleServiceDiscoverTask) -> Bool {
+public class SLDiscoverBleServiceTask: Equatable {
+    public static func == (lhs: SLDiscoverBleServiceTask, rhs: SLDiscoverBleServiceTask) -> Bool {
         return lhs.peripheral == rhs.peripheral
     }
     
@@ -25,7 +25,7 @@ public class SLBleServiceDiscoverTask: Equatable {
     
     public func start() throws {
         do {
-            try SLBleManager.shared.startDiscoverServices(self)
+            try SLCentralManager.shared.startDiscoverServices(self)
         } catch let e {
             throw e
         }

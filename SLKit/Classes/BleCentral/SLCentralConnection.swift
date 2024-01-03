@@ -1,5 +1,5 @@
 //
-//  SLBleConnection.swift
+//  SLCentralConnection.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/12/12.
@@ -8,18 +8,18 @@
 import Foundation
 import CoreBluetooth
 
-public enum SLBleConnectionState {
+public enum SLCentralConnectionState {
     case initial
     case connecting
     case connected
     case disconnectedWithError
 }
 
-public class SLBleConnection : SLTask {
+public class SLCentralConnection : SLTask {
     
     typealias Exception = SLError
     
-    typealias Progress = SLBleConnectionState
+    typealias Progress = SLCentralConnectionState
     
     typealias Result = SLResult<CBPeripheral, SLError>
     
@@ -29,7 +29,7 @@ public class SLBleConnection : SLTask {
     
     public func start() throws {
         do {
-            try SLBleManager.shared.startConnection(self)
+            try SLCentralManager.shared.startConnection(self)
             switch timeout {
             case .infinity:
                 break
@@ -61,7 +61,7 @@ public class SLBleConnection : SLTask {
         }
     }
     
-    func update(progress: SLBleConnectionState) {
+    func update(progress: SLCentralConnectionState) {
         iState = progress
     }
     
@@ -70,10 +70,10 @@ public class SLBleConnection : SLTask {
     }
     
     public func terminate() {
-        SLBleManager.shared.stopConnection(self)
+        SLCentralManager.shared.stopConnection(self)
     }
     
-    public static func == (lhs: SLBleConnection, rhs: SLBleConnection) -> Bool {
+    public static func == (lhs: SLCentralConnection, rhs: SLCentralConnection) -> Bool {
         lhs.peripheral.isEqual(rhs.peripheral)
     }
     
@@ -82,9 +82,9 @@ public class SLBleConnection : SLTask {
     private var checkStateWork: SLCancelableWork?
     let completion: ((_ result: SLResult<CBPeripheral, SLError>) -> Void)?
     let disconnectedCallback: ((_ error: SLError?) -> Void)?
-    private var iState = SLBleConnectionState.initial
+    private var iState = SLCentralConnectionState.initial
     
-    public var state: SLBleConnectionState {
+    public var state: SLCentralConnectionState {
         get {
             return iState
         }

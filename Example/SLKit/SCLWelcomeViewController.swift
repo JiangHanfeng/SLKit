@@ -53,7 +53,7 @@ class SCLWelcomeViewController: SCLBaseViewController {
 //                self.nsBtn.setTitle("开始吧", for: .normal)
             case self.requestPermissionController:
                 let requestBt = Observable.create { observer in
-                    SLBleManager.shared.requestPermission { state in
+                    SLCentralManager.shared.requestPermission { state in
                         if state != .unauthorized {
                             observer.onNext(state)
                             observer.onCompleted()

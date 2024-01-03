@@ -13,19 +13,51 @@ import RxSwift
 class SLSocketDataHandlerProxy {
     let id: String
     var handler: SLSocketDataHandler? = nil
+    private var interruptHandler: (() -> Void)?
+    private var timeoutChecker: SLCancelableWork?
+    private var completed: Bool?
     
-    init(id: String, handler: SLSocketDataHandler? = nil) {
+    init(id: String, handler: SLSocketDataHandler? = nil, interrupted: @escaping (() -> Void)) {
         self.id = id
         self.handler = handler
+        self.interruptHandler = interrupted
+    }
+    
+    func start(timeout: SLTimeInterval, timeoutHandler: @escaping (() -> Void)) {
+        completed = false
+        timeoutChecker?.cancel()
+        timeoutChecker = nil
+        switch timeout {
+        case .infinity:
+            break
+        case .seconds(let value):
+            timeoutChecker = SLCancelableWork(id: self.id, delayTime: .seconds(value), closure: { [weak self] in
+                if let completed = self?.completed, !completed {
+                    self?.completed = true
+                    // 超时
+                    timeoutHandler()
+                }
+            })
+        }
+    }
+    
+    func finished() {
+        completed = true
     }
     
     deinit {
+        if let completed, !completed {
+            self.completed = true
+            interruptHandler?()
+        }
         print("\(self) with id(\(id)) deinit")
     }
 }
 
 public final class SLSocketManager: NSObject {
+    
     static let socketQueue = DispatchQueue(label: "slkit.socketManager.queue")
+    
     public static let shared = {
         let singleInstance = SLSocketManager()
         return singleInstance
@@ -33,9 +65,11 @@ public final class SLSocketManager: NSObject {
     
     private var clients: [SLSocketClient:[SLSocketDataHandlerProxy]] = [:]
     
+    private var servers: [SLSocketServer:[SLSocketDataHandlerProxy]] = [:]
+    
     private override init() {}
     
-    /// 获取某个socket的数据响应处理集合
+    /// 获取某个socket client的数据响应处理集合
     @available(*, renamed: "getProxys(for:)")
     private func getProxys(for sock: SLSocketClient, completion: @escaping((_ proxys: [SLSocketDataHandlerProxy]?) -> Void)) {
         Task {
@@ -114,7 +148,7 @@ public final class SLSocketManager: NSObject {
         return array
     }
     
-    /// 根据ip和端口获取socket
+    /// 根据ip和端口获取socket client
     @available(*, renamed: "getSocketClient(host:port:)")
     private func getSocketClient(host: String, port: UInt16, completion: @escaping ((_ socket: SLSocketClient?) -> Void)) {
         Task {
@@ -123,7 +157,7 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 根据ip和端口获取socket
+    /// 根据ip和端口获取socket client
     private func getSocketClient(host: String, port: UInt16) async -> SLSocketClient? {
         return await withCheckedContinuation { continuation in
             Self.socketQueue.async {
@@ -138,7 +172,31 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 添加socket
+    /// 根据端口获取socket server
+    @available(*, renamed: "getSocketServer(port:)")
+    private func getSocketServer(port: UInt16, completion: @escaping ((_ socket: SLSocketServer?) -> Void)) {
+        Task {
+            let result = await getSocketServer(port: port)
+            completion(result)
+        }
+    }
+    
+    /// 根据端口获取socket server
+    private func getSocketServer(port: UInt16) async -> SLSocketServer? {
+        return await withCheckedContinuation { continuation in
+            Self.socketQueue.async {
+                if let socket = self.servers.keys.first(where: { item in
+                    item.port == port
+                }) {
+                    continuation.resume(returning: socket)
+                    return
+                }
+                continuation.resume(returning: nil)
+            }
+        }
+    }
+    
+    /// 添加socket client
     @available(*, renamed: "addSocketClient(_:)")
     private func addSocketClient(_ sock: SLSocketClient, completion: @escaping (() -> Void)) {
         Task {
@@ -147,7 +205,7 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 添加socket
+    /// 添加socket client
     private func addSocketClient(_ sock: SLSocketClient) async {
         return await withCheckedContinuation { continuation in
             Self.socketQueue.async {
@@ -159,17 +217,17 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 删除socket
-    @available(*, renamed: "removeSocket(_:)")
-    private func removeSocket(_ sock: SLSocketClient, completion: @escaping (() -> Void)) {
+    /// 删除socket client
+    @available(*, renamed: "removeSocketClient(_:)")
+    private func removeSockeClient(_ sock: SLSocketClient, completion: @escaping (() -> Void)) {
         Task {
-            await removeSocket(sock)
+            await removeSocketClient(sock)
             completion()
         }
     }
     
-    /// 删除socket
-    private func removeSocket(_ sock: SLSocketClient) async {
+    /// 删除socket client
+    private func removeSocketClient(_ sock: SLSocketClient) async {
         return await withCheckedContinuation { continuation in
             Self.socketQueue.async {
                 self.clients.removeValue(forKey: sock)
@@ -178,12 +236,143 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 连接
-    @available(*, renamed: "connect(host:port:timeout:)")
-    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, completion: @escaping ((SLResult<SLSocketClient, Error>) -> Void)) {
+    /// 添加socket server
+    @available(*, renamed: "addSocketServer(_:)")
+    private func addSocketServer(_ sock: SLSocketServer, completion: @escaping (() -> Void)) {
+        Task {
+            await addSocketServer(sock)
+            completion()
+        }
+    }
+    
+    /// 添加socket server
+    private func addSocketServer(_ sock: SLSocketServer) async {
+        return await withCheckedContinuation { continuation in
+            Self.socketQueue.async {
+                if nil == self.servers[sock] {
+                    self.servers.updateValue([], forKey: sock)
+                }
+                continuation.resume(returning: ())
+            }
+        }
+    }
+    
+    /// 删除socket server
+    @available(*, renamed: "removeSocketServer(_:)")
+    private func removeSocketServer(_ sock: SLSocketServer, completion: @escaping (() -> Void)) {
+        Task {
+            await removeSocketServer(sock)
+            completion()
+        }
+    }
+    
+    /// 删除socket server
+    private func removeSocketServer(_ sock: SLSocketServer) async {
+        return await withCheckedContinuation { continuation in
+            Self.socketQueue.async {
+                self.servers.removeValue(forKey: sock)
+                continuation.resume(returning: ())
+            }
+        }
+    }
+    
+    /// 监听
+    @available(*, renamed: "startListen(port:gateway:heartbeatRule:)")
+    public func startListen(port: UInt16, gateway: SLSocketServerGateway, heartbeatRule: SLSocketHeartbeatRule? = nil, completion: @escaping ((SLResult<SLSocketServer, Error>) -> Void)) {
         Task {
             do {
-                let result = try await connect(host: host, port: port, timeout: timeout, heartbeatRule: heartbeatRule)
+                let result = try await startListen(port: port, gateway: gateway, heartbeatRule: heartbeatRule)
+                completion(.success(result))
+            } catch let e {
+                completion(.failure(e))
+            }
+        }
+    }
+    
+    /// 监听
+    public func startListen(port: UInt16, gateway: SLSocketServerGateway, heartbeatRule: SLSocketHeartbeatRule? = nil) async throws -> SLSocketServer {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.getSocketServer(port: port) { socket in
+                var sock = socket
+                let configSock: ((SLSocketServer) -> Void) = { s in
+                    s.startListen(completion: { error in
+                        if let error {
+                            continuation.resume(throwing: error)
+                        } else {
+                            s.dataHandler = { [weak self] data in
+                                if let proxys = self?.servers[s] {
+                                    proxys.forEach { item in
+                                        item.handler?(data)
+                                    }
+                                }
+                            }
+                            continuation.resume(returning: s)
+                        }
+                    })
+                }
+                if sock == nil {
+                    sock = SLSocketServer(port: port, gateway: gateway, hearbeatRule: heartbeatRule)
+                    self.addSocketServer(sock!) {
+                        configSock(sock!)
+                    }
+                } else {
+                    configSock(sock!)
+                }
+            }
+        }
+    }
+    
+    @available(*, renamed: "stopListen(_:)")
+    public func stopListen(_ sock: SLSocketServer, completion: @escaping (() -> Void)) {
+        Task {
+            await stopListen(sock)
+            completion()
+        }
+    }
+    
+    
+    public func stopListen(_ sock: SLSocketServer) async {
+        return await withCheckedContinuation { continuation in
+            Self.socketQueue.async {
+                sock.stopListen()
+                self.removeSocketServer(sock) {
+                    continuation.resume()
+                }
+            }
+        }
+    }
+    
+    @available(*, renamed: "stopListen(port:)")
+    public func stopListen(port: UInt16, completion: @escaping (() -> Void)) {
+        Task {
+            await stopListen(port: port)
+            completion()
+        }
+    }
+    
+    
+    public func stopListen(port: UInt16) async {
+        return await withCheckedContinuation { continuation in
+            Self.socketQueue.async {
+                self.getSocketServer(port: port) { socket in
+                    if let socket {
+                        self.stopListen(socket) {
+                            continuation.resume()
+                        }
+                    } else {
+                        continuation.resume()
+                    }
+                }
+            }
+        }
+    }
+    
+    /// 连接
+    @available(*, renamed: "connect(host:port:timeout:)")
+    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, dataHandler: ((Data) -> Void)? = nil, completion: @escaping ((SLResult<SLSocketClient, Error>) -> Void)) {
+        Task {
+            do {
+                let result = try await connect(host: host, port: port, timeout: timeout, heartbeatRule: heartbeatRule, dataHandler: dataHandler)
                 DispatchQueue.main.async {
                     completion(.success(result))
                 }
@@ -196,31 +385,40 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 连接
-    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil) async throws -> SLSocketClient {
-        print("连接socket:\(host):\(port)")
-        var sock = await getSocketClient(host: host, port: port)
-        if sock == nil {
-            sock = SLSocketClient(host: host, port: port, heartbeatRule: heartbeatRule)
-            await addSocketClient(sock!)
-        }
+    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, dataHandler: ((Data) -> Void)? = nil) async throws -> SLSocketClient {
         return try await withCheckedThrowingContinuation { continuation in
-            sock?.startConnection(timeout: timeout) { [weak socket = sock] result in
-                guard let socket else {
-                    continuation.resume(throwing: SLError.socketHasBeenReleased)
-                    return
-                }
-                switch result {
-                case .success(_):
-                    socket.setReceivedDataHandler { [weak self] data in
-                        if let proxys = self?.clients[socket] {
-                            proxys.forEach { item in
-                                item.handler?(data)
+            self.getSocketClient(host: host, port: port) { socket in
+                var sock = socket
+                let configSock: ((SLSocketClient) -> Void) = {
+                    $0.startConnection(timeout: timeout) { [weak socket = $0] result in
+                        guard let socket else {
+                            continuation.resume(throwing: SLError.socketHasBeenReleased)
+                            return
+                        }
+                        switch result {
+                        case .success(_):
+                            socket.dataHandler = { [weak self] data in
+                                dataHandler?(data)
+                                if let proxys = self?.clients[socket] {
+                                    proxys.forEach { item in
+                                        item.handler?(data)
+                                        item.finished()
+                                    }
+                                }
                             }
+                            continuation.resume(returning: socket)
+                        case .failure(let error):
+                            continuation.resume(throwing: error)
                         }
                     }
-                    continuation.resume(returning: socket)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+                }
+                if sock == nil {
+                    sock = SLSocketClient(host: host, port: port, heartbeatRule: heartbeatRule)
+                    self.addSocketClient(sock!) {
+                        configSock(sock!)
+                    }
+                } else {
+                    configSock(sock!)
                 }
             }
         }
@@ -274,7 +472,7 @@ public final class SLSocketManager: NSObject {
     /// 发送二进制
     public func send(_ data: Data, to sock: SLSocketClient, timeout: SLTimeInterval = .seconds(10)) throws {
         do {
-            try sock.send(data, timeout: timeout)
+            try sock.send(data, type: 0x11, timeout: timeout)
         } catch let e {
             throw e
         }
@@ -289,12 +487,12 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 发送请求，并指定响应类型
-    @available(*, renamed: "send(_:to:for:timeout:)")
-    public func send<T: SLSocketSessionItem, U: SLSocketResponse>(_ request: T, to sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10), completion: @escaping ((SLResult<U, Error>) -> Void)) {
+    /// 从某个socket client发送请求，并指定响应类型
+    @available(*, renamed: "send(_:from:for:timeout:)")
+    public func send<T: SLSocketRequest, U: SLSocketResponse>(_ request: T, from sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10), completion: @escaping ((SLResult<U, Error>) -> Void)) {
         Task {
             do {
-                let result = try await send(request, to: sock, for: responseType, timeout: timeout)
+                let result = try await send(request, from: sock, for: responseType, timeout: timeout)
                 DispatchQueue.main.async {
                     completion(.success(result))
                 }
@@ -306,10 +504,10 @@ public final class SLSocketManager: NSObject {
         }
     }
     
-    /// 发送请求，并指定响应类型
-    public func send<T: SLSocketSessionItem, U: SLSocketResponse>(_ request: T, to sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10)) async throws -> U {
+    /// 从某个socket client发送请求，并指定响应类型
+    public func send<T: SLSocketRequest, U: SLSocketResponse>(_ request: T, from client: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10)) async throws -> U {
         return try await withCheckedThrowingContinuation { continuation in
-            self.getSocketClient(host: sock.host, port: sock.port) { socket in
+            self.getSocketClient(host: client.host, port: client.port) { socket in
                 guard let socket, socket.isConnected else {
                     continuation.resume(throwing: SLError.socketSendFailureNotConnected)
                     return
@@ -318,9 +516,11 @@ public final class SLSocketManager: NSObject {
                     continuation.resume(throwing: SLError.socketSendFailureEmptyData)
                     return
                 }
-                let proxy = SLSocketDataHandlerProxy(id: request.id)
+                let proxy = SLSocketDataHandlerProxy(id: request.id) {
+                    continuation.resume(throwing: SLError.taskCanceled)
+                }
                 self.getProxys(for: socket) { proxys in
-                    guard let proxys else {
+                    guard proxys != nil else {
                         continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
                         return
                     }
@@ -348,7 +548,10 @@ public final class SLSocketManager: NSObject {
                     }
                     self.addProxy(proxy, for: socket) { array in
                         do {
-                            try socket.send(data, timeout: timeout)
+                            try socket.send(data, type: request.type.rawValue, timeout: timeout)
+                            proxy.start(timeout: timeout) {
+                                continuation.resume(throwing: SLError.taskTimeout)
+                            }
                         } catch let e {
                             continuation.resume(throwing: e)
                         }

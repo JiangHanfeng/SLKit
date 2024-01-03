@@ -65,16 +65,28 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBAction private func onAirplay() {
         switch state {
         case .connected:
-            let pairedMacAddresses = SCLDBManager.getPairedMacAddresses()
-            if pairedMacAddresses.contains(mac) {
-                
-            } else {
-                guard let socket else {
-                    toast("已断开连接")
-                    return
-                }
-                present(SCLPairViewController(sock: socket), animated: true)
+            guard let socket else {
+                return
             }
+            Task {
+                do {
+                    _ = await try SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: 0, port3: 0)), from: socket, for: SCLScreenResp.self)
+                    _ = await try SLSocketManager.shared.send(SCLSocketRequest(content: SCLInitReq()), from: socket, for: SCLInitResp.self)
+                    present(SCLAirPlayGuideViewController(), animated: true)
+                } catch let e {
+                    toast(e.localizedDescription)
+                }
+            }
+//            let pairedMacAddresses = SCLDBManager.getPairedMacAddresses()
+//            if pairedMacAddresses.contains(mac) {
+//                present(SCLAirPlayGuideViewController(), animated: true)
+//            } else {
+//                guard let socket else {
+//                    toast("已断开连接")
+//                    return
+//                }
+//                present(SCLPairViewController(sock: socket), animated: true)
+//            }
         default:
             break
         }

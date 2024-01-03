@@ -11,18 +11,64 @@ import NetworkExtension
 import CoreLocation
 import SystemConfiguration.CaptiveNetwork
 
+public enum SLNetworkType : String {
+    case celluar = "pdp_ip0"
+    case wifi = "en0"
+}
+
 public class SLNetworkManager {
-    public enum InterfaceName {
-        
-    }
     public static let shared = SLNetworkManager()
-    private init() {}
+    private init() {
+        monitor = NWPathMonitor(requiredInterfaceType: .wifi)
+        monitor.pathUpdateHandler = { [weak self] path in
+            if path.status == .satisfied {
+                if #available(iOS 13.0, *) {
+                    if !path.gateways.isEmpty {
+                        let endPoint = String(describing: path.gateways.first!)
+                        let components = endPoint.components(separatedBy: ":")
+                        if components.count == 2 {
+                            self?.gateway = components.first
+                        }
+                    } else {
+                        self?.gateway = nil
+                    }
+                } else {
+                    // Fallback on earlier versions
+                    self?.gateway = nil
+                }
+                self?.ipv4OfWifi = self?.getIP(for: .wifi)
+            } else {
+                self?.gateway = nil
+                self?.ipv4OfWifi = nil
+            }
+        }
+    }
     
-    private var monitor: NWPathMonitor?
-    
-    private var getGatewayTimeoutWorkItem: DispatchWorkItem?
-    private var getConnectedWifiTimeoutWorkItem: DispatchWorkItem?
+    private var isInitial = true
+    private let monitor: NWPathMonitor!
+    private var gateway: String?
+    public var ipv4OfWifi: String? {
+        didSet {
+            if isInitial {
+                isInitial = false
+                ipv4OfWifiUpdated?(ipv4OfWifi)
+                return
+            }
+            if let oldValue {
+                if let ipv4OfWifi {
+                    if !ipv4OfWifi.elementsEqual(oldValue) {
+                        ipv4OfWifiUpdated?(ipv4OfWifi)
+                    }
+                } else {
+                    ipv4OfWifiUpdated?(nil)
+                }
+            } else if let ipv4OfWifi {
+                ipv4OfWifiUpdated?(ipv4OfWifi)
+            }
+        }
+    }
     private let queue = DispatchQueue(label: (Bundle.main.bundleIdentifier ?? "com.") + ".SLKit.SLNetworkManager.NWPathMonitor")
+    public var ipv4OfWifiUpdated: ((String?) -> Void)?
     
     public func connectWifi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
         guard !ssid.isEmpty && !passphrase.isEmpty else {
@@ -67,48 +113,45 @@ public class SLNetworkManager {
         }
     }
     
-    public func getGatewayAddress(completionHandler: @escaping ((String?, Error?) -> Void)) {
-        stopMonitorWifi()
-        monitor = NWPathMonitor(requiredInterfaceType: .wifi)
-        monitor?.pathUpdateHandler = { [weak self] path in
-            if path.status == .satisfied {
-                var gateway: String?
-                if #available(iOS 13.0, *) {
-                    if !path.gateways.isEmpty {
-                        let endPoint = String(describing: path.gateways.first)
-                        let components = endPoint.components(separatedBy: ":")
-                        if components.count == 2 {
-                            self?.stopMonitorWifi()
-                            gateway = components.first
-                            DispatchQueue.main.async {
-                                completionHandler(gateway!, nil)
-                            }
-                        }
-                    }
-                } else {
-                    // Fallback on earlier versions
-                }
-            } else {
-                self?.stopMonitorWifi()
-                DispatchQueue.main.async {
-                    completionHandler(nil, NSError(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:"wifi已断开"]))
-                }
-            }
-        }
-        getGatewayTimeoutWorkItem = DispatchWorkItem(block: { [weak self] in
-            if (self?.monitor) != nil {
-                self?.stopMonitorWifi()
-                completionHandler(nil, NSError(domain: NSURLErrorDomain, code: NSURLErrorTimedOut, userInfo: [NSLocalizedDescriptionKey:"获取网关地址超时"]))
-            }
-        })
-        queue.asyncAfter(deadline: .now() + .seconds(10), execute: getGatewayTimeoutWorkItem ?? DispatchWorkItem(block: {}))
-        monitor?.start(queue: queue)
+    public func startMonitorWifi() {
+        monitor.start(queue: queue)
     }
     
     private func stopMonitorWifi() {
-        getGatewayTimeoutWorkItem?.cancel()
-        getGatewayTimeoutWorkItem = nil
-        monitor?.cancel()
-        monitor = nil
+        monitor.cancel()
+    }
+    
+    public func getIP(for networkType: SLNetworkType) -> String? {
+        var address: String?
+
+        // Get list of all interfaces on the local machine:
+        var ifaddr: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&ifaddr) == 0 else { return nil }
+        guard let firstAddr = ifaddr else { return nil }
+
+        // For each interface ...
+        for ifptr in sequence(first: firstAddr, next: { $0.pointee.ifa_next }) {
+            let interface = ifptr.pointee
+
+            // Check for IPv4 or IPv6 interface:
+            let addrFamily = interface.ifa_addr.pointee.sa_family
+            if addrFamily == UInt8(AF_INET) || addrFamily == UInt8(AF_INET6) {
+
+                // Check interface name:
+                let name = String(cString: interface.ifa_name)
+                if name == networkType.rawValue {
+
+                    // Convert interface address to a human readable string:
+                    var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+                    getnameinfo(interface.ifa_addr, socklen_t(interface.ifa_addr.pointee.sa_len),
+                                &hostname, socklen_t(hostname.count),
+                                nil, socklen_t(0), NI_NUMERICHOST)
+                    address = String(cString: hostname)
+                }
+            }
+        }
+        freeifaddrs(ifaddr)
+
+        return address
     }
 }

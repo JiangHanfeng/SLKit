@@ -32,6 +32,52 @@ extension UIApplication {
         style.messageFont = .systemFont(ofSize: 14)
         window.makeToast(msg, duration: duration, position: .bottom, style: style)
     }
+    
+    public func currentWindow() -> UIWindow {
+        var window: UIWindow?
+        if #available(iOS 15.0, *) {
+            window = UIApplication.shared.connectedScenes
+                .lazy
+                .compactMap { $0.activationState == .foregroundActive ? ($0 as? UIWindowScene) : nil}
+                .first(where: { $0.keyWindow != nil })?.keyWindow
+        } else if #available(iOS 13.0, *) {
+            window = UIApplication.shared.windows.first
+        } else {
+            window = UIApplication.shared.keyWindow
+        }
+        guard let window else {
+            fatalError("can not get window at this moment!!!")
+        }
+        return window
+    }
+    
+    public func currentController() -> UIViewController {
+        guard let root = currentWindow().rootViewController else {
+            fatalError("can not get rootViewController at this moment!!!")
+        }
+        return getCurrentViewController(root)
+    }
+    
+    /// 通过递归拿到当前显示的UIViewController
+    public func getCurrentViewController(_ vc: UIViewController) -> UIViewController {
+        if vc is UINavigationController {
+            let nav = vc as! UINavigationController
+            if nav.viewControllers.count > 0 {
+                return getCurrentViewController(nav.viewControllers.last!)
+            }
+            return nav
+        } else if vc is UITabBarController {
+            let tabbarController = vc as! UITabBarController
+            if let selectedViewController = tabbarController.selectedViewController {
+                return selectedViewController
+            }
+            return tabbarController
+        } else if vc.presentedViewController != nil {
+            return getCurrentViewController(vc.presentedViewController!)
+        } else {
+            return vc
+        }
+    }
 }
 
 extension UIViewController {

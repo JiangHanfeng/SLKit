@@ -49,9 +49,18 @@ class SCLConnectionViewController: SCLBaseViewController {
                 case .connecting(let host, let port, let mac, let name):
                     Task {
                         do {
-                            let sock = try await SLSocketManager.shared.connect(host: host, port: port, heartbeatRule: SLSocketHeartbeatRule(interval: 1, timeout: 10, sendValue: "ping", reponseValue: "pong"))
-                            let resp = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), to: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
+                            let sock = try await SLSocketManager.shared.connect(host: host, port: port, heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestValue: "ping", reponseValue: "pong"))
+                            sock.unexpectedDisconnectHandler = { [weak self] error in
+                                DispatchQueue.main.async {
+                                    self?.state = .initialize
+                                    if let error {
+                                        self?.toast(error.localizedDescription)
+                                    }
+                                }
+                            }
+                            let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
                             if resp.state == 1 {
+                                _ = await try? SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
                                 self.connectedCallback?(sock, mac, name)
                             } else {
                                 SLLog.debug("TCP登录失败:state != 1")
@@ -60,9 +69,18 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 sock.disconnect()
                             }
                         } catch let e {
-                            SLLog.debug("TCP登录失败:\(e.localizedDescription)")
                             self.state = .initialize
-                            self.toast("连接失败，请查看连接须知")
+                            SLLog.debug("TCP登录失败:\(e.localizedDescription)")
+                            if let slError = e as? SLError {
+                                switch slError {
+                                case .taskCanceled:
+                                    break
+                                default:
+                                    self.toast("连接失败，请查看连接须知")
+                                }
+                            } else {
+                                self.toast("连接失败，请查看连接须知")
+                            }
                         }
                     }
                 default:
@@ -230,6 +248,10 @@ class SCLConnectionViewController: SCLBaseViewController {
     @IBAction func onBottomBtn() {
         switch state {
         case .initialize:
+            guard SLCentralManager.shared.available() else {
+                self.toast("蓝牙不可用")
+                return
+            }
             state = .scanStarting
             startCamera(previewSize: CGSize(width: cameraView.bounds.width, height: cameraView.bounds.height), rectOfInterest: rectOfInterest) { error, previewLayer in
                 if let error {

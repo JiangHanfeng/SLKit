@@ -30,6 +30,13 @@
 		4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */; };
 		4B2E00162B394B8D00E2191E /* SCLFileHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */; };
 		4B2E00172B394B8D00E2191E /* SCLFileHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */; };
+		4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */; };
+		4B33D2502B4548E4002B0C5B /* SCLSocketLoginReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D24F2B4548E4002B0C5B /* SCLSocketLoginReq.swift */; };
+		4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2512B454A40002B0C5B /* SCLSocketLoginResp.swift */; };
+		4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2532B457106002B0C5B /* SCLScreenReq.swift */; };
+		4B33D2562B45729E002B0C5B /* SCLInitReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2552B45729E002B0C5B /* SCLInitReq.swift */; };
+		4B33D2582B4575C5002B0C5B /* SCLScreenResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2572B4575C5002B0C5B /* SCLScreenResp.swift */; };
+		4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B33D2592B457901002B0C5B /* SCLInitResp.swift */; };
 		4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */; };
 		4B4290DE2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */; };
 		4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */; };
@@ -57,7 +64,6 @@
 		4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */; };
 		4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */; };
 		4BE3B94D2B3BF46F00C48A71 /* SCLDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */; };
-		4BE3B94F2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */; };
 		4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -106,6 +112,13 @@
 		4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLExtension.swift; sourceTree = "<group>"; };
 		4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLFileHistoryViewController.swift; sourceTree = "<group>"; };
 		4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLFileHistoryViewController.xib; sourceTree = "<group>"; };
+		4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLHomeViewModel.swift; sourceTree = "<group>"; };
+		4B33D24F2B4548E4002B0C5B /* SCLSocketLoginReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketLoginReq.swift; sourceTree = "<group>"; };
+		4B33D2512B454A40002B0C5B /* SCLSocketLoginResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketLoginResp.swift; sourceTree = "<group>"; };
+		4B33D2532B457106002B0C5B /* SCLScreenReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLScreenReq.swift; sourceTree = "<group>"; };
+		4B33D2552B45729E002B0C5B /* SCLInitReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLInitReq.swift; sourceTree = "<group>"; };
+		4B33D2572B4575C5002B0C5B /* SCLScreenResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLScreenResp.swift; sourceTree = "<group>"; };
+		4B33D2592B457901002B0C5B /* SCLInitResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLInitResp.swift; sourceTree = "<group>"; };
 		4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPhonePickerAlertViewController.swift; sourceTree = "<group>"; };
 		4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPhonePickerAlertViewController.xib; sourceTree = "<group>"; };
 		4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPhonePickerCell.swift; sourceTree = "<group>"; };
@@ -133,7 +146,6 @@
 		4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLWebViewController.swift; sourceTree = "<group>"; };
 		4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLDBManager.swift; sourceTree = "<group>"; };
-		4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetPairedDeviceReq.swift; sourceTree = "<group>"; };
 		4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetPairedDeviceResp.swift; sourceTree = "<group>"; };
 		4BE3B9522B3C353700C48A71 /* SLKit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SLKit.entitlements; sourceTree = "<group>"; };
 		540536ACE968C6C213F41F95 /* Pods-SLKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Tests.release.xcconfig"; path = "Target Support Files/Pods-SLKit_Tests/Pods-SLKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -172,6 +184,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B33D24E2B4547AB002B0C5B /* Socket */ = {
+			isa = PBXGroup;
+			children = (
+				4B14ACA22B3AB34F00FD0F9A /* SCLSocketRequest.swift */,
+				4B14ACA42B3ABC7000FD0F9A /* SCLSocketResponse.swift */,
+				4B33D24F2B4548E4002B0C5B /* SCLSocketLoginReq.swift */,
+				4B33D2512B454A40002B0C5B /* SCLSocketLoginResp.swift */,
+				4BCEEA942B3D808E003C036A /* SCLPairVerificationReq.swift */,
+				4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */,
+				4B33D2532B457106002B0C5B /* SCLScreenReq.swift */,
+				4B33D2572B4575C5002B0C5B /* SCLScreenResp.swift */,
+				4B33D2552B45729E002B0C5B /* SCLInitReq.swift */,
+				4B33D2592B457901002B0C5B /* SCLInitResp.swift */,
+			);
+			path = Socket;
+			sourceTree = "<group>";
+		};
+		4B33D25D2B457E7C002B0C5B /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */,
+				4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +235,7 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4B33D24E2B4547AB002B0C5B /* Socket */,
 				4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */,
 				4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */,
 				4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */,
@@ -208,8 +247,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */,
-				4B2CA3802B2FD6A700D7F024 /* SCLHomeViewController.swift */,
-				4B2CA3812B2FD6A700D7F024 /* SCLHomeViewController.xib */,
+				4B33D25D2B457E7C002B0C5B /* Home */,
 				4B2CA3842B301C6C00D7F024 /* SCLConnectionViewController.swift */,
 				4B2CA3852B301C6C00D7F024 /* SCLConnectionViewController.xib */,
 				4B2CA38C2B301DCA00D7F024 /* SCLDeviceViewController.swift */,
@@ -246,14 +284,10 @@
 				4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */,
 				4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */,
 				4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */,
-				4B14ACA22B3AB34F00FD0F9A /* SCLSocketRequest.swift */,
-				4B14ACA42B3ABC7000FD0F9A /* SCLSocketResponse.swift */,
 				4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */,
-				4BE3B94E2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift */,
-				4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */,
 				4BE3B9522B3C353700C48A71 /* SLKit.entitlements */,
 				4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */,
-				4BCEEA942B3D808E003C036A /* SCLPairVerificationReq.swift */,
+				4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -531,20 +565,27 @@
 				4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */,
 				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
+				4B33D2502B4548E4002B0C5B /* SCLSocketLoginReq.swift in Sources */,
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
 				4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */,
 				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
 				4B14ACA32B3AB34F00FD0F9A /* SCLSocketRequest.swift in Sources */,
+				4B33D2582B4575C5002B0C5B /* SCLScreenResp.swift in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
+				4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */,
 				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
 				4BCEEA972B3D8302003C036A /* SCLSocktGenericContent.swift in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
+				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
+				4B33D2562B45729E002B0C5B /* SCLInitReq.swift in Sources */,
 				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
+				4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */,
+				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
 				4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */,
 				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
 				4BCEEA952B3D808E003C036A /* SCLPairVerificationReq.swift in Sources */,
@@ -561,7 +602,6 @@
 				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
 				4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				4BE3B94F2B3C316500C48A71 /* SCLGetPairedDeviceReq.swift in Sources */,
 				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
 				4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */,
 				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,

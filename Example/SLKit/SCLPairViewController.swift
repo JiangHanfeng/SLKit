@@ -55,7 +55,7 @@ class SCLPairViewController: SCLBaseViewController {
             return
         }
         button?.isEnabled = false
-        SLSocketManager.shared.send(SCLSocketRequest(content: SCLGetPairedDeviceReq()), to: socket, for: SCLSocketResponse<SCLGetPairedDeviceResp>.self) { [weak self, weak btn = button] result in
+        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .getPairedDevices)), from: socket, for: SCLSocketResponse<SCLGetPairedDeviceResp>.self) { [weak self, weak btn = button] result in
             guard let self else {
                 return
             }
@@ -119,20 +119,19 @@ class SCLPairViewController: SCLBaseViewController {
             }
             return
         }
-        SLSocketManager.shared.send(SCLSocketRequest(content: SCLPairVerificationReq(device: device)), to: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self, weak btn = button] result in
+        SLSocketManager.shared.send(SCLSocketRequest(content: SCLPairVerificationReq(device: device)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self, weak btn = button] result in
             guard let self else { return }
             btn?.isEnabled = true
             switch result {
             case .success(let resp):
                 if resp.state == 1 {
                     // MARK: 蓝牙配对校验通过
-                    self.toast("已完成蓝牙配对，回控功能已启用")
-                    self.present(SCLAirPlayGuideViewController(), animated: true)
+                    self.presentingViewController?.toast("已完成蓝牙配对，回控功能已启用")
                 } else {
                     // MARK: 蓝牙配对校验未通过
                     self.presentingViewController?.toast("蓝牙配对校验未通过")
-                    self.dismiss(animated: true)
                 }
+                self.presentingViewController?.dismiss(animated: true)
             case .failure(let e):
                 self.presentingViewController?.toast(e.localizedDescription)
                 self.dismiss(animated: true)

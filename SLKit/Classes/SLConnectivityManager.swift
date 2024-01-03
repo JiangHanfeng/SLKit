@@ -15,15 +15,16 @@ public final class SLConnectivityManager {
         return singleInstance
     }()
     
+    private var bleStateUpdatedHandlers: [SLBleStateUpdatedHandler] = []
     var a2dpDevice: SLA2DPDevice? {
         get {
             return SLA2DPMonitor.shared.connectedDevice()
         }
     }
     
-    private init() {
-        
-    }
+    private var peripheralManager = SLPeripheralManager(queue: DispatchQueue(label: "com.slkit.peripheral"))
+    
+    private init() {}
     
     public func connectWifi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
         SLNetworkManager.shared.connectWifi(ssid: ssid, passphrase: passphrase, completionHandler: completionHandler)
@@ -46,13 +47,13 @@ public final class SLConnectivityManager {
     }
     
     public func stopScan() {
-        SLBleManager.shared.stopScan()
+        SLCentralManager.shared.stopScan()
     }
     
     public func connectDevice<T: SLBaseDevice>(_ device: T) {
         switch device.type {
         case .freestyle(key: _):
-            let connection = SLBleConnection(peripheral: device.peripheral) { result in
+            let connection = SLCentralConnection(peripheral: device.peripheral) { result in
                 switch result {
                 case .success(_):
                     break
@@ -68,39 +69,10 @@ public final class SLConnectivityManager {
     }
     
     public func disconnectDevice() {
-        SLBleManager.shared.disconnectAll()
+        SLCentralManager.shared.disconnectAll()
     }
     
-    public func asyncScan<U: SLDeviceBuilder>(
-        deviceBuilder: U.Type,
-        timeout: SLTimeInterval = .infinity,
-        filter: @escaping ((U.Device) -> Bool)
-    ) async throws -> U.Device {
-        let task = SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
-        return try await task.asyncStart(timeout: timeout, filter: filter)
-    }
-    
-    public func asyncBleConnection<U: SLDeviceBuilder>(
-        deviceBuilder: U.Type,
-        timeout: SLTimeInterval = .seconds(15),
-        target: @escaping ((U.Device) -> Bool)
-    ) async throws -> Bool {
-        let device = try await asyncScan(deviceBuilder: deviceBuilder, timeout: timeout) { target($0) }
-        return try await withCheckedThrowingContinuation { continuation in
-            let task = SLBleConnection(peripheral: device.peripheral, timeout: timeout) { result in
-                switch result {
-                case .success(_):
-                    continuation.resume(returning: true)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            } disconnectedCallback: { error in
-                
-            }
-        }
-    }
-    
-    public func asyncTcpSocketConnection() {
-        
+    public func bleAvailable() -> Bool {
+        return SLCentralManager.shared.available() && peripheralManager.available()
     }
 }

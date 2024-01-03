@@ -1,5 +1,5 @@
 //
-//  SLBleScanTask.swift
+//  SLScanPeripheralTask.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/11/6.
@@ -15,7 +15,7 @@ public typealias SLPeripheralDiscoveredCallback = (( _ peripheral: CBPeripheral,
 //    case interruppt
 //}
 
-public class SLBleScanTask: SLTask {
+public class SLScanPeripheralTask: SLTask {
     
     typealias Progress = SLPeripheral
     
@@ -37,7 +37,7 @@ public class SLBleScanTask: SLTask {
     private var shouldUpdate = true
     
     func start() {
-        SLBleManager.shared.startScanTask(self)
+        SLCentralManager.shared.startScanTask(self)
     }
     
     func exception(e: SLError) {
@@ -58,10 +58,10 @@ public class SLBleScanTask: SLTask {
     }
     
     func terminate() {
-        SLBleManager.shared.stopScanTask(self)
+        SLCentralManager.shared.stopScanTask(self)
     }
     
-    public static func == (lhs: SLBleScanTask, rhs: SLBleScanTask) -> Bool {
+    public static func == (lhs: SLScanPeripheralTask, rhs: SLScanPeripheralTask) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -78,6 +78,6 @@ public class SLBleScanTask: SLTask {
     }
     
     class func stop(with id: String) {
-        SLBleManager.shared.stopScanTask(id: id)
+        SLCentralManager.shared.stopScanTask(id: id)
     }
 }

@@ -11,9 +11,9 @@ import HandyJSON
 import SLKit
 
 enum SCLCmd: Int, HandyJSONEnum {
-    case unknown = 0
-    case login = 1
-//    case initPlatform = 1
+    case unknown = -1
+    case login = 0
+    case initPlatform = 1
     case end = 5
     case requestCalibration = 10
     case submitCalibrationData = 11
@@ -49,11 +49,12 @@ struct SCLSocketGenericContent: SCLSocketConetent {
 
 struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
-    let dev_id = UIDevice.current.identifierForVendor?.uuidString ?? ""
-    let dev_mac = UIDevice.current.identifierForVendor?.uuidString ?? ""
+    let dev_id = (SCLUtil.getBTMac() ?? SCLUtil.getTempMac()).split(separator: ":").joined()
+    let dev_mac = (SCLUtil.getBTMac() ?? SCLUtil.getTempMac()).split(separator: ":").joined()
     let deviceName = UIDevice.current.name
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
+    let dbg_info = "bug"
     let content: T
     
     init(content: T) {
@@ -61,7 +62,11 @@ struct SCLSocketRequest<T: SCLSocketConetent> {
     }
 }
 
-extension SCLSocketRequest: SLSocketSessionItem {
+extension SCLSocketRequest: SLSocketRequest           {
+    var type: SLSocketSessionItemType {
+        return .businessMessage
+    }
+    
     var id: String {
         return taskId
     }
@@ -72,7 +77,7 @@ extension SCLSocketRequest: SLSocketSessionItem {
         }
         json.updateValue(taskId, forKey: "taskId")
         json.updateValue(dev_id, forKey: "dev_id")
-        json.updateValue(dev_mac, forKey: "dev_mac")
+        json.updateValue(dev_mac, forKey: "mac")
         json.updateValue(deviceName, forKey: "deviceName")
         json.updateValue(os, forKey: "os")
         json.updateValue(version, forKey: "version")

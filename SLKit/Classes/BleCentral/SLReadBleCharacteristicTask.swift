@@ -1,5 +1,5 @@
 //
-//  SLReadCharacteristicTask.swift
+//  SLReadBleCharacteristicTask.swift
 //  SLKit
 //
 //  Created by 蒋函锋 on 2023/12/12.
@@ -8,8 +8,8 @@
 import Foundation
 import CoreBluetooth
 
-public class SLReadCharacteristicTask: Equatable {
-    public static func == (lhs: SLReadCharacteristicTask, rhs: SLReadCharacteristicTask) -> Bool {
+public class SLReadBleCharacteristicTask: Equatable {
+    public static func == (lhs: SLReadBleCharacteristicTask, rhs: SLReadBleCharacteristicTask) -> Bool {
         return lhs.peripheral == rhs.peripheral && lhs.characteristic == rhs.characteristic
     }
     
@@ -27,7 +27,7 @@ public class SLReadCharacteristicTask: Equatable {
     
     public func start() throws {
         do {
-            try SLBleManager.shared.startReadCharacteristic(self)
+            try SLCentralManager.shared.startReadCharacteristic(self)
         } catch let e {
             throw e
         }

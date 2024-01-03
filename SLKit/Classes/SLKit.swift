@@ -54,7 +54,7 @@ public class SLCancelableWork {
                     SLLog.debug("SLCancelableWork:\(self?.identifier ?? "")执行")
                     closure()
                 } else if let self {
-                    SLLog.debug("SLCancelableWork:\(self.identifier ?? "")无法执行-已取消")
+//                    SLLog.debug("SLCancelableWork:\(self.identifier ?? "")无法执行-已取消")
                 }
             }))
         }
@@ -65,18 +65,13 @@ public class SLCancelableWork {
             if let cancel = self?.shouldCancel, !cancel {
                 self?.closure?()
             } else if let identifier = self?.identifier {
-                SLLog.debug("SLCancelableWork(\(identifier))无法执行:已取消")
+//                SLLog.debug("SLCancelableWork(\(identifier))无法执行:已取消")
             }
         }
     }
     
-//    public func pause() {
-//        SLLog.debug("SLCancelableWork:\(identifier ?? "")暂停")
-//        self.shouldCancel = true
-//    }
-    
     public func cancel() {
-        SLLog.debug("SLCancelableWork:\(identifier ?? "")取消")
+//        SLLog.debug("SLCancelableWork:\(identifier ?? "")取消")
         self.shouldCancel = true
         self.closure = nil
     }
@@ -84,4 +79,33 @@ public class SLCancelableWork {
     deinit {
         print("\(self):\(identifier ?? "") deinit")
     }
+}
+
+extension UInt8 {
+    var hexString : String {
+        get {
+            return String(format: "%02X", self)
+        }
+    }
+}
+
+public func randomMacAddressString() -> String {
+    return [
+        UInt8.random(in: 0...255),
+        UInt8.random(in: 0...255),
+        UInt8.random(in: 0...255),
+        UInt8.random(in: 0...255),
+        UInt8.random(in: 0...255),
+        UInt8.random(in: 0...255)
+    ].map { uint8 in
+        return uint8.hexString
+    }.joined(separator: ":")
+}
+
+public func stackAddress(of: UnsafeRawPointer) -> Int {
+    return Int(bitPattern: of)
+}
+
+public func headAddress<T: AnyObject>(of: T) -> Int {
+    return unsafeBitCast(of, to: Int.self)
 }

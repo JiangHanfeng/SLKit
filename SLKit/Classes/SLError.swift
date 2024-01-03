@@ -14,7 +14,8 @@ public enum SLError: Error, LocalizedError {
     case bleConnectionTimeout
     case bleConnectionFailure(Error?)
     case bleDisconnected(Error?)
-    case socketConnectionErrorState
+    case socketWrongRole
+    case socketWrongClientState
     case socketConnectionFailure(Error)
     case socketConnectionTimeout
     case socketDisconnectedHeartbeatTimeout
@@ -25,6 +26,10 @@ public enum SLError: Error, LocalizedError {
     case socketNotConnectedYet
     case socketDisconnectedWaitingForResponse
     case socketHasBeenReleased
+    case socketWrongServerState
+    case socketListenFailure(Error)
+    case taskCanceled
+    case taskTimeout
     
     public var errorDescription: String? {
         switch self {
@@ -40,7 +45,7 @@ public enum SLError: Error, LocalizedError {
             return error != nil ? error!.localizedDescription : "ble connection failure"
         case .bleDisconnected(let error):
             return error != nil ? error!.localizedDescription : "ble disconnected"
-        case .socketConnectionErrorState:
+        case .socketWrongClientState:
             return "socket wrong state"
         case .socketConnectionFailure(let error):
             return error.localizedDescription
@@ -62,6 +67,16 @@ public enum SLError: Error, LocalizedError {
             return "socket has disconected when waiting for the response"
         case .socketHasBeenReleased:
             return "socket has been released"
+        case .socketWrongServerState:
+            return "socket serve error state"
+        case .socketWrongRole:
+            return "socket wrong role"
+        case .socketListenFailure(let error):
+            return error.localizedDescription
+        case .taskCanceled:
+            return "任务已取消"
+        case .taskTimeout:
+            return "任务超时"
         }
     }
 }

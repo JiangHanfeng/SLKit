@@ -10,10 +10,14 @@ import UIKit
 import SnapKit
 import RxSwift
 import SLKit
+import CoreBluetooth
 
 class SCLHomeViewController: SCLBaseViewController {
     
     @IBOutlet weak var topBar: UIView!
+    
+    private var localClient: SLSocketClient?
+    private var remoteClient: SLAcceptedSocket?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,15 +30,40 @@ class SCLHomeViewController: SCLBaseViewController {
                 make.bottom.equalTo(-UIDevice.safeDistanceBottom())
             }
         }
+        
+        let ipSignal = Observable.create { observer in
+            SLNetworkManager.shared.startMonitorWifi()
+            SLNetworkManager.shared.ipv4OfWifiUpdated = { ip in
+                observer.onNext(ip ?? "")
+            }
+            return Disposables.create()
+        }
+        let bleStateSignal = Observable.create { observer in
+            observer.onNext(SLCentralManager.shared.state == .poweredOn)
+            SLCentralManager.shared.stateUpdateHandler = SLBleStateUpdatedHandler(handle: { state in
+                observer.onNext(state == .poweredOn)
+            })
+            return Disposables.create()
+        }
+        let socketConnectionSignal = Observable.create { observer in
+            SLCentralManager.shared.stateUpdateHandler = SLBleStateUpdatedHandler(handle: { state in
+                observer.onNext(state == .poweredOn)
+            })
+            return Disposables.create()
+        }
+        Observable.combineLatest(ipSignal, bleStateSignal)
+            .subscribe(onNext: { (ip, bleAvailable) in
+                print("ip = \(ip), bleAvailable = \(bleAvailable)")
+            }, onError: { error in
+                print(error.localizedDescription)
+            }, onCompleted: {
+                print("onCompleted")
+            }).disposed(by: disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
     
     @IBAction private func onFileTransfer() {
@@ -86,6 +115,34 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
             navigationController.viewControllers = vcs
         }
     }
+}
+
+extension SCLHomeViewController {
+    private var isConnected: Bool {
+        return localClient != nil || remoteClient != nil
+    }
+    func startListenPort() {
+        SLSocketManager.shared.startListen(port: 8099, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
+            return .access(nil)
+        }, dataAuthrizationHandler: { [weak self] socket, data in
+            if self?.isConnected != true {
+                self?.remoteClient = socket
+                return .access(nil)
+            }
+            return .deny("已与其它客户端进行连接".data(using: .utf8))
+        })) { result in
+            switch result {
+            case .success(let server):
+                print("socket server已启动")
+            case .failure(_):
+                print("socket server启动失败")
+            }
+        }
+    }
+    
+    func stopListenPort() {
+        
+    }
     
     func test() {
         let connect = Observable.create { subscriber in
@@ -100,17 +157,15 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
             }
             return Disposables.create()
         }
-        // 并发100个请求
+        // MARK: 测试：并发100个请求
         let concurrencyRequests: ((_ sock: SLSocketClient) -> Observable) = { sock in
             return Observable.create { subscriber in
-                for i in 0..<100 {
+                for _ in 0..<100 {
                     DispatchQueue.global().async {
                         Task {
                             do {
-                                let response = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), to: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
-                            } catch let e {
-                                
-                            }
+                                let response = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
+                            } catch _ {}
                         }
                     }
                 }
@@ -123,7 +178,7 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
             print("socket连接成功")
             return concurrencyRequests(sock)
         }.subscribe (onNext: {
-            print("并发请求")
+    
         }, onError: { _ in
             
         }, onCompleted: {

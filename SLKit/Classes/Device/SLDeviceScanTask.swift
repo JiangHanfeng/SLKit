@@ -54,7 +54,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
     private var bleScanTaskId: String? {
         didSet {
             if let oldValue, bleScanTaskId == nil {
-                SLBleScanTask.stop(with: oldValue)
+                SLScanPeripheralTask.stop(with: oldValue)
             }
         }
     }
@@ -101,7 +101,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
         }
         self.timeout = timeout
         return try await withCheckedThrowingContinuation { continuation in
-            let task = SLBleScanTask { peripheral in
+            let task = SLScanPeripheralTask { peripheral in
                 if let device = self.anyDevice.build(peripheral: peripheral.peripheral, advertisementData: peripheral.advertisementData, rssi: peripheral.rssi), filter(device) {
                     self.bleScanTaskId = nil
                     continuation.resume(returning: device)
