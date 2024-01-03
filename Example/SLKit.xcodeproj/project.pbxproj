@@ -54,6 +54,7 @@
 		4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C72B45B3EC00074E28 /* SLFileTransferFileModel.mm */; };
 		4B72F5CD2B45B3EC00074E28 /* libXTunnelFileTransfer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B72F5C92B45B3EC00074E28 /* libXTunnelFileTransfer.a */; };
 		4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */; };
+		4B72F5D92B45CBF300074E28 /* SLDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5D82B45CBF300074E28 /* SLDevice.swift */; };
 		4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */; };
 		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
 		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
@@ -62,7 +63,6 @@
 		4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34092B34436C00E14D40 /* SCLQRResult.swift */; };
 		4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */; };
 		4BCEEA952B3D808E003C036A /* SCLPairVerificationReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEEA942B3D808E003C036A /* SCLPairVerificationReq.swift */; };
-		4BCEEA972B3D8302003C036A /* SCLSocktGenericContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEEA962B3D8302003C036A /* SCLSocktGenericContent.swift */; };
 		4BDE22E42B31407600D1A50C /* SCLPairGuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */; };
 		4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */; };
 		4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */; };
@@ -167,6 +167,7 @@
 		4B72F5D12B45B47C00074E28 /* SLKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SLKit-Bridging-Header.h"; sourceTree = "<group>"; };
 		4B72F5D42B45BCC500074E28 /* NSString+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Transition.h"; sourceTree = "<group>"; };
 		4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+Transition.mm"; sourceTree = "<group>"; };
+		4B72F5D82B45CBF300074E28 /* SLDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLDevice.swift; sourceTree = "<group>"; };
 		4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDevice.swift; sourceTree = "<group>"; };
 		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
 		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
@@ -175,7 +176,6 @@
 		4BCE34092B34436C00E14D40 /* SCLQRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLQRResult.swift; sourceTree = "<group>"; };
 		4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLReconnectViewController.swift; sourceTree = "<group>"; };
 		4BCEEA942B3D808E003C036A /* SCLPairVerificationReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairVerificationReq.swift; sourceTree = "<group>"; };
-		4BCEEA962B3D8302003C036A /* SCLSocktGenericContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocktGenericContent.swift; sourceTree = "<group>"; };
 		4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPairGuideViewController.swift; sourceTree = "<group>"; };
 		4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPairGuideViewController.xib; sourceTree = "<group>"; };
 		4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPrivacyPolicyViewController.swift; sourceTree = "<group>"; };
@@ -344,10 +344,21 @@
 			path = FileTransfer;
 			sourceTree = "<group>";
 		};
+		4B72F5D72B45CBCC00074E28 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */,
+				4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */,
+				4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */,
+				4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */,
+				4B72F5D82B45CBF300074E28 /* SLDevice.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
-				4BCEEA962B3D8302003C036A /* SCLSocktGenericContent.swift */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for SLKit */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -371,10 +382,7 @@
 			children = (
 				4B72F5A72B45B3EC00074E28 /* FileTransfer */,
 				4B33D24E2B4547AB002B0C5B /* Socket */,
-				4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */,
-				4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */,
-				4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */,
-				4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */,
+				4B72F5D72B45CBCC00074E28 /* Model */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				4B6B9DCC2AF8AB0F00EEB598 /* TestViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -713,7 +721,6 @@
 				4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
-				4BCEEA972B3D8302003C036A /* SCLSocktGenericContent.swift in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
@@ -725,6 +732,7 @@
 				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
 				4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */,
 				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
+				4B72F5D92B45CBF300074E28 /* SLDevice.swift in Sources */,
 				4BCEEA952B3D808E003C036A /* SCLPairVerificationReq.swift in Sources */,
 				4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */,
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
@@ -891,6 +899,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -914,6 +923,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
+				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

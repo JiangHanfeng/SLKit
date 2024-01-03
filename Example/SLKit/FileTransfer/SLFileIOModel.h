@@ -12,7 +12,9 @@
 #import <WebKit/WKNavigation.h>
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKScriptMessageHandler.h>
-#import "SLKit_Example-Swift.h"
+//#import "SLKit_Example-Swift.h"
+@class SLFileModel;
+@class SLFreeStyleDevice;
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -15,9 +15,15 @@ import CoreBluetooth
 class SCLHomeViewController: SCLBaseViewController {
     
     @IBOutlet weak var topBar: UIView!
+    private var device: SLDevice? {
+        didSet {
+            if device != oldValue {
+                deviceUpdatedHandler?(device)
+            }
+        }
+    }
     
-    private var localClient: SLSocketClient?
-    private var remoteClient: SLAcceptedSocket?
+    public var deviceUpdatedHandler: ((SLDevice?) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,19 +51,66 @@ class SCLHomeViewController: SCLBaseViewController {
             })
             return Disposables.create()
         }
-        let socketConnectionSignal = Observable.create { observer in
-            SLCentralManager.shared.stateUpdateHandler = SLBleStateUpdatedHandler(handle: { state in
-                observer.onNext(state == .poweredOn)
-            })
+        let deviceSignal = Observable.create { [weak self] observer in
+            if let self {
+                self.deviceUpdatedHandler = { device in
+                    observer.onNext(device != nil)
+                }
+            } else {
+                observer.onCompleted()
+            }
             return Disposables.create()
         }
-        Observable.combineLatest(ipSignal, bleStateSignal)
-            .subscribe(onNext: { (ip, bleAvailable) in
-                print("ip = \(ip), bleAvailable = \(bleAvailable)")
+        Observable.combineLatest(ipSignal, bleStateSignal, deviceSignal)
+            .subscribe(onNext: { [weak self] (ip, bleAvailable, connected) in
+                if connected {
+                    // TODO: 停止广播
+                    
+                    guard let self, let device = self.device else {
+                        return
+                    }
+                    switch device.role {
+                    case .client(_, _):
+                        break
+                    case .server(let sLSocketClient):
+                        sLSocketClient.unexpectedDisconnectHandler = { [weak weakSelf = self] error in
+                            weakSelf?.device = nil
+                            weakSelf?.toast("已断开连接")
+                        }
+                    }
+                    self.transitionToChild(self.getDeviceVc(device)) { childView in
+                        childView.snp.makeConstraints { make in
+                            make.top.equalTo(self.topBar.snp.bottom)
+                            make.left.right.equalTo(0)
+                            make.bottom.equalTo(-UIDevice.safeDistanceBottom())
+                        }
+                    }
+                } else {
+                    if ip.isEmpty {
+                        self?.stopListenPort()
+                    } else {
+                        self?.startListenPort()
+                    }
+                    if bleAvailable {
+                        // TODO: 广播
+                    } else {
+                        // TODO: 停止广播
+                    }
+                    guard let self else {
+                        return
+                    }
+                    self.transitionToChild(self.getConnectionVc()) { childView in
+                        childView.snp.makeConstraints { make in
+                            make.top.equalTo(self.topBar.snp.bottom)
+                            make.left.right.equalTo(0)
+                            make.bottom.equalTo(-UIDevice.safeDistanceBottom())
+                        }
+                    }
+                }
             }, onError: { error in
-                print(error.localizedDescription)
+                
             }, onCompleted: {
-                print("onCompleted")
+                
             }).disposed(by: disposeBag)
     }
     
@@ -75,22 +128,13 @@ class SCLHomeViewController: SCLBaseViewController {
     }
     
     private func getConnectionVc() -> SCLConnectionViewController {
-        return SCLConnectionViewController { [weak self] (socket, mac, name) in
-            guard let self else {
-                return
-            }
-            self.transitionToChild(self.getDeviceVc(socket, mac, name)) { childView in
-                childView.snp.makeConstraints { make in
-                    make.top.equalTo(self.topBar.snp.bottom)
-                    make.left.right.equalTo(0)
-                    make.bottom.equalTo(-UIDevice.safeDistanceBottom())
-                }
-            }
+        return SCLConnectionViewController { [weak self] device in
+            self?.device = device
         }
     }
     
-    private func getDeviceVc(_ sock: SLSocketClient, _ mac: String, _ name: String) -> SCLDeviceViewController {
-        return SCLDeviceViewController(socket: sock, mac: mac, name: name) { [weak self] in
+    private func getDeviceVc(_ device: SLDevice) -> SCLDeviceViewController {
+        return SCLDeviceViewController(device: device) { [weak self] in
             guard let self else {
                 return
             }
@@ -118,21 +162,19 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
 }
 
 extension SCLHomeViewController {
-    private var isConnected: Bool {
-        return localClient != nil || remoteClient != nil
-    }
+
     func startListenPort() {
         SLSocketManager.shared.startListen(port: 8099, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
             return .access(nil)
         }, dataAuthrizationHandler: { [weak self] socket, data in
-            if self?.isConnected != true {
-                self?.remoteClient = socket
+            if self?.device == nil {
+                // TODO: 解析data，赋值device
                 return .access(nil)
             }
             return .deny("已与其它客户端进行连接".data(using: .utf8))
         })) { result in
             switch result {
-            case .success(let server):
+            case .success(_):
                 print("socket server已启动")
             case .failure(_):
                 print("socket server启动失败")
@@ -141,7 +183,9 @@ extension SCLHomeViewController {
     }
     
     func stopListenPort() {
-        
+        SLSocketManager.shared.stopListen(port: 8099) {
+            
+        }
     }
     
     func test() {

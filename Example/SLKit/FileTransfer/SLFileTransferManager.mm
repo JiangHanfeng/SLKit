@@ -9,6 +9,7 @@
 #import "FileTransfer.h"
 #import "NSString+Transition.h"
 #import "SLFileTransferFileModel.h"
+#import "SLKit_Example-Swift.h"
 
 static SLFileTransferManager *singleton = nil;
 

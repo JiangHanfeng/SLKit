@@ -22,31 +22,34 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var connectionStateLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
     
-    private var mac: String!
-    private var name: String!
-    private var socket: SLSocketClient?
+    private var device: SLDevice?
     private var disconnectedCallback: (() -> Void)?
     private var state = State.connected
     
-    convenience init(socket: SLSocketClient, mac: String, name: String, disconnectedCallback: @escaping () -> Void) {
+    convenience init(device: SLDevice, disconnectedCallback: @escaping () -> Void) {
         self.init()
-        self.socket = socket
-        self.mac = mac
-        self.name = name
+        self.device = device
         self.disconnectedCallback = disconnectedCallback
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         disconenctBtn.setBorder(width: 1, cornerRadius: 15, color: UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1))
-        nameLabel.text = name
-        socket?.unexpectedDisconnectHandler = { [weak self] error in
-            DispatchQueue.main.async {
-                self?.connectionStateLabel.text = "已断开连接"
-                self?.startReconnect()
-            }
-        }
-        SLFileTransferManager.share().activate(withDeviceId: SCLUtil.getDeviceMac(), deviceName: SCLUtil.getDeviceName(), buferSize: 1024 * 1024 * 2, outTime: 5)
+        nameLabel.text = device?.name
+//        switch device?.role {
+//        case .client(_):
+//            disconnectedCallback?()
+//        case .server(let sLSocketClient):
+//            sLSocketClient.unexpectedDisconnectHandler = { [weak self] error in
+//                DispatchQueue.main.async {
+//                    self?.connectionStateLabel.text = "已断开连接"
+//                    self?.startReconnect()
+//                }
+//            }
+//        case nil:
+//            break
+//        }
+        SLFileTransferManager.share().activate(withDeviceId: SCLUtil.getDeviceMac(), deviceName: SCLUtil.getDeviceName(), bufferSize: 1024 * 1024 * 2, outTime: 5)
     }
 
     private func startReconnect() {
@@ -54,11 +57,16 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
 
     @IBAction private func onDisconnect() {
-        if let socket {
-            SLSocketManager.shared.disconnect(socket) { [weak self] in
+        switch device?.role {
+        case .client(let port, _):
+            SLSocketManager.shared.stopListen(port: port) { [weak self] in
                 self?.disconnectedCallback?()
             }
-        } else {
+        case .server(let sLSocketClient):
+            SLSocketManager.shared.disconnect(sLSocketClient) { [weak self] in
+                self?.disconnectedCallback?()
+            }
+        case nil:
             disconnectedCallback?()
         }
     }
@@ -66,17 +74,21 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBAction private func onAirplay() {
         switch state {
         case .connected:
-            guard let socket else {
-                return
-            }
-            Task {
-                do {
-                    _ = await try SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: 0, port3: 0)), from: socket, for: SCLScreenResp.self)
-                    _ = await try SLSocketManager.shared.send(SCLSocketRequest(content: SCLInitReq()), from: socket, for: SCLInitResp.self)
-                    present(SCLAirPlayGuideViewController(), animated: true)
-                } catch let e {
-                    toast(e.localizedDescription)
+            switch device?.role {
+            case .client(_, _):
+                break
+            case .server(let socket):
+                Task {
+                    do {
+                        _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: 0, port3: 0)), from: socket, for: SCLScreenResp.self)
+                        _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLInitReq()), from: socket, for: SCLInitResp.self)
+                        present(SCLAirPlayGuideViewController(), animated: true)
+                    } catch let e {
+                        toast(e.localizedDescription)
+                    }
                 }
+            case nil:
+                break
             }
 //            let pairedMacAddresses = SCLDBManager.getPairedMacAddresses()
 //            if pairedMacAddresses.contains(mac) {

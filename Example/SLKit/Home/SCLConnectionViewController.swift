@@ -59,9 +59,11 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 }
                             }
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
+                            
                             if resp.state == 1 {
-                                _ = await try? SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
-                                self.connectedCallback?(sock, mac, name)
+                                _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
+                                let device = SLDevice(name: name, mac: mac, role: .server(sock))
+                                self.connectedCallback?(device)
                             } else {
                                 self.state = .initialize
                                 self.toast("连接失败，请查看连接须知")
@@ -164,9 +166,9 @@ class SCLConnectionViewController: SCLBaseViewController {
         return shape
     }
     
-    private var connectedCallback: ((SLSocketClient, String, String) -> Void)?
+    private var connectedCallback: ((SLDevice) -> Void)?
     
-    convenience init(_ connectedCallback: @escaping (_ socket: SLSocketClient, _ mac: String, _ name: String) -> Void) {
+    convenience init(_ connectedCallback: @escaping (_ device: SLDevice) -> Void) {
         self.init()
         self.connectedCallback = connectedCallback
     }

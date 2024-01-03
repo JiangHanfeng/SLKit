@@ -9,7 +9,7 @@ import Foundation
 import CocoaAsyncSocket
 import RxSwift
 
-public struct SLAcceptedSocket {
+public struct SLAcceptedSocket : Equatable {
     public let host: String?
     public let port: UInt16
     let socket: GCDAsyncSocket
@@ -18,6 +18,10 @@ public struct SLAcceptedSocket {
         self.host = host
         self.port = port
         self.socket = socket
+    }
+    
+    public static func == (lhs: SLAcceptedSocket, rhs: SLAcceptedSocket) -> Bool {
+        return (lhs.host ?? "").elementsEqual(rhs.host ?? "") && lhs.port == rhs.port && lhs.socket.isEqual(rhs.socket)
     }
 }
 
