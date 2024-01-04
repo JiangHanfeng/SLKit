@@ -356,6 +356,33 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		4BA0385F2B46901E00F43214 /* AppGuide */ = {
+			isa = PBXGroup;
+			children = (
+				4B23D1F52B330B5C008724E5 /* SCLWelcomeViewController.swift */,
+				4B23D1F62B330B5C008724E5 /* SCLWelcomeViewController.xib */,
+				4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */,
+				4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */,
+				4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */,
+				4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */,
+				4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */,
+				4B23D1F22B3306D8008724E5 /* SCLRequestPermissionViewController.xib */,
+			);
+			path = AppGuide;
+			sourceTree = "<group>";
+		};
+		4BA038602B46A31F00F43214 /* Pair */ = {
+			isa = PBXGroup;
+			children = (
+				4B4290E32B386083000EE7AD /* SCLPairViewController.swift */,
+				4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */,
+				4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */,
+				4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */,
+				4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */,
+			);
+			path = Pair;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -398,22 +425,11 @@
 				4B2694F12B304BB500B116BA /* SCLSettingCell.xib */,
 				4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */,
 				4B2694F62B31347400B116BA /* SCLBaseViewController.swift */,
-				4B4290E32B386083000EE7AD /* SCLPairViewController.swift */,
-				4BDE22E22B31407600D1A50C /* SCLPairGuideViewController.swift */,
-				4BDE22E32B31407600D1A50C /* SCLPairGuideViewController.xib */,
-				4B4290DB2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift */,
-				4B4290DC2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.xib */,
+				4BA038602B46A31F00F43214 /* Pair */,
 				4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */,
 				4B4290E02B38196E000EE7AD /* SCLPhonePickerCell.xib */,
-				4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */,
-				4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */,
 				4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */,
-				4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */,
-				4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */,
-				4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */,
-				4B23D1F22B3306D8008724E5 /* SCLRequestPermissionViewController.xib */,
-				4B23D1F52B330B5C008724E5 /* SCLWelcomeViewController.swift */,
-				4B23D1F62B330B5C008724E5 /* SCLWelcomeViewController.xib */,
+				4BA0385F2B46901E00F43214 /* AppGuide */,
 				4BCE34072B3441CB00E14D40 /* SCLUtil.swift */,
 				4BCE34092B34436C00E14D40 /* SCLQRResult.swift */,
 				4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */,
@@ -899,15 +915,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "超级互联Lite";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SLKit/FileTransfer",
 				);
+				MARKETING_VERSION = 0.0.1;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -923,15 +942,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "超级互联Lite";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SLKit/FileTransfer",
 				);
+				MARKETING_VERSION = 0.0.1;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite;
 				PRODUCT_NAME = "$(TARGET_NAME)";

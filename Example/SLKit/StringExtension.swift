@@ -9,6 +9,47 @@
 import Foundation
 
 extension String {
+    func ipV4Bytes() -> [UInt8]? {
+        let arr = split(separator: ".")
+        guard arr.count == 4 else {
+            return nil
+        }
+        var bytes: [UInt8] = []
+        for i in arr {
+            if let uint8 = UInt8(String(i)) {
+                bytes.append(uint8)
+            } else {
+                break
+            }
+        }
+        guard bytes.count == 4 else {
+            return nil
+        }
+        return bytes
+    }
+    
+    func macBytes() -> [UInt8]? {
+        let arr = split(separator: ":")
+        guard arr.count == 6 else {
+            return nil
+        }
+        var bytes: [UInt8] = []
+        for i in arr {
+            let scanner = Scanner(string: String(i))
+            var macSegment: UInt64 = 0
+            scanner.scanHexInt64(&macSegment)
+            if let uint8 = UInt8(exactly: macSegment) {
+                bytes.append(uint8)
+            } else {
+                break
+            }
+        }
+        guard bytes.count == 6 else {
+            return nil
+        }
+        return bytes
+    }
+    
     func hex2IpV4() -> [UInt8]? {
         guard count == 8 else {
             return nil

@@ -16,6 +16,7 @@ struct SCLSocketLoginResp: SLSocketResponse {
     var state: Int
     var msg: String
     var dev_id: String
+    var dev_name: String
     
     init(data: Data) throws {
         self.data = data
@@ -28,12 +29,14 @@ struct SCLSocketLoginResp: SLSocketResponse {
                 let state = json?["state"] as? Int,
                 stateRange.contains(state),
                 let dev_id = json?["dev_id"] as? String,
-                !dev_id.isEmpty
+                !dev_id.isEmpty,
+                let dev_name = json?["dev_name"] as? String
             {
                 self.id = "0"
                 self.state = state
                 self.msg = state == 1 ? "登录成功" : "登录失败"
                 self.dev_id = dev_id
+                self.dev_name = dev_name
             } else {
                 throw NSError(domain: NSErrorDomain(string: "failed to get cmd/state/dev_id") as String, code: -999, userInfo: [NSLocalizedDescriptionKey:"转换SCLTCPSocketResponse失败"])
             }

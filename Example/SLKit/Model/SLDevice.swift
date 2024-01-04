@@ -36,16 +36,18 @@ extension SLDeviceRole : Equatable {
 }
 
 @objcMembers class SLDevice : NSObject {
+    let id: String
     let name: String
     let mac: String
     let role: SLDeviceRole
-    init(name: String, mac: String, role: SLDeviceRole) {
+    init(id: String, name: String, mac: String, role: SLDeviceRole) {
+        self.id = id
         self.name = name
         self.mac = mac
         self.role = role
     }
     
     public static func == (lhs: SLDevice, rhs: SLDevice) -> Bool {
-        return lhs.name.elementsEqual(rhs.name) && lhs.mac.elementsEqual(rhs.mac) && lhs.role == rhs.role
+        return lhs.id.elementsEqual(rhs.id) && lhs.name.elementsEqual(rhs.name) && lhs.mac.elementsEqual(rhs.mac) && lhs.role == rhs.role
     }
 }

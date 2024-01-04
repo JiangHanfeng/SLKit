@@ -14,6 +14,7 @@ public enum SLError: Error, LocalizedError {
     case bleConnectionTimeout
     case bleConnectionFailure(Error?)
     case bleDisconnected(Error?)
+    case locationNotAllowed
     case socketWrongRole
     case socketWrongClientState
     case socketConnectionFailure(Error)
@@ -45,6 +46,8 @@ public enum SLError: Error, LocalizedError {
             return error != nil ? error!.localizedDescription : "ble connection failure"
         case .bleDisconnected(let error):
             return error != nil ? error!.localizedDescription : "ble disconnected"
+        case .locationNotAllowed:
+            return "未授予定位权限"
         case .socketWrongClientState:
             return "socket wrong state"
         case .socketConnectionFailure(let error):

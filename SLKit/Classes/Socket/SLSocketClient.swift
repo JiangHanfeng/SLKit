@@ -141,13 +141,7 @@ public class SLSocketClient : NSObject {
         }
         
         socket.write(data, withTimeout: time, tag: 0)
-//        socket. (withTimeout: -1, tag: 0)
-//        SLLog.debug("向\(socket.connectedHost ?? "nil host"):\(socket.connectedPort)发送数据:\n\(String(data: data, encoding: .utf8) ?? "some data which can't convert to string")\n")
     }
-    
-//    func setReceivedDataHandler(_ handler: SLSocketDataHandler?) {
-//        dataHandler = handler
-//    }
     
     @objc private func sendHeartbeat() {
         if let socket = server, socket.isConnected, let heartbeatRule {
@@ -159,7 +153,6 @@ public class SLSocketClient : NSObject {
                 bytes.append(contentsOf: $0)
             }
             try? send(Data(bytes: bytes))
-//            SLLog.debug("发送心跳")
             let currentTime = ProcessInfo.processInfo.systemUptime
             if let lastReadTime, Int(round(currentTime - lastReadTime)) < heartbeatRule.interval {
                 // 当上次接收数据和本次心跳之间间隔不超过一个心跳周期，比如心跳周期为3秒，第0秒发送了一次心跳，第2秒收到一次业务数据响应，那么本该在第三秒发送的心跳就没必要发了
@@ -172,10 +165,10 @@ public class SLSocketClient : NSObject {
             let timeout = Int(heartbeatRule.timeout)
             heartbeatTimeoutChecker?.cancel()
             heartbeatTimeoutChecker = nil
-            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout))) { [weak self] in
-                if let lastReadTime = self?.lastHeartbeatTime {
+            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 100))) { [weak self] in
+                if let lastHeartbeatTime = self?.lastHeartbeatTime {
                     let currentTime = ProcessInfo.processInfo.systemUptime
-                    let passedTime = Int(round(currentTime - lastReadTime))
+                    let passedTime = Int(round(currentTime - lastHeartbeatTime))
                     if passedTime >= timeout {
                         self?.handleHeartbeatTimeout()
                     }
@@ -207,7 +200,7 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         server!.readData(withTimeout: -1, tag: 0)
         state = .connected
         connectionCompletion?(.success(Void()))
-        if let heartbeatRule {
+        if heartbeatRule != nil {
             DispatchQueue.global().async { [weak self] in
                 guard let self else { return }
                 self.heartbeatTimer?.invalidate()
@@ -224,7 +217,7 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         
         cachedData = nil
         if state == .connecting {
-            SLLog.debug("\(serverDesc ?? "socket连接")连接失败")
+            SLLog.debug("\(serverDesc ?? "socket")连接失败")
             state = .initilized
             connectionCompletion?(.failure(.bleConnectionFailure(err)))
         } else if state == .connected {
@@ -259,33 +252,30 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         }
         cachedData!.append(data)
         guard cachedData!.count > 0 else {
-            SLLog.debug("cachedData!.count == 0")
             return
         }
         let bytes = cachedData!.withUnsafeBytes {
             [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
         }
+        SLLog.debug("bytes.count = \(bytes.count)")
         guard bytes.count > 4 else {
-            SLLog.debug("bytes.count <= 4")
             return
         }
-        let type = bytes.first
+        let type = bytes.first!
         let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
         let packetLength = 1 + 4 + length
-        SLLog.debug("type = \(String(describing: type)), length = \(length),  packetLength = \(packetLength)")
+        SLLog.debug("type = \(type), length = \(length),  packetLength = \(packetLength)")
         if packetLength == cachedData!.count {
             // 如果读取的数据长度与当前保存的字节流长度一致，说明是一次完成的数据
-            if length > 0 {
+            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
                 let totalData = cachedData![5..<cachedData!.count]
                 let string = String(data: totalData, encoding: .utf8)
                 SLLog.debug("收到:\(string ?? "")")
                 dataHandler?(totalData)
-            } else {
-//                SLLog.debug("收到心跳")
             }
             cachedData!.removeAll()
         } else if packetLength < cachedData!.count {
-            if length > 0 {
+            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
                 let totalData = cachedData![5..<5+length]
                 let string = String(data: totalData, encoding: .utf8)
                 SLLog.debug("收到:\(string ?? "")")

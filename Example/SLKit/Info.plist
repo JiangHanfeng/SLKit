@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>使用蓝牙</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>获取位置信息</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -26,9 +30,14 @@
 	<string>使用蓝牙</string>
 	<key>NSCameraUsageDescription</key>
 	<string>使用相机扫描二维码</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>获取位置信息</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>获取位置信息</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

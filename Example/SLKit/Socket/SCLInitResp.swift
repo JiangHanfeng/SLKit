@@ -11,7 +11,6 @@ import SLKit
 
 struct SCLInitResp : SLSocketResponse {
     var id: String
-    
     var data: Data?
     
     var cmd: Int

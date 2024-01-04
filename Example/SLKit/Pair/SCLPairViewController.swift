@@ -15,6 +15,9 @@ class SCLPairViewController: SCLBaseViewController {
     
     private var pcPairedDevices: [SCLPCPairedDevice]?
     
+    private var a2dpMonitorTask: SLA2DPMonitorTask?
+    private var a2dpDevice: SLA2DPDevice?
+    
     convenience init(sock: SLSocketClient) {
         self.init()
         self.socket = sock
@@ -22,11 +25,27 @@ class SCLPairViewController: SCLBaseViewController {
         self.modalTransitionStyle = .crossDissolve
     }
     
+    deinit {
+        print("\(self) deinit")
+        a2dpMonitorTask?.terminate()
+    }
+    
     private lazy var pairAlertVc = {
         return SCLPairGuideViewController { [unowned self] in
             self.dismiss(animated: true)
         } onPair: { [unowned self] in
+            // MARK: 获取pc的已配对列表，开启A2DP检测，跳转到设置
             self.getPairedDevices(onPaired: false, button: nil)
+            if self.a2dpMonitorTask == nil {
+                self.a2dpMonitorTask = SLA2DPMonitorTask(connectedCallback: { [weak self] device in
+                    self?.a2dpDevice = device
+                }, updatededCallback: { [weak self] device in
+                    self?.a2dpDevice = device
+                }, disconnectedCallback: { [weak self] device in
+                    self?.a2dpDevice = nil
+                })
+            }
+            self.a2dpMonitorTask?.start()
         } onPaired: { [unowned self] button in
             self.getPairedDevices(onPaired: true, button: button)
         }

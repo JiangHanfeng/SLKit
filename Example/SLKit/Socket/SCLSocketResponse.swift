@@ -28,15 +28,14 @@ struct SCLSocketResponse<T: SCLSocketConetent>: SLSocketResponse {
                 let taskId = json?["taskId"] as? String,
                 !taskId.isEmpty,
                 let state = json?["state"] as? Int,
-                stateRange.contains(state),
-                let msg = json?["msg"] as? String,
-                let dev_mac = json?["dev_mac"] as? String,
-                !dev_mac.isEmpty
+                stateRange.contains(state)
             {
+                let msg = json?["msg"] as? String
+                let dev_mac = json?["dev_mac"] as? String
                 self.id = taskId
                 self.state = state
-                self.msg = msg
-                self.dev_mac = dev_mac
+                self.msg = msg ?? ""
+                self.dev_mac = dev_mac ?? ""
                 self.content = T.deserialize(from: json)
             } else {
                 throw NSError(domain: NSErrorDomain(string: "failed to get taskId/state/msg/dev_mac") as String, code: -999, userInfo: [NSLocalizedDescriptionKey:"转换SCLTCPSocketResponse失败"])

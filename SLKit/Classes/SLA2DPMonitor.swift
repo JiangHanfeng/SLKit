@@ -15,11 +15,11 @@ public class SLA2DPMonitor {
     
     private var isEnable = false {
         didSet {
-            tasks.forEach { task in
-                if isEnable {
-                    task.startedCallback?()
-                } else {
-                    task.stoppedCallback?()
+            if oldValue != isEnable {
+                if !isEnable {
+                    tasks.forEach { task in
+                        task.stoppedCallback?()
+                    }
                 }
             }
         }
@@ -59,15 +59,10 @@ public class SLA2DPMonitor {
     
     private init() {}
     
-    public func enable(resetDevice: Bool = false) {
+    public func enable() {
         guard !isEnable else { return }
-        SLLog.debug("开始监听A2DP，重置当前A2DP设备：\(resetDevice)")
+        SLLog.debug("开始监听A2DP")
         isEnable = true
-        if resetDevice {
-            currentDevice = nil
-        } else {
-            currentDevice = getA2DPDevice()
-        }
         NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionRouteChanged(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
     }
@@ -114,6 +109,12 @@ public class SLA2DPMonitor {
         }) {
             
         } else {
+            task.startedCallback?()
+            currentDevice = getA2DPDevice()
+            if let currentDevice {
+                // 对于新加入的任务来说，如果加入时存在已连接的a2dp设备，则通知一次连接
+                task.deviceConnectedCallback?(currentDevice)
+            }
             tasks.append(task)
         }
         enable()
@@ -131,5 +132,8 @@ public class SLA2DPMonitor {
             }
         }
         task.stoppedCallback?()
+        if tasks.isEmpty {
+            disable()
+        }
     }
 }

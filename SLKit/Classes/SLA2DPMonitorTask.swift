@@ -15,7 +15,7 @@ public class SLA2DPMonitorTask: SLTask {
     
     typealias Result = SLA2DPDevice
     
-    func start() {
+    public func start() {
         SLA2DPMonitor.shared.startTask(self)
     }
     
@@ -31,8 +31,8 @@ public class SLA2DPMonitorTask: SLTask {
         
     }
     
-    func terminate() {
-        
+    public func terminate() {
+        SLA2DPMonitor.shared.stopTask(self)
     }
     
     public static func == (lhs: SLA2DPMonitorTask, rhs: SLA2DPMonitorTask) -> Bool {

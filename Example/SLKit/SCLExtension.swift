@@ -13,13 +13,11 @@ import Toast_Swift
 extension UIApplication {
     func toast(_ msg: String, duration: TimeInterval, tag: Int = 0) throws {
         var window: UIWindow?
-        if #available(iOS 15.0, *) {
-            window = UIApplication.shared.connectedScenes
-                .lazy
-                .compactMap { $0.activationState == .foregroundActive ? ($0 as? UIWindowScene) : nil}
-                .first(where: { $0.keyWindow != nil })?.keyWindow
-        } else if #available(iOS 13.0, *) {
-            window = UIApplication.shared.windows.first
+//        if #available(iOS 15.0, *) {
+//            
+//        } else 
+        if #available(iOS 13.0, *) {
+            window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         } else {
             window = UIApplication.shared.keyWindow
         }
@@ -35,13 +33,14 @@ extension UIApplication {
     
     public func currentWindow() -> UIWindow {
         var window: UIWindow?
-        if #available(iOS 15.0, *) {
-            window = UIApplication.shared.connectedScenes
-                .lazy
-                .compactMap { $0.activationState == .foregroundActive ? ($0 as? UIWindowScene) : nil}
-                .first(where: { $0.keyWindow != nil })?.keyWindow
-        } else if #available(iOS 13.0, *) {
-            window = UIApplication.shared.windows.first
+//        if #available(iOS 15.0, *) {
+//            window = UIApplication.shared.connectedScenes
+//                .lazy
+//                .compactMap { $0.activationState == .foregroundActive ? ($0 as? UIWindowScene) : nil}
+//                .first(where: { $0.keyWindow != nil })?.keyWindow
+//        } else 
+        if #available(iOS 13.0, *) {
+            window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
         } else {
             window = UIApplication.shared.keyWindow
         }
@@ -82,11 +81,14 @@ extension UIApplication {
 
 extension UIViewController {
     func toast(_ msg: String, image: UIImage? = nil) {
-        var style = ToastStyle()
-        style.messageColor = .white
-        style.backgroundColor = .init(red: 70/255.0, green: 72/255.0, blue: 82/255.0, alpha: 0.8)
-        style.messageFont = .systemFont(ofSize: 14)
-        view.makeToast(msg, duration: 3.0, position: .bottom, image: image, style: style)
+//        var style = ToastStyle()
+//        style.messageColor = .white
+//        style.backgroundColor = .init(red: 70/255.0, green: 72/255.0, blue: 82/255.0, alpha: 0.8)
+//        style.messageFont = .systemFont(ofSize: 14)
+//        view.makeToast(msg, duration: 3.0, position: .bottom, image: image, style: style)
+        DispatchQueue.main.async {
+            try? UIApplication.shared.toast(msg, duration: 3)
+        }
     }
     
     func transitionToChild(_ controller: UIViewController, removeCurrent: Bool = true, configChildViewRect: ((_ childView: UIView) -> Void)) {

@@ -9,10 +9,11 @@ import Foundation
 import CocoaAsyncSocket
 import RxSwift
 
-public struct SLAcceptedSocket : Equatable {
+public class SLAcceptedSocket : Equatable {
     public let host: String?
     public let port: UInt16
     let socket: GCDAsyncSocket
+    var data = Data()
     
     init(host: String?, port: UInt16, socket: GCDAsyncSocket) {
         self.host = host
@@ -83,8 +84,6 @@ public class SLSocketServer : NSObject {
     
     private var heartbeatTimeoutChecker: SLCancelableWork?
     
-    private var cachedData: Data?
-    
     public var isConnected : Bool {
         return currentClient?.socket.isConnected ?? false
     }
@@ -133,7 +132,6 @@ public class SLSocketServer : NSObject {
         server?.disconnect()
         acceptedClients.removeAll()
         currentClient = nil
-        cachedData = nil
     }
     
     public func send(_ text: String, timeout: SLTimeInterval = .seconds(15)) throws {
@@ -182,7 +180,6 @@ public class SLSocketServer : NSObject {
                     if passedTime >= timeout {
                         SLLog.debug("\(self?.currentClientDesc ?? "")心跳已超时")
                         self?.state = .disconnectedUnexpected
-                        self?.cachedData = nil
                         sock?.disconnect()
                         self?.acceptedClients.removeAll()
                         self?.currentClient = nil
@@ -245,26 +242,110 @@ extension SLSocketServer: GCDAsyncSocketDelegate {
     }
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
-        // MARK: 目前只考虑双方基于JSON进行通信
-        if let string = String(data: data, encoding: .utf8) {
-            if let heartbeatRule, heartbeatRule.reponseValue.elementsEqual(string) {
-                lastReadTime = ProcessInfo.processInfo.systemUptime
-                // 心跳不交给上层处理
-                return
-            }
-            print("\n来自\(sock.connectedHost ?? "nil host"):\(sock.connectedPort)的数据:\n\(string)\n")
-            // 组包（？？？连续发送多个请求a，b，a的请求响应需要分多个包接收，接收过程中是否可能包含b的响应？考虑到tcp可以保证顺序性，应该不会出现这种情况，所以以下的组包应该是安全的）
-            do {
-                var totalData = cachedData ?? Data()
-                totalData.append(data)
-                cachedData = nil
-                _ = try JSONSerialization.jsonObject(with: totalData)
-                dataHandler?(totalData)
-            } catch _ {
-                cachedData == nil ? cachedData = Data() : nil
-                cachedData!.append(data)
-            }
+        server?.readData(withTimeout: -1, tag: 0)
+        if let accepted = acceptedClients.first(where: { item in
+            item.socket.isEqual(sock)
+        }) {
+            didReceived(data: data, from: accepted)
         }
-        sock.readData(withTimeout: -1, tag: 0)
+    }
+    
+    private func didReceived(data: Data, from sock: SLAcceptedSocket) {
+        lastReadTime = ProcessInfo.processInfo.systemUptime
+        sock.data.append(data)
+        guard sock.data.count > 0 else {
+            return
+        }
+        let bytes = sock.data.withUnsafeBytes {
+            [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
+        }
+        guard bytes.count > 4 else {
+            return
+        }
+        let type = bytes.first
+        let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
+        let packetLength = 1 + 4 + length
+        if packetLength == sock.data.count {
+            // 如果读取的数据长度与当前保存的字节流长度一致，说明是一次完成的数据
+            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
+                let totalData = sock.data[5..<sock.data.count]
+                let string = String(data: totalData, encoding: .utf8)
+                SLLog.debug("收到客户端请求:\(string ?? "")")
+                switch gateway.dataAuthrizationHandler(sock, totalData) {
+                case .access(let response):
+                    if let response {
+                        SLLog.debug("返回客户端响应:\(String(data: response, encoding: .utf8) ?? "")")
+                        var mData = Data()
+                        mData.append(Data(bytes: [SLSocketSessionItemType.businessMessage.rawValue]))
+                        var lengthBytes: [UInt8] = []
+                        let length = UInt32(response.count)
+                        withUnsafeBytes(of: length.bigEndian) {
+                            lengthBytes.append(contentsOf: $0)
+                        }
+                        mData.append(Data(bytes: lengthBytes))
+                        mData.append(response)
+                        sock.socket.write(mData, withTimeout: -1, tag: 0)
+                    }
+                case .deny(let response):
+                    if let response {
+                        sock.socket.write(response, withTimeout: -1, tag: 0)
+                        sock.socket.disconnectAfterWriting()
+                    } else {
+                        sock.socket.disconnect()
+                    }
+                    acceptedClients.removeAll { item in
+                        item == sock
+                    }
+                }
+            }
+            sock.data.removeAll()
+        } else if packetLength < sock.data.count {
+            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
+                let totalData = sock.data[5..<5+length]
+                let string = String(data: totalData, encoding: .utf8)
+                SLLog.debug("收到:\(string ?? "")")
+                let dataHandlerResult = gateway.dataAuthrizationHandler(sock, totalData)
+                switch dataHandlerResult {
+                case .access(let response):
+                    if let response {
+                        let type = SLSocketSessionItemType.businessMessage.rawValue
+                        var mData = Data()
+                        mData.append(Data(bytes: [type]))
+                        var lengthBytes: [UInt8] = []
+                        let length = UInt32(response.count)
+                        SLLog.debug("response value length = \(length)")
+                        withUnsafeBytes(of: length.bigEndian) {
+                            lengthBytes.append(contentsOf: $0)
+                        }
+                        mData.append(Data(bytes: lengthBytes))
+                        mData.append(response)
+                        sock.socket.write(mData, withTimeout: -1, tag: 0)
+                    }
+                case .deny(let response):
+                    if let response {
+                        let type = SLSocketSessionItemType.businessMessage.rawValue
+                        var mData = Data()
+                        mData.append(Data(bytes: [type]))
+                        var lengthBytes: [UInt8] = []
+                        let length = UInt32(response.count)
+                        SLLog.debug("response value length = \(length)")
+                        withUnsafeBytes(of: length.bigEndian) {
+                            lengthBytes.append(contentsOf: $0)
+                        }
+                        mData.append(Data(bytes: lengthBytes))
+                        mData.append(response)
+                        sock.socket.write(mData, withTimeout: -1, tag: 0)
+                        sock.socket.write(response, withTimeout: -1, tag: 0)
+                        sock.socket.disconnectAfterWriting()
+                    } else {
+                        sock.socket.disconnect()
+                    }
+                    acceptedClients.removeAll { item in
+                        item == sock
+                    }
+                }
+            }
+            sock.data = sock.data[(5+Int(length))..<sock.data.count]
+        }
     }
 }

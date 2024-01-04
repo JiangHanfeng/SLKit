@@ -15,6 +15,8 @@ import CoreBluetooth
 class SCLHomeViewController: SCLBaseViewController {
     
     @IBOutlet weak var topBar: UIView!
+    private var ipv4: String?
+    private var localServer: SLSocketServer?
     private var device: SLDevice? {
         didSet {
             if device != oldValue {
@@ -22,6 +24,7 @@ class SCLHomeViewController: SCLBaseViewController {
             }
         }
     }
+    private var connectionVc: SCLConnectionViewController?
     
     public var deviceUpdatedHandler: ((SLDevice?) -> Void)?
     
@@ -29,14 +32,6 @@ class SCLHomeViewController: SCLBaseViewController {
         super.viewDidLoad()
         navigationController?.delegate = self
         navigationController?.setNavigationBarHidden(true, animated: true)
-        transitionToChild(getConnectionVc()) { childView in
-            childView.snp.makeConstraints { make in
-                make.top.equalTo(self.topBar.snp.bottom)
-                make.left.right.equalTo(0)
-                make.bottom.equalTo(-UIDevice.safeDistanceBottom())
-            }
-        }
-        
         let ipSignal = Observable.create { observer in
             SLNetworkManager.shared.startMonitorWifi()
             SLNetworkManager.shared.ipv4OfWifiUpdated = { ip in
@@ -46,7 +41,7 @@ class SCLHomeViewController: SCLBaseViewController {
         }
         let bleStateSignal = Observable.create { observer in
             observer.onNext(SLCentralManager.shared.state == .poweredOn)
-            SLCentralManager.shared.stateUpdateHandler = SLBleStateUpdatedHandler(handle: { state in
+            SLPeripheralManager.shared.stateUpdatedHandler = SLBleStateUpdatedHandler(handle: { state in
                 observer.onNext(state == .poweredOn)
             })
             return Disposables.create()
@@ -62,10 +57,10 @@ class SCLHomeViewController: SCLBaseViewController {
             return Disposables.create()
         }
         Observable.combineLatest(ipSignal, bleStateSignal, deviceSignal)
-            .subscribe(onNext: { [weak self] (ip, bleAvailable, connected) in
+            .observe(on: MainScheduler()).subscribe(onNext: { [weak self] (ip, bleAvailable, connected) in
                 if connected {
-                    // TODO: 停止广播
-                    
+//                    self?.stopListenPort()
+                    self?.stopAdvertising()
                     guard let self, let device = self.device else {
                         return
                     }
@@ -87,14 +82,38 @@ class SCLHomeViewController: SCLBaseViewController {
                     }
                 } else {
                     if ip.isEmpty {
+                        self?.ipv4 = nil
                         self?.stopListenPort()
+                        self?.stopAdvertising()
                     } else {
-                        self?.startListenPort()
-                    }
-                    if bleAvailable {
-                        // TODO: 广播
-                    } else {
-                        // TODO: 停止广播
+                        self?.stopAdvertising()
+                        if self?.ipv4 != ip {
+                            self?.stopListenPort()
+                            self?.ipv4 = ip
+                            let serverPort = UInt16.random(in: 10000..<65535)
+                            self?.startListenPort(serverPort, success: {
+                                if bleAvailable {
+                                    if let advertiseError = self?.startAdvertising(port: serverPort) {
+                                        self?.toast(advertiseError)
+                                    }
+                                }
+                            })
+                        } else if let server = self?.localServer {
+                            if bleAvailable {
+                                if let advertiseError = self?.startAdvertising(port: server.port) {
+                                    self?.toast(advertiseError)
+                                }
+                            }
+                        } else {
+                            let serverPort = UInt16.random(in: 10000..<65535)
+                            self?.startListenPort(serverPort, success: {
+                                if bleAvailable {
+                                    if let advertiseError = self?.startAdvertising(port: serverPort) {
+                                        self?.toast(advertiseError)
+                                    }
+                                }
+                            })
+                        }
                     }
                     guard let self else {
                         return
@@ -112,6 +131,7 @@ class SCLHomeViewController: SCLBaseViewController {
             }, onCompleted: {
                 
             }).disposed(by: disposeBag)
+        deviceUpdatedHandler?(nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,9 +148,12 @@ class SCLHomeViewController: SCLBaseViewController {
     }
     
     private func getConnectionVc() -> SCLConnectionViewController {
-        return SCLConnectionViewController { [weak self] device in
-            self?.device = device
+        if connectionVc == nil {
+            connectionVc = SCLConnectionViewController { [weak self] device in
+                self?.device = device
+            }
         }
+        return connectionVc!
     }
     
     private func getDeviceVc(_ device: SLDevice) -> SCLDeviceViewController {
@@ -162,30 +185,94 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
 }
 
 extension SCLHomeViewController {
-
-    func startListenPort() {
-        SLSocketManager.shared.startListen(port: 8099, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
+    func startListenPort(_ port: UInt16, success: () -> Void) {
+        SLSocketManager.shared.startListen(port: port, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
             return .access(nil)
         }, dataAuthrizationHandler: { [weak self] socket, data in
-            if self?.device == nil {
-                // TODO: 解析data，赋值device
-                return .access(nil)
+            do {
+                guard let json = try JSONSerialization.jsonObject(with: data) as? [String : Any] else {
+                    return .access(nil)
+                }
+                guard
+                    let cmd = json["cmd"] as? Int,
+                    let ip = json["ip"] as? String,
+                    let _ = ip.ipV4Bytes(),
+                    let port = json["port"] as? UInt16,
+                    port > 0
+                else {
+                    return .access(nil)
+                }
+                let shouldConnect = self?.device == nil
+                let resp = [
+                    "cmd":cmd,
+                    "state":shouldConnect ? 1 : 0
+                ]
+                if shouldConnect {
+                    DispatchQueue.main.async {
+                        self?.getConnectionVc().startConnect(host: ip, port: port, mac: "", name: "")
+                    }
+                }
+                let respData = try? JSONSerialization.data(withJSONObject: resp)
+                return .access(respData)
+            } catch _ {
+                return .deny("消息格式错误".data(using: .utf8))
             }
-            return .deny("已与其它客户端进行连接".data(using: .utf8))
-        })) { result in
+        })) { [weak self] result in
             switch result {
-            case .success(_):
-                print("socket server已启动")
+            case .success(let server):
+                print("监听本地端口:\(server.port)成功")
+                self?.localServer = server
             case .failure(_):
-                print("socket server启动失败")
+                print("监听本地端口:\(port)失败")
             }
         }
     }
     
     func stopListenPort() {
-        SLSocketManager.shared.stopListen(port: 8099) {
-            
+        if let localServer {
+            SLSocketManager.shared.stopListen(localServer) {
+                
+            }
+            self.localServer = nil
         }
+    }
+    
+    func startAdvertising(port: UInt16) -> String? {
+        guard let macBytes = SCLUtil.getDeviceMac().macBytes() else {
+            return "无法获取mac"
+        }
+        let macData = Data(bytes: macBytes)
+        
+        guard let ipBytes = ipv4?.ipV4Bytes() else {
+            return "无法获取ip"
+        }
+        let ipData = Data(bytes: ipBytes)
+
+        var uint16 = CFSwapInt16BigToHost(port)
+        let portBytes = withUnsafeBytes(of: &uint16) { Array($0) }
+        let portData = Data(bytes: portBytes)
+        
+        let ipHeadBytes: [UInt8] = [0xdd, 0xe7]
+        
+        var ipPageData = Data()
+        ipPageData.append(Data(bytes: ipHeadBytes))
+        ipPageData.append(macData)
+        ipPageData.append(ipData)
+        ipPageData.append(portData)
+        while ipPageData.count < 21 {
+            ipPageData.append(Data(bytes: [0x00]))
+        }
+        stopAdvertising()
+        do {
+            try  SLPeripheralManager.shared.startAdvertising(["kCBAdvDataAppleBeaconKey":ipPageData])
+        } catch let e {
+            return e.localizedDescription
+        }
+        return nil
+    }
+    
+    func stopAdvertising() {
+        SLPeripheralManager.shared.stopAdvertising()
     }
     
     func test() {

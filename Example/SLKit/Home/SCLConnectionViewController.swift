@@ -61,8 +61,10 @@ class SCLConnectionViewController: SCLBaseViewController {
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
                             
                             if resp.state == 1 {
-                                _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
-                                let device = SLDevice(name: name, mac: mac, role: .server(sock))
+                                 SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self, timeout: .seconds(10)) { result in
+                                    
+                                }
+                                let device = SLDevice(id: resp.dev_id, name: resp.dev_name, mac: mac, role: .server(sock))
                                 self.connectedCallback?(device)
                             } else {
                                 self.state = .initialize
@@ -293,6 +295,10 @@ class SCLConnectionViewController: SCLBaseViewController {
         }
     }
     
+    public func startConnect(host: String, port: UInt16, mac: String, name: String) {
+        state = .connecting(host, port, mac, name)
+    }
+    
     private func startAnimation() {
         var animationImages: [UIImage] = []
         for i in 0..<35 {
@@ -406,7 +412,7 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
         let soundID = SystemSoundID(kSystemSoundID_Vibrate)
         AudioServicesPlaySystemSound(soundID)
         let object = metadataObjects.first! as! AVMetadataMachineReadableCodeObject
-        if let string = object.stringValue, let url = URL(string: string), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
+        if let string = object.stringValue, let urlEncoded = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: urlEncoded), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
             print("识别到可连接设备:\(result.deviceName)")
             DispatchQueue.main.async {
                 if let port = UInt16(result.port) {
