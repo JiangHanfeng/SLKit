@@ -54,7 +54,7 @@ struct SCLSocketGenericContent: SCLSocketConetent {
 struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
     let dev_id = SCLUtil.getDeviceMac().split(separator: ":").joined()
-    let dev_mac = SCLUtil.getBTMac()?.split(separator: ":").joined() ?? ""
+    let dev_mac = SCLUtil.getBTMac()?.split(separator: ":").joined() ?? SCLUtil.getDeviceMac().split(separator: ":").joined()
     let deviceName = UIDevice.current.name
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
@@ -66,7 +66,7 @@ struct SCLSocketRequest<T: SCLSocketConetent> {
     }
 }
 
-extension SCLSocketRequest: SLSocketRequest           {
+extension SCLSocketRequest: SLSocketRequest {
     var type: SLSocketSessionItemType {
         return .businessMessage
     }

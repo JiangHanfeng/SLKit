@@ -21,6 +21,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var connectionStateLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
+    @IBOutlet weak var airplayBtn: UIButton!
     
     private var device: SLDevice?
     private var disconnectedCallback: (() -> Void)?
@@ -28,6 +29,11 @@ class SCLDeviceViewController: SCLBaseViewController {
     private var socketDataListener: SLSocketClientUnhandledDataHandler?
     private var requestPairByDevice = false // 是否从pc发起配对
     private var pcPairedDevices: [SCLPCPairedDevice] = []
+    private var airplaySuccess = false {
+        didSet {
+            airplayBtn.setTitle(airplaySuccess ? "停止投屏" : "开始投屏", for: .normal)
+        }
+    }
     
     convenience init(device: SLDevice, disconnectedCallback: @escaping () -> Void) {
         self.init()
@@ -66,9 +72,12 @@ class SCLDeviceViewController: SCLBaseViewController {
                     }
                     if result {
                         SLLog.debug("投屏成功")
-                        self.requestScreen()
+//                        self.requestScreen()
+                        self.toast("投屏成功")
+                        self.airplaySuccess = true
                     } else {
                         self.toast("投屏失败")
+                        self.airplaySuccess = false
                     }
                 case SCLCmd.requestPair.rawValue:
                     // 从pc发起的配对请求，state 1表示发起配对，0表示取消配对
@@ -148,7 +157,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBAction private func onAirplay() {
         switch state {
         case .connected:
-            requestScreen()
+            airplaySuccess ? cancelScreen() : requestScreen()
         default:
             break
         }
@@ -158,16 +167,16 @@ class SCLDeviceViewController: SCLBaseViewController {
         guard let socket = device?.localClient else {
             return
         }
-        guard let mac = SCLUtil.getBTMac(), !mac.isEmpty else {
-            present(SCLPairViewController(sock: socket), animated: true)
-            return
-        }
+//        guard let mac = SCLUtil.getBTMac(), !mac.isEmpty else {
+//            present(SCLPairViewController(sock: socket), animated: true)
+//            return
+//        }
         Task {
             do {
                 if isInitiative {
                     _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: 0, port3: 0)), from: socket, for: SCLScreenResp.self)
                 }
-                _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLInitReq()), from: socket, for: SCLInitResp.self)
+                _ = try await SLSocketManager.shared.send(SCLInitReq(mac: SCLUtil.getBTMac() ?? ""), from: socket, for: SCLInitResp.self)
                 SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
 
                 }
@@ -182,6 +191,18 @@ class SCLDeviceViewController: SCLBaseViewController {
             } catch let e {
                 toast(e.localizedDescription)
             }
+        }
+    }
+    
+    private func cancelScreen() {
+        defer {
+            airplaySuccess = false
+        }
+        guard let socket = device?.localClient else {
+            return
+        }
+        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
+            
         }
     }
 }

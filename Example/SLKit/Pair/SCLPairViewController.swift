@@ -108,14 +108,15 @@ class SCLPairViewController: SCLBaseViewController {
                         self.submitPairResult(device: newDevices.first!, result: true)
                     } else {
                         self.transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: newDevices.isEmpty ? deviceList : newDevices, onVerified: { [weak self] device in
-                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
+//                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
+                                self?.submitPairResult(device: device, result: true)
                                 let presentingVc = self?.presentingViewController
                                 presentingVc?.dismiss(animated: true, completion: {
                                     presentingVc?.toast("配对校验通过")
                                 })
-                            } else {
-                                self?.toast("配对校验未通过")
-                            }
+//                            } else {
+//                                self?.toast("配对校验未通过")
+//                            }
                         }, onBack: { [weak self] in
                             if let self {
                                 self.transitionToChild(self.pairAlertVc) { childView in }

@@ -8,9 +8,28 @@
 
 import Foundation
 import UIKit
+import SLKit
+import HandyJSON
 
-struct SCLInitReq : SCLSocketConetent {
-    var cmd: SCLCmd = .initPlatform
+struct SCLInitReq : SLSocketRequest, HandyJSON {
+    init() {
+        mac = ""
+    }
+    
+    var type: SLKit.SLSocketSessionItemType = .businessMessage
+    
+    var id: String {
+        return taskId
+    }
+    
+    var data: Data? {
+        if let json = toJSON() {
+            return try? JSONSerialization.data(withJSONObject: json)
+        }
+        return nil
+    }
+    
+    let cmd: SCLCmd = .initPlatform
     
     let saving = 0
     let width = Int(UIScreen.main.bounds.width)
@@ -21,4 +40,16 @@ struct SCLInitReq : SCLSocketConetent {
     let distanceY = Int(UIDevice.safeDistanceTop())
     let hasPassword = 0
     let isHomeKey = false
+    
+    let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
+    let dev_id : String = SCLUtil.getDeviceMac().split(separator: ":").joined()
+    let mac : String
+    let deviceName = UIDevice.current.name
+    let os = 1
+    let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
+    let dbg_info = "bug"
+    
+    init(mac: String) {
+        self.mac = mac
+    }
 }
