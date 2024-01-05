@@ -12,13 +12,12 @@ class SCLAirPlayGuideViewController: SCLBaseViewController {
 
     @IBOutlet private weak var cancelBtn: UIButton!
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        self.modalPresentationStyle = .overFullScreen
-    }
+    private var onCancel: (() -> Void)?
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    convenience init(onCancel: @escaping (() -> Void)) {
+        self.init()
+        self.onCancel = onCancel
+        self.modalPresentationStyle = .fullScreen
     }
     
     override func viewDidLoad() {
@@ -27,12 +26,6 @@ class SCLAirPlayGuideViewController: SCLBaseViewController {
     }
     
     @IBAction func onCancel(sender: UIButton) {
-        var rootPresentingVc = presentingViewController
-        var presentingVc = rootPresentingVc
-        while presentingVc != nil {
-            rootPresentingVc = presentingVc
-            presentingVc = presentingVc?.presentingViewController
-        }
-        rootPresentingVc?.dismiss(animated: true)
+        onCancel?()
     }
 }

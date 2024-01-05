@@ -76,7 +76,7 @@ public class SLSocketServer : NSObject {
         }
     }
     
-    public var dataHandler: SLSocketDataHandler?
+    public var dataHandler: SLSocketDataCallback?
     
     private var heartbeatTimer: Timer?
     
@@ -163,7 +163,7 @@ public class SLSocketServer : NSObject {
         SLLog.debug("向\(socket.connectedHost ?? "nil host"):\(socket.connectedPort)发送数据:\n\(String(data: data, encoding: .utf8) ?? "some data which can't convert to string")\n")
     }
     
-//    func setReceivedDataHandler(_ handler: SLSocketDataHandler?) {
+//    func setReceivedDataHandler(_ handler: SLSocketDataCallback?) {
 //        dataHandler = handler
 //    }
     

@@ -8,9 +8,11 @@
 import Foundation
 import CocoaAsyncSocket
 
+//public protocol SLSocketDataMapper {
+//    init(data: Data) throws
+//}
 
-
-public typealias SLSocketDataHandler = ((Data) -> Void)
+public typealias SLSocketDataCallback = ((Data) -> Void)
 
 public struct SLSocketHeartbeatRule {
     public let interval: UInt

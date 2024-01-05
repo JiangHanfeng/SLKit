@@ -61,11 +61,10 @@ class SCLConnectionViewController: SCLBaseViewController {
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
                             
                             if resp.state == 1 {
-                                 SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self, timeout: .seconds(10)) { result in
-                                    
-                                }
-                                let device = SLDevice(id: resp.dev_id, name: resp.dev_name, mac: mac, role: .server(sock))
+                                let syncResp = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncReq(deviceName: SCLUtil.getDeviceName(), deviceId: SCLUtil.getDeviceMac().split(separator: ":").joined(), ip: sock.localHost ?? "", port1: 10001, port2: 10002, port3: 10003)), from: sock, for: SCLSyncResp.self)
+                                let device = SLDevice(id: resp.dev_id, name: resp.dev_name, mac: mac, localClient: sock)
                                 self.connectedCallback?(device)
+                                self.state = .initialize
                             } else {
                                 self.state = .initialize
                                 self.toast("连接失败，请查看连接须知")

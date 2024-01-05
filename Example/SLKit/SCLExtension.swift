@@ -442,3 +442,22 @@ extension ObservableType {
         }
     }
 }
+
+extension UIFont {
+
+    class func oversized(_ weight: UIFont.Weight = .regular) -> UIFont{
+        return UIFont.systemFont(ofSize: 30, weight: weight)
+    }
+    
+    class func nomalSized(_ weight: UIFont.Weight = .regular) -> UIFont{
+        return UIFont.systemFont(ofSize: 17, weight: weight)
+    }
+    
+    class func trumpetSized(_ weight: UIFont.Weight = .regular) -> UIFont{
+        return UIFont.systemFont(ofSize: 15, weight: weight)
+    }
+    
+    class func font(_ size: CGFloat, _ weight: UIFont.Weight = .regular)-> UIFont {
+        return UIFont.systemFont(ofSize: size, weight: weight)
+    }
+}

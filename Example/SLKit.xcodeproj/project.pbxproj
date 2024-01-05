@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B0EC3842B479F0C00E01BBE /* SCLEndReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3832B479F0C00E01BBE /* SCLEndReq.swift */; };
+		4B0EC3882B47D02200E01BBE /* SCLSyncReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */; };
+		4B0EC38A2B47D9C000E01BBE /* SCLSyncResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */; };
 		4B14ACA32B3AB34F00FD0F9A /* SCLSocketRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B14ACA22B3AB34F00FD0F9A /* SCLSocketRequest.swift */; };
 		4B14ACA52B3ABC7000FD0F9A /* SCLSocketResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B14ACA42B3ABC7000FD0F9A /* SCLSocketResponse.swift */; };
 		4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */; };
@@ -68,6 +71,18 @@
 		4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */; };
 		4BDE22EF2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */; };
 		4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */; };
+		4BE13FEF2B4819CF00606BE6 /* SCLSyncPairReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE13FEE2B4819CF00606BE6 /* SCLSyncPairReq.swift */; };
+		4BE13FF92B4826AC00606BE6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4BE13FFB2B4826AC00606BE6 /* Localizable.strings */; };
+		4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */; };
+		4BE1400C2B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */; };
+		4BE1400D2B48271C00606BE6 /* SLAdjustingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */; };
+		4BE1400E2B48271C00606BE6 /* SLAdustingControlAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140032B48271C00606BE6 /* SLAdustingControlAnimationView.swift */; };
+		4BE1400F2B48271C00606BE6 /* SLAdjustingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140042B48271C00606BE6 /* SLAdjustingView.swift */; };
+		4BE140102B48271C00606BE6 /* SLAdjustingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140052B48271C00606BE6 /* SLAdjustingManager.swift */; };
+		4BE140112B48271C00606BE6 /* SLAdjustingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140072B48271C00606BE6 /* SLAdjustingImageView.swift */; };
+		4BE140122B48271C00606BE6 /* SLAdjustingSortView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140082B48271C00606BE6 /* SLAdjustingSortView.swift */; };
+		4BE140132B48271C00606BE6 /* SLAdjustingOpenTouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140092B48271C00606BE6 /* SLAdjustingOpenTouchView.swift */; };
+		4BE140142B48271C00606BE6 /* SLAdjustingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1400A2B48271C00606BE6 /* SLAdjustingBackgroundView.swift */; };
 		4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */; };
 		4BE3B94D2B3BF46F00C48A71 /* SCLDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */; };
 		4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */; };
@@ -95,6 +110,9 @@
 		0EAC628545CAA7CE11A3FDBE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Example.debug.xcconfig"; path = "Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		18CE967A18D972234CC35A2A /* Pods_SLKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SLKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B0EC3832B479F0C00E01BBE /* SCLEndReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLEndReq.swift; sourceTree = "<group>"; };
+		4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncReq.swift; sourceTree = "<group>"; };
+		4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncResp.swift; sourceTree = "<group>"; };
 		4B14ACA22B3AB34F00FD0F9A /* SCLSocketRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketRequest.swift; sourceTree = "<group>"; };
 		4B14ACA42B3ABC7000FD0F9A /* SCLSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketResponse.swift; sourceTree = "<group>"; };
 		4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetAppPromptViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +199,21 @@
 		4BDE22EC2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLPrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		4BDE22ED2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLPrivacyPolicyViewController.xib; sourceTree = "<group>"; };
 		4BDE22F02B328C4000D1A50C /* SLWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLWebViewController.swift; sourceTree = "<group>"; };
+		4BE13FEE2B4819CF00606BE6 /* SCLSyncPairReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncPairReq.swift; sourceTree = "<group>"; };
+		4BE13FF52B48262400606BE6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		4BE13FF62B48262400606BE6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		4BE13FFA2B4826AC00606BE6 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		4BE13FFC2B4826B100606BE6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingTimeoutViewController.swift; sourceTree = "<group>"; };
+		4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingSensitivityBigHintViewController.swift; sourceTree = "<group>"; };
+		4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingViewController.swift; sourceTree = "<group>"; };
+		4BE140032B48271C00606BE6 /* SLAdustingControlAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdustingControlAnimationView.swift; sourceTree = "<group>"; };
+		4BE140042B48271C00606BE6 /* SLAdjustingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingView.swift; sourceTree = "<group>"; };
+		4BE140052B48271C00606BE6 /* SLAdjustingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingManager.swift; sourceTree = "<group>"; };
+		4BE140072B48271C00606BE6 /* SLAdjustingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingImageView.swift; sourceTree = "<group>"; };
+		4BE140082B48271C00606BE6 /* SLAdjustingSortView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingSortView.swift; sourceTree = "<group>"; };
+		4BE140092B48271C00606BE6 /* SLAdjustingOpenTouchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingOpenTouchView.swift; sourceTree = "<group>"; };
+		4BE1400A2B48271C00606BE6 /* SLAdjustingBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingBackgroundView.swift; sourceTree = "<group>"; };
 		4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLDBManager.swift; sourceTree = "<group>"; };
 		4BE3B9502B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetPairedDeviceResp.swift; sourceTree = "<group>"; };
@@ -222,6 +255,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4B0EC3822B4795DF00E01BBE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				4B2694F02B304BB400B116BA /* SCLSettingCell.swift */,
+				4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */,
+				4B2694EE2B30448200B116BA /* SCLSettingCellModel.swift */,
+				4B2694F12B304BB500B116BA /* SCLSettingCell.xib */,
+				4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		4B33D24E2B4547AB002B0C5B /* Socket */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +280,10 @@
 				4B33D2572B4575C5002B0C5B /* SCLScreenResp.swift */,
 				4B33D2552B45729E002B0C5B /* SCLInitReq.swift */,
 				4B33D2592B457901002B0C5B /* SCLInitResp.swift */,
+				4B0EC3832B479F0C00E01BBE /* SCLEndReq.swift */,
+				4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */,
+				4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */,
+				4BE13FEE2B4819CF00606BE6 /* SCLSyncPairReq.swift */,
 			);
 			path = Socket;
 			sourceTree = "<group>";
@@ -383,6 +432,47 @@
 			path = Pair;
 			sourceTree = "<group>";
 		};
+		4BE13FFD2B48271C00606BE6 /* Adusting */ = {
+			isa = PBXGroup;
+			children = (
+				4BE13FFE2B48271C00606BE6 /* Controller */,
+				4BE140022B48271C00606BE6 /* sdk */,
+				4BE140062B48271C00606BE6 /* View */,
+			);
+			path = Adusting;
+			sourceTree = "<group>";
+		};
+		4BE13FFE2B48271C00606BE6 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */,
+				4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */,
+				4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		4BE140022B48271C00606BE6 /* sdk */ = {
+			isa = PBXGroup;
+			children = (
+				4BE140032B48271C00606BE6 /* SLAdustingControlAnimationView.swift */,
+				4BE140042B48271C00606BE6 /* SLAdjustingView.swift */,
+				4BE140052B48271C00606BE6 /* SLAdjustingManager.swift */,
+			);
+			path = sdk;
+			sourceTree = "<group>";
+		};
+		4BE140062B48271C00606BE6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4BE140072B48271C00606BE6 /* SLAdjustingImageView.swift */,
+				4BE140082B48271C00606BE6 /* SLAdjustingSortView.swift */,
+				4BE140092B48271C00606BE6 /* SLAdjustingOpenTouchView.swift */,
+				4BE1400A2B48271C00606BE6 /* SLAdjustingBackgroundView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -407,6 +497,7 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4BE13FFD2B48271C00606BE6 /* Adusting */,
 				4B72F5A72B45B3EC00074E28 /* FileTransfer */,
 				4B33D24E2B4547AB002B0C5B /* Socket */,
 				4B72F5D72B45CBCC00074E28 /* Model */,
@@ -419,11 +510,7 @@
 				4BE1FA9E2B2B0CC100F7A4B1 /* StringExtension.swift */,
 				4B33D25D2B457E7C002B0C5B /* Home */,
 				4B2CA3962B302B5A00D7F024 /* SCLExtension.swift */,
-				4B2694F02B304BB400B116BA /* SCLSettingCell.swift */,
-				4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */,
-				4B2694EE2B30448200B116BA /* SCLSettingCellModel.swift */,
-				4B2694F12B304BB500B116BA /* SCLSettingCell.xib */,
-				4B2694F42B3060D800B116BA /* SCLSettingSectionBackgroundView.swift */,
+				4B0EC3822B4795DF00E01BBE /* Settings */,
 				4B2694F62B31347400B116BA /* SCLBaseViewController.swift */,
 				4BA038602B46A31F00F43214 /* Pair */,
 				4B4290DF2B38196E000EE7AD /* SCLPhonePickerCell.swift */,
@@ -445,6 +532,7 @@
 				4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */,
 				4B72F5A52B45A2C500074E28 /* SLFileModel.swift */,
 				4B72F5D12B45B47C00074E28 /* SLKit-Bridging-Header.h */,
+				4BE13FFB2B4826AC00606BE6 /* Localizable.strings */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -571,12 +659,13 @@
 			};
 			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "SLKit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 607FACC71AFB9204008FA782;
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
@@ -607,6 +696,7 @@
 				4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */,
 				4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				4BE13FF92B4826AC00606BE6 /* Localizable.strings in Resources */,
 				4B4290EB2B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib in Resources */,
 				4B23D1F02B330381008724E5 /* SCLGetAppPromptViewController.xib in Resources */,
 				4B23D1F82B330B5C008724E5 /* SCLWelcomeViewController.xib in Resources */,
@@ -725,30 +815,42 @@
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
 				4B33D2502B4548E4002B0C5B /* SCLSocketLoginReq.swift in Sources */,
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
+				4B0EC38A2B47D9C000E01BBE /* SCLSyncResp.swift in Sources */,
+				4B0EC3882B47D02200E01BBE /* SCLSyncReq.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
+				4BE140122B48271C00606BE6 /* SLAdjustingSortView.swift in Sources */,
 				4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */,
 				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
+				4B0EC3842B479F0C00E01BBE /* SCLEndReq.swift in Sources */,
 				4B14ACA32B3AB34F00FD0F9A /* SCLSocketRequest.swift in Sources */,
 				4B33D2582B4575C5002B0C5B /* SCLScreenResp.swift in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
+				4BE1400E2B48271C00606BE6 /* SLAdustingControlAnimationView.swift in Sources */,
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
 				4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */,
 				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
 				4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
+				4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
+				4BE13FEF2B4819CF00606BE6 /* SCLSyncPairReq.swift in Sources */,
 				4B72F5A62B45A2C500074E28 /* SLFileModel.swift in Sources */,
+				4BE140142B48271C00606BE6 /* SLAdjustingBackgroundView.swift in Sources */,
 				4B33D2562B45729E002B0C5B /* SCLInitReq.swift in Sources */,
 				4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */,
+				4BE140102B48271C00606BE6 /* SLAdjustingManager.swift in Sources */,
+				4BE1400D2B48271C00606BE6 /* SLAdjustingViewController.swift in Sources */,
 				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
 				4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */,
 				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
+				4BE140112B48271C00606BE6 /* SLAdjustingImageView.swift in Sources */,
 				4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */,
 				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
 				4B72F5D92B45CBF300074E28 /* SLDevice.swift in Sources */,
+				4BE1400C2B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift in Sources */,
 				4BCEEA952B3D808E003C036A /* SCLPairVerificationReq.swift in Sources */,
 				4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */,
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
@@ -756,8 +858,10 @@
 				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
 				4B14ACA52B3ABC7000FD0F9A /* SCLSocketResponse.swift in Sources */,
 				4BDE22E42B31407600D1A50C /* SCLPairGuideViewController.swift in Sources */,
+				4BE1400F2B48271C00606BE6 /* SLAdjustingView.swift in Sources */,
 				4BE3B94D2B3BF46F00C48A71 /* SCLDBManager.swift in Sources */,
 				4B2E00162B394B8D00E2191E /* SCLFileHistoryViewController.swift in Sources */,
+				4BE140132B48271C00606BE6 /* SLAdjustingOpenTouchView.swift in Sources */,
 				4B4AF9692B391255001C8214 /* SCLFileRecordViewController.swift in Sources */,
 				4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */,
 				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
@@ -791,10 +895,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4BE13FFB2B4826AC00606BE6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4BE13FFA2B4826AC00606BE6 /* zh-Hans */,
+				4BE13FFC2B4826B100606BE6 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		607FACD91AFB9204008FA782 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				607FACDA1AFB9204008FA782 /* Base */,
+				4BE13FF52B48262400606BE6 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -803,6 +917,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				607FACDF1AFB9204008FA782 /* Base */,
+				4BE13FF62B48262400606BE6 /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -915,7 +1030,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
@@ -942,7 +1057,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;

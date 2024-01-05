@@ -10,16 +10,31 @@ import CocoaAsyncSocket
 import RxCocoa
 import RxSwift
 
-class SLSocketDataHandlerProxy {
+//protocol SLSocketUnhandledDataProcesser {
+//    associatedtype ExpectDataType
+//    var process: ((_ data: ExpectDataType) -> Void) { get }
+//}
+
+public final class SLSocketUnhandledDataProcesser<T: SLSocketDataMapper> {
+    public var process: ((T) -> Void)
+    
+    init(process: @escaping (T) -> Void) {
+        self.process = process
+    }
+}
+
+public typealias SLSocketDataResponseHandlerAction = ((Data) -> Bool)
+
+class SLSocketDataResponseHandler {
     let id: String
-    var handler: SLSocketDataHandler? = nil
+    var handle: SLSocketDataResponseHandlerAction? = nil
     private var interruptHandler: (() -> Void)?
     private var timeoutChecker: SLCancelableWork?
     private var completed: Bool?
     
-    init(id: String, handler: SLSocketDataHandler? = nil, interrupted: @escaping (() -> Void)) {
+    init(id: String, handle: SLSocketDataResponseHandlerAction? = nil, interrupted: @escaping (() -> Void)) {
         self.id = id
-        self.handler = handler
+        self.handle = handle
         self.interruptHandler = interrupted
     }
     
@@ -54,6 +69,21 @@ class SLSocketDataHandlerProxy {
     }
 }
 
+class SLSocketDataHandler<T: SLSocketDataMapper> {
+    var responseHandler: SLSocketDataResponseHandler?
+    var unhandledDataHandler: SLSocketUnhandledDataProcesser<T>?
+}
+
+public class SLSocketClientUnhandledDataHandler {
+    let id: String
+    let handle: (_ data: Data, _ from: SLSocketClient) -> Void
+    
+    public init(id: String, handle: @escaping (_: Data, _: SLSocketClient) -> Void) {
+        self.id = id
+        self.handle = handle
+    }
+}
+
 public final class SLSocketManager: NSObject {
     
     static let socketQueue = DispatchQueue(label: "slkit.socketManager.queue")
@@ -63,15 +93,17 @@ public final class SLSocketManager: NSObject {
         return singleInstance
     }()
     
-    private var clients: [SLSocketClient:[SLSocketDataHandlerProxy]] = [:]
+    private var clients: [SLSocketClient:[SLSocketDataResponseHandler]] = [:]
     
-    private var servers: [SLSocketServer:[SLSocketDataHandlerProxy]] = [:]
+    private var servers: [SLSocketServer:[SLSocketDataResponseHandler]] = [:]
+    
+    private var unhandledDataHandlers: [SLSocketClientUnhandledDataHandler] = []
     
     private override init() {}
     
     /// 获取某个socket client的数据响应处理集合
     @available(*, renamed: "getProxys(for:)")
-    private func getProxys(for sock: SLSocketClient, completion: @escaping((_ proxys: [SLSocketDataHandlerProxy]?) -> Void)) {
+    private func getProxys(for sock: SLSocketClient, completion: @escaping((_ proxys: [SLSocketDataResponseHandler]?) -> Void)) {
         Task {
             let result = await getProxys(for: sock)
             completion(result)
@@ -79,7 +111,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 获取某个socket的数据响应处理集合
-    private func getProxys(for sock: SLSocketClient) async -> [SLSocketDataHandlerProxy]? {
+    private func getProxys(for sock: SLSocketClient) async -> [SLSocketDataResponseHandler]? {
         return await withCheckedContinuation { continuation in
             Self.socketQueue.async {
                 continuation.resume(returning: self.clients[sock])
@@ -89,7 +121,7 @@ public final class SLSocketManager: NSObject {
     
     /// 更新某个socket的数据响应处理集合
     @available(*, renamed: "update(proxys:for:)")
-    private func update(proxys: [SLSocketDataHandlerProxy]?, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataHandlerProxy]?) -> Void)) {
+    private func update(proxys: [SLSocketDataResponseHandler]?, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataResponseHandler]?) -> Void)) {
         Task {
             let result = await update(proxys: proxys, for: sock)
             completion(result)
@@ -97,7 +129,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 更新某个socket的数据响应处理集合
-    private func update(proxys: [SLSocketDataHandlerProxy]?, for sock: SLSocketClient) async -> [SLSocketDataHandlerProxy]? {
+    private func update(proxys: [SLSocketDataResponseHandler]?, for sock: SLSocketClient) async -> [SLSocketDataResponseHandler]? {
         return await withCheckedContinuation { continuation in
             Self.socketQueue.async {
                 if let proxys {
@@ -112,7 +144,7 @@ public final class SLSocketManager: NSObject {
     
     /// 为某个socket添加新的数据响应的处理
     @available(*, renamed: "addProxy(_:for:)")
-    private func addProxy(_ proxy: SLSocketDataHandlerProxy, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataHandlerProxy]?) -> Void)) {
+    private func addProxy(_ proxy: SLSocketDataResponseHandler, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataResponseHandler]?) -> Void)) {
         Task {
             let result = await addProxy(proxy, for: sock)
             completion(result)
@@ -120,7 +152,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 为某个socket添加新的数据响应的处理
-    private func addProxy(_ proxy: SLSocketDataHandlerProxy, for sock: SLSocketClient) async -> [SLSocketDataHandlerProxy]? {
+    private func addProxy(_ proxy: SLSocketDataResponseHandler, for sock: SLSocketClient) async -> [SLSocketDataResponseHandler]? {
         let proxys = await getProxys(for: sock)
         var newProxys = proxys
         newProxys?.append(proxy)
@@ -130,7 +162,7 @@ public final class SLSocketManager: NSObject {
     
     /// 移除某个socket的特定的数据响应处理
     @available(*, renamed: "removeProxy(_:for:)")
-    private func removeProxy(_ proxy: SLSocketDataHandlerProxy, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataHandlerProxy]?) -> Void)) {
+    private func removeProxy(_ proxy: SLSocketDataResponseHandler, for sock: SLSocketClient, completion: @escaping ((_ array: [SLSocketDataResponseHandler]?) -> Void)) {
         Task {
             let result = await removeProxy(proxy, for: sock)
             completion(result)
@@ -138,7 +170,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 移除某个socket的特定的数据响应处理
-    private func removeProxy(_ proxy: SLSocketDataHandlerProxy, for sock: SLSocketClient) async -> [SLSocketDataHandlerProxy]? {
+    private func removeProxy(_ proxy: SLSocketDataResponseHandler, for sock: SLSocketClient) async -> [SLSocketDataResponseHandler]? {
         let proxys = await getProxys(for: sock)
         var newProxys = proxys
         newProxys?.removeAll(where: { item in
@@ -302,7 +334,7 @@ public final class SLSocketManager: NSObject {
                             s.dataHandler = { [weak self] data in
                                 if let proxys = self?.servers[s] {
                                     proxys.forEach { item in
-                                        item.handler?(data)
+                                        item.handle?(data)
                                     }
                                 }
                             }
@@ -369,10 +401,10 @@ public final class SLSocketManager: NSObject {
     
     /// 连接
     @available(*, renamed: "connect(host:port:timeout:)")
-    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, dataHandler: ((Data) -> Void)? = nil, completion: @escaping ((SLResult<SLSocketClient, Error>) -> Void)) {
+    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, completion: @escaping ((SLResult<SLSocketClient, Error>) -> Void)) {
         Task {
             do {
-                let result = try await connect(host: host, port: port, timeout: timeout, heartbeatRule: heartbeatRule, dataHandler: dataHandler)
+                let result = try await connect(host: host, port: port, timeout: timeout, heartbeatRule: heartbeatRule)
                 DispatchQueue.main.async {
                     completion(.success(result))
                 }
@@ -385,7 +417,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 连接
-    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil, dataHandler: ((Data) -> Void)? = nil) async throws -> SLSocketClient {
+    public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil) async throws -> SLSocketClient {
         return try await withCheckedThrowingContinuation { continuation in
             self.getSocketClient(host: host, port: port) { socket in
                 var sock = socket
@@ -398,12 +430,21 @@ public final class SLSocketManager: NSObject {
                         switch result {
                         case .success(_):
                             socket.dataHandler = { [weak self] data in
-                                dataHandler?(data)
+                                var dataHandled = false
                                 if let proxys = self?.clients[socket] {
                                     proxys.forEach { item in
-                                        item.handler?(data)
+                                        let result = item.handle?(data)
                                         item.finished()
+                                        if result == true {
+                                            dataHandled = true
+                                        }
                                     }
+                                }
+                                if !dataHandled {
+                                    // 未被处理的数据
+                                    self?.unhandledDataHandlers.forEach({ item in
+                                        item.handle(data, socket)
+                                    })
                                 }
                             }
                             continuation.resume(returning: socket)
@@ -489,7 +530,7 @@ public final class SLSocketManager: NSObject {
     
     /// 从某个socket client发送请求，并指定响应类型
     @available(*, renamed: "send(_:from:for:timeout:)")
-    public func send<T: SLSocketRequest, U: SLSocketResponse>(_ request: T, from sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10), completion: @escaping ((SLResult<U, Error>) -> Void)) {
+    public func send<T: SLSocketRequest, U: SLSocketDataMapper>(_ request: T, from sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10), completion: @escaping ((SLResult<U, Error>) -> Void)) {
         Task {
             do {
                 let result = try await send(request, from: sock, for: responseType, timeout: timeout)
@@ -505,7 +546,7 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 从某个socket client发送请求，并指定响应类型
-    public func send<T: SLSocketRequest, U: SLSocketResponse>(_ request: T, from client: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10)) async throws -> U {
+    public func send<T: SLSocketRequest, U: SLSocketDataMapper>(_ request: T, from client: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10)) async throws -> U {
         return try await withCheckedThrowingContinuation { continuation in
             self.getSocketClient(host: client.host, port: client.port) { socket in
                 guard let socket, socket.isConnected else {
@@ -516,7 +557,8 @@ public final class SLSocketManager: NSObject {
                     continuation.resume(throwing: SLError.socketSendFailureEmptyData)
                     return
                 }
-                let proxy = SLSocketDataHandlerProxy(id: request.id) {
+                // 为本次请求生成一个数据处理
+                let proxy = SLSocketDataResponseHandler(id: request.id) {
                     continuation.resume(throwing: SLError.taskCanceled)
                 }
                 self.getProxys(for: socket) { proxys in
@@ -524,27 +566,32 @@ public final class SLSocketManager: NSObject {
                         continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
                         return
                     }
-                    proxy.handler = { [weak self, weak proxy] data in
-                        guard let self , let proxy else {
+                    proxy.handle = { [weak self, weak proxy] data in
+                        guard let self, let proxy else {
                             continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
-                            return
+                            return false
                         }
                         do {
-                            let response = try U.init(data: data)
+//                            let response = try U.init(data: data)
+                            let response = U.init(data: data)
                             if response.id.elementsEqual(request.id) {
                                 self.removeProxy(proxy, for: socket) { array in
                                     continuation.resume(returning: response)
                                 }
+                                return true
                             } else {
                                 // MARK: wait until socket write and receive timeout
                                 print("wait until socket write and receive timeout")
-                            }
-                        } catch let error {
-                            // MARK: 还需要优化当socket返回无法序列化的数据时，如何从data中取出id进行对应的响应处理，否则会出现异常不匹配的bug，比如如果socket把心跳数据抛到这一层的话，就大概率会出现请求A刚发送完就因为收到心跳响应，而心跳响应无法解析成期望的返回类型，请求就被提前终止了，问题的关键在于data和id的关联方法是交给上层处理的，实际上应该在内部生成，可以考虑socket发送数据时的tag
-                            self.removeProxy(proxy, for: socket) { array in
-                                continuation.resume(throwing: error)
+                                return false
                             }
                         }
+//                        catch let error {
+//                            // MARK: 还需要优化当socket返回无法序列化的数据时，如何从data中取出id进行对应的响应处理，否则会出现异常不匹配的bug，比如如果socket把心跳数据抛到这一层的话，就大概率会出现请求A刚发送完就因为收到心跳响应，而心跳响应无法解析成期望的返回类型，请求就被提前终止了，问题的关键在于data和id的关联方法是交给上层处理的，实际上应该在内部生成，可以考虑socket发送数据时的tag
+//                            self.removeProxy(proxy, for: socket) { array in
+//                                continuation.resume(throwing: error)
+//                            }
+//                            return false
+//                        }
                     }
                     self.addProxy(proxy, for: socket) { array in
                         do {
@@ -558,6 +605,21 @@ public final class SLSocketManager: NSObject {
                     }
                 }
             }
+        }
+    }
+    
+    /// 监听从远端socket client收到的未处理的数据
+    public func addHandlerToProcessUnhandledData<T>(of client: SLSocketClient, expectDataType: T.Type, handler: SLSocketUnhandledDataProcesser<T>) {
+        
+    }
+    
+    public func addClientUnhandledDataHandler(_ handler: SLSocketClientUnhandledDataHandler) {
+        unhandledDataHandlers.append(handler)
+    }
+    
+    public func removeClientUnhandledDataHandler(_ handler: SLSocketClientUnhandledDataHandler) {
+        unhandledDataHandlers.removeAll { item in
+            item.id.elementsEqual(handler.id)
         }
     }
 }

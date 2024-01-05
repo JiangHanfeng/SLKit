@@ -17,6 +17,9 @@ struct SCLUtil {
     static let TEMP_MAC_KEY : String = "TEMP_MAC_KEY"
     static let BT_MAC_KEY : String = "BT_MAC_KEY"
     static let DEVICE_NAME_KEY : String = "DEVICE_NAME_KEY"
+    static let FIRST_LAUNCH_KEY : String = "FIRST_LAUNCH_KEY"
+    static let FIRST_AIR_PLAY_KEY : String = "FIRST_AIR_PLAY_KEY"
+    
     static func getUUID() -> String {
         var uuid = getStringValue(for: UUID_KEY, description: "设备uuid") ?? ""
         if uuid.isEmpty {
@@ -40,11 +43,14 @@ struct SCLUtil {
     }
     
     static func getBTMac() -> String? {
-        return getStringValue(for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+//        return getStringValue(for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+        return UserDefaults.standard.string(forKey: BT_MAC_KEY)
     }
     
     static func setBTMac(_ mac: String?) -> Bool {
-        return set(stringValue: mac, for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+//        return set(stringValue: mac, for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+        UserDefaults.standard.set(mac, forKey: BT_MAC_KEY)
+        return UserDefaults.standard.synchronize()
     }
     
     static func getDeviceMac() -> String {
@@ -60,6 +66,25 @@ struct SCLUtil {
     
     static func setDeviceName(_ name: String) -> Bool {
         return set(stringValue: name, for: DEVICE_NAME_KEY, description: "设备名称")
+    }
+    
+    static func isFirstLaunch() -> Bool {
+        let firstLaunch = UserDefaults.standard.string(forKey: FIRST_LAUNCH_KEY)
+        return firstLaunch == nil
+    }
+    
+    static func markNotFirstLaunch() {
+        UserDefaults.standard.setValue("0", forKey: FIRST_LAUNCH_KEY)
+        UserDefaults.standard.synchronize()
+    }
+    
+    static func isFirstAirPlay() -> Bool {
+        return UserDefaults.standard.bool(forKey: FIRST_AIR_PLAY_KEY)
+    }
+    
+    static func setFirstAirPlay(_ value: Bool) {
+        UserDefaults.standard.setValue(value, forKey: FIRST_AIR_PLAY_KEY)
+        UserDefaults.standard.synchronize()
     }
     
     private static func getStringValue(for key: String, description: String? = nil) -> String? {

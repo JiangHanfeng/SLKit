@@ -9,33 +9,29 @@
 import Foundation
 import SLKit
 
-struct SCLInitResp : SLSocketResponse {
-    var id: String
+struct SCLInitResp : SLSocketDataMapper {
+    var id: String = ""
     var data: Data?
     
-    var cmd: Int
-    var state: Int
+    var cmd: Int = SCLCmd.initPlatform.rawValue
+    var state: Int = -1
     
-    init(data: Data) throws {
+    init(data: Data) {
         self.data = data
-        do {
-            let json = try JSONSerialization.jsonObject(with: data) as? [String : Any]
-            let stateRange = 0...1
-            if
-                let taskId = json?["taskId"] as? String,
-                !taskId.isEmpty,
-                let cmd = json?["cmd"] as? Int,
-                let state = json?["state"] as? Int,
-                stateRange.contains(state)
-            {
-                self.cmd = cmd
-                self.id = taskId
-                self.state = state
-            } else {
-                throw NSError(domain: NSErrorDomain(string: "无法解析初始化平台响应") as String, code: -999, userInfo: [NSLocalizedDescriptionKey:"转换SCLTCPSocketResponse失败"])
-            }
-        } catch let e {
-            throw e
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else {
+            return
+        }
+        let stateRange = 0...1
+        if
+            let taskId = dict["taskId"] as? String,
+            !taskId.isEmpty,
+            let cmd = dict["cmd"] as? Int,
+            let state = dict["state"] as? Int,
+            stateRange.contains(state)
+        {
+            self.cmd = cmd
+            self.id = taskId
+            self.state = state
         }
     }
 }

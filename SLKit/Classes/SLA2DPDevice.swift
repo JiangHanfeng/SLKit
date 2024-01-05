@@ -8,8 +8,8 @@
 import Foundation
 
 public class SLA2DPDevice {
-    var uid: String
-    var name: String
+    public let uid: String
+    public let name: String
     
     init(uid: String, name: String) {
         self.uid = uid

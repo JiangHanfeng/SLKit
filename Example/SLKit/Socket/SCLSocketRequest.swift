@@ -24,9 +24,13 @@ enum SCLCmd: Int, HandyJSONEnum {
     case startAirplay = 20
     case hidConnected = 21
     case airplayUpdated = 23
+    case stopAirplay = 25
+    case syncConnection = 26 // tcp login成功后发送本条命令，参数为设备名
     case getPairedDevices = 30
     case requestPairVerification = 31
+    case syncPairSuccess = 32
     case requestPair = 201
+    case pairCompleted = 202
     case requestScreen = 203
     case requestFileTransfer = 204
 }
@@ -49,8 +53,8 @@ struct SCLSocketGenericContent: SCLSocketConetent {
 
 struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
-    let dev_id = (SCLUtil.getBTMac() ?? SCLUtil.getTempMac()).split(separator: ":").joined()
-    let dev_mac = (SCLUtil.getBTMac() ?? SCLUtil.getTempMac()).split(separator: ":").joined()
+    let dev_id = SCLUtil.getDeviceMac().split(separator: ":").joined()
+    let dev_mac = SCLUtil.getBTMac()?.split(separator: ":").joined() ?? ""
     let deviceName = UIDevice.current.name
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0

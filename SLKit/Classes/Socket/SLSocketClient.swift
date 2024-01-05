@@ -23,6 +23,10 @@ public class SLSocketClient : NSObject {
     
     public let port: UInt16
     
+    public var localHost: String? {
+        return server?.localHost
+    }
+    
     private var state: State!
     
     public let heartbeatRule: SLSocketHeartbeatRule?
@@ -39,7 +43,7 @@ public class SLSocketClient : NSObject {
         }
     }
     
-    var dataHandler: SLSocketDataHandler?
+    var dataHandler: SLSocketDataCallback?
     
     private var heartbeatTimer: Timer?
     
@@ -116,6 +120,9 @@ public class SLSocketClient : NSObject {
     }
     
     public func send(_ value: Data, type: UInt8, timeout: SLTimeInterval = .seconds(15)) throws {
+        if type != SLSocketSessionItemType.heartbeat.rawValue, let string = String(data: value, encoding: .utf8) {
+            SLLog.debug("socket发送:\n\(string)\n")
+        }
         var data = Data()
         data.append(Data(bytes: [type]))
         var lengthBytes: [UInt8] = []
@@ -165,7 +172,7 @@ public class SLSocketClient : NSObject {
             let timeout = Int(heartbeatRule.timeout)
             heartbeatTimeoutChecker?.cancel()
             heartbeatTimeoutChecker = nil
-            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 100))) { [weak self] in
+            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 300))) { [weak self] in
                 if let lastHeartbeatTime = self?.lastHeartbeatTime {
                     let currentTime = ProcessInfo.processInfo.systemUptime
                     let passedTime = Int(round(currentTime - lastHeartbeatTime))
@@ -257,14 +264,13 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         let bytes = cachedData!.withUnsafeBytes {
             [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
         }
-        SLLog.debug("bytes.count = \(bytes.count)")
+//        SLLog.debug("bytes.count = \(bytes.count)")
         guard bytes.count > 4 else {
             return
         }
         let type = bytes.first!
         let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
         let packetLength = 1 + 4 + length
-        SLLog.debug("type = \(type), length = \(length),  packetLength = \(packetLength)")
         if packetLength == cachedData!.count {
             // 如果读取的数据长度与当前保存的字节流长度一致，说明是一次完成的数据
             if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
@@ -276,7 +282,7 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
             cachedData!.removeAll()
         } else if packetLength < cachedData!.count {
             if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
-                let totalData = cachedData![5..<5+length]
+                let totalData = cachedData![5..<(5+Int(length))]
                 let string = String(data: totalData, encoding: .utf8)
                 SLLog.debug("收到:\(string ?? "")")
                 dataHandler?(totalData)

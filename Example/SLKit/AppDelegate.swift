@@ -23,13 +23,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundId: UIBackgroundTaskIdentifier?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        //        dateFormatter.dateFormat = "yy年MM月dd日 HH时mm分ss秒"
+        SLLog.prepare()
+//        if SCLUtil.isFirstLaunch() {
+//            SCLUtil.setFirstAirPlay(true)
+//            SCLUtil.markNotFirstLaunch()
+//        }
         if let btMac = SCLUtil.getBTMac(), !btMac.isEmpty {
-            
+//            SCLUtil.setBTMac(nil)
         } else {
             let tempMac = SCLUtil.getTempMac()
-            print("设备临时mac地址：\(tempMac)")
+            SLLog.debug("设备临时mac地址：\(tempMac)")
         }
         if let backImage = UIImage(named: "icon_back_dark") {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 import RxSwift
 import SLKit
 import LLNetworkAccessibility_Swift
@@ -27,6 +28,10 @@ class SCLWelcomeViewController: SCLBaseViewController {
     
     private lazy var requestPermissionController = {
         return SCLRequestPermissionViewController()
+    }()
+    
+    private lazy var locationManager = {
+        return CLLocationManager()
     }()
     
     override func viewDidLoad() {
@@ -64,6 +69,12 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     }
                     return Disposables.create()
                 }
+                let requestLocalNetwork = Observable.create { observer in
+                    SLNetworkManager.shared.requestLocalNetworkPermission { granted in
+                        observer.onNext(granted)
+                    }
+                    return Disposables.create()
+                }
                 let requestNetwork = Observable.create { observer in
                     LLNetworkAccessibility.start()
                     let currentState = LLNetworkAccessibility.getCurrentAuthState()
@@ -91,12 +102,15 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     return Disposables.create()
                 }
                 requestBt.flatMap { _ in
-                    return requestNetwork
-                }.subscribe(onNext: { [weak self] _ in
-                    UserDefaults.standard.setValue(true, forKey: SCLUserDefaultKey.agreedPrivacyPolicy.rawValue)
-                    UserDefaults.standard.synchronize()
-                    self?.navigationController?.show(SCLHomeViewController(), sender: nil)
-                }, onError: { [weak self] error in
+                    return requestLocalNetwork
+                }.subscribe(onNext: { [weak self] result in
+                    if result {
+                        self?.locationManager.delegate = self
+                        self?.locationManager.requestAlwaysAuthorization()
+                    } else {
+                        self?.toast("您拒绝了访问“本地网络”")
+                    }
+                }, onError: { _ in
                     
                 }, onCompleted: {
                     
@@ -122,4 +136,21 @@ class SCLWelcomeViewController: SCLBaseViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+}
+
+extension SCLWelcomeViewController: CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        var locationAuthStatus: CLAuthorizationStatus?
+        if #available(iOS 14.0, *) {
+            locationAuthStatus = locationManager.authorizationStatus
+        } else {
+            locationAuthStatus = CLLocationManager.authorizationStatus()
+        }
+        guard locationAuthStatus == .authorizedAlways || locationAuthStatus == .authorizedWhenInUse else {
+            return
+        }
+        UserDefaults.standard.setValue(true, forKey: SCLUserDefaultKey.agreedPrivacyPolicy.rawValue)
+        UserDefaults.standard.synchronize()
+        navigationController?.show(SCLHomeViewController(), sender: nil)
+    }
 }

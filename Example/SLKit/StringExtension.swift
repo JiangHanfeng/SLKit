@@ -29,7 +29,16 @@ extension String {
     }
     
     func macBytes() -> [UInt8]? {
-        let arr = split(separator: ":")
+        var arr: [String] = []
+        if contains(":") && count == 17 {
+            arr = split(separator: ":").map({String($0)})
+        } else if !contains(":") && count == 12 {
+            for i in 0..<6 {
+                let subString = String((self as NSString).substring(with: NSMakeRange(i*2, 2)))
+                arr.append(subString)
+            }
+        }
+//        let arr = split(separator: ":")
         guard arr.count == 6 else {
             return nil
         }

@@ -78,6 +78,7 @@
             <connections>
                 <outlet property="iconView" destination="y23-hz-NpK" id="6Na-Ed-kO0"/>
                 <outlet property="nameLabel" destination="Wgw-p9-pwp" id="WaD-Ta-bPY"/>
+                <outlet property="verifyLabel" destination="6gf-t2-v9b" id="nrf-V9-C6Z"/>
             </connections>
             <point key="canvasLocation" x="56" y="61"/>
         </tableViewCell>

@@ -14,6 +14,7 @@ class SCLPhonePickerCell: UITableViewCell {
     
     @IBOutlet weak var iconView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var verifyLabel: UILabel!
     
     private lazy var progressBackgroundLayer = {
         return CAShapeLayer()
@@ -24,6 +25,7 @@ class SCLPhonePickerCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        verifyLabel.text = nil
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -31,7 +33,7 @@ class SCLPhonePickerCell: UITableViewCell {
         
     }
     
-    func setProgress(_ progress: CGFloat) {
+    func setProgress(_ progress: CGFloat, result: Bool?) {
         
         if progressBackgroundLayer.superlayer == nil {
             // ps: 圆心+0.33的原因是因为图标素材不是1:1的，需要调整圆心看上去进度条和图标的间距才近似处处相等
@@ -55,5 +57,10 @@ class SCLPhonePickerCell: UITableViewCell {
         progressLayer.isHidden = progress == 0
         progressLayer.strokeEnd = progress
         
+        if let result {
+            verifyLabel.text = result ? "验证通过" : "验证未通过"
+        } else {
+            verifyLabel.text = nil
+        }
     }
 }

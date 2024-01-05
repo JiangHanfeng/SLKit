@@ -30,6 +30,7 @@ class SCLHomeViewController: SCLBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         navigationController?.delegate = self
         navigationController?.setNavigationBarHidden(true, animated: true)
         let ipSignal = Observable.create { observer in
@@ -58,22 +59,21 @@ class SCLHomeViewController: SCLBaseViewController {
         }
         Observable.combineLatest(ipSignal, bleStateSignal, deviceSignal)
             .observe(on: MainScheduler()).subscribe(onNext: { [weak self] (ip, bleAvailable, connected) in
+                SLLog.debug("ip/ble/连接状态发生变化")
                 if connected {
 //                    self?.stopListenPort()
                     self?.stopAdvertising()
                     guard let self, let device = self.device else {
+                        SLLog.debug("主页或已连接设备不存在")
                         return
                     }
-                    switch device.role {
-                    case .client(_, _):
-                        break
-                    case .server(let sLSocketClient):
-                        sLSocketClient.unexpectedDisconnectHandler = { [weak weakSelf = self] error in
-                            weakSelf?.device = nil
-                            weakSelf?.toast("已断开连接")
-                        }
+                    device.localClient.unexpectedDisconnectHandler = { [weak weakSelf = self] error in
+                        weakSelf?.device = nil
+                        weakSelf?.toast("已断开连接")
                     }
-                    self.transitionToChild(self.getDeviceVc(device)) { childView in
+                    self.transitionToChild(self.getDeviceVc(device)) {
+                        childView in
+                        SLLog.debug("跳转至设备页")
                         childView.snp.makeConstraints { make in
                             make.top.equalTo(self.topBar.snp.bottom)
                             make.left.right.equalTo(0)

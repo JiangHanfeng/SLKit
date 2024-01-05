@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  SLKit
+
+  Created by 蒋函锋 on 2024/1/5.
+  Copyright © 2024 CocoaPods. All rights reserved.
+*/
+
+"SLAdjustingtitleString" = "屏幕校准";
+"SLAdjustingStratBtnString" = "开始校准";
+"SLAdjustingBtnString" = "校准中，请稍后...";
+"SLAdjustingDisconnectDeviceString" = "设备连接已断,请重新连接设备。";
+"SLAdjustingsucceedBtnString" = "完成";
+"SLAdjustingFailBtnString" = "重新校准";
+
+"SLAdjustingStratHindString" = "投屏中如果触控不准，请进行屏幕校准";
+"SLAdjustingStratContentHindString1" = "校准前请确保 “";
+"SLAdjustingStratContentHindString2" = "辅助触控";
+"SLAdjustingStratContentHindString3" = "” 已开启";
+"SLAdjustingStratSubContentHindString" = "方法如下：设置-辅助功能-触控-辅助触控-开启";
+"SLAdjustingStratGoSystemTitleString" = "前往系统设置";
+
+
+"SLAdjustingOriHindString" = "屏幕校准";
+
+"SLAdjustingPrepareTitleString" = "屏幕校准";
+"SLAdjustingPrepareContentHindString" = "请保持竖屏，点击‘下一步’开始校准，\n校准过程中请勿旋转及触摸屏幕";
+
+"SLAdjustingHorizontalOriContentHindString" = "将手机旋转至横屏方向";
+"SLAdjustingVerticalOriContentHindString" = "再将手机恢复至竖屏方向";
+
+"SLAdjustingAdjustingHindString" = "校准中";
+"SLAdjustingAdjustingContentHindString" = "校准过程中请勿旋转及触摸屏幕，校准过程大概需要几分钟";
+
+"SLAdjustingsucceedHindString" = "校准成功";
+"SLAdjustingFailHindString" = "校准失败";
+
+"SLAdjustingSensitivityBigHintString" = "校准失败";
+"SLAdjustingSensitivityBigHintContentString1" = "辅助触控的“跟踪灵敏度”过大。\n请在";
+"SLAdjustingSensitivityBigHintContentString2" = "设置-辅助功能-触控-辅助触控-跟踪灵敏度 \n";
+"SLAdjustingSensitivityBigHintContentString3" = "内，将跟踪灵敏度调整至三分之一处的位置，如\n图所示";
+"SLAdjustingSensitivityBigHintSettingTitle" = "前往系统设置";
+
+
+"SLAdjustingTimeoutHintString" = "校准失败";
+"SLAdjustingTimeoutHintContentString1" = "请检查是否开启辅助触控。\n 请在";
+"SLAdjustingTimeoutHintContentString2" = "设置-辅助功能-触控";
+"SLAdjustingTimeoutHintContentString3" = "菜单内，开启";
+"SLAdjustingTimeoutHintContentString4" = "辅助触控";
+"SLAdjustingTimeoutHintSettingTitle" = "前往系统设置";
+
+

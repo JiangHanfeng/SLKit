@@ -69,6 +69,16 @@ public class SLNetworkManager {
     }
     private let queue = DispatchQueue(label: (Bundle.main.bundleIdentifier ?? "com.") + ".SLKit.SLNetworkManager.NWPathMonitor")
     public var ipv4OfWifiUpdated: ((String?) -> Void)?
+
+    private lazy var localNetworkAuthorization:SLLocalNetworkAuthorization = {
+       return SLLocalNetworkAuthorization()
+    }()
+    
+    public func requestLocalNetworkPermission(completion: @escaping ((_ granted: Bool) -> Void)) {
+        self.localNetworkAuthorization.requestAuthorization { isAgree in
+            completion(isAgree)
+        }
+    }
     
     public func connectWifi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
         guard !ssid.isEmpty && !passphrase.isEmpty else {

@@ -39,10 +39,13 @@ class SCLPairViewController: SCLBaseViewController {
             if self.a2dpMonitorTask == nil {
                 self.a2dpMonitorTask = SLA2DPMonitorTask(connectedCallback: { [weak self] device in
                     self?.a2dpDevice = device
+                    SLLog.debug("检测到已连接a2dp:\(device.uid)")
                 }, updatededCallback: { [weak self] device in
                     self?.a2dpDevice = device
+                    SLLog.debug("检测到已更新a2dp:\(device.uid)")
                 }, disconnectedCallback: { [weak self] device in
                     self?.a2dpDevice = nil
+                    SLLog.debug("检测到已断开a2dp:\(device.uid)")
                 })
             }
             self.a2dpMonitorTask?.start()
@@ -98,14 +101,22 @@ class SCLPairViewController: SCLBaseViewController {
                             old == new
                         }
                     }
-                    if newDevices.isEmpty {
-                        self.toast("蓝牙未配对")
-                        btn?.isEnabled = true
-                    } else if newDevices.count == 1 {
-                        // 认为新增的这个配对设备就是本机
-                        self.requestPairVerification(device: newDevices.first!, button: btn)
+                    SLLog.debug("newDevices.count = \(newDevices.count)")
+                    if newDevices.count == 1 {
+                        // 认为新增的这个配对设备就是本机，暂时不考虑判断a2dp连接状态
+//                        self.requestPairVerification(device: newDevices.first!, button: btn)
+                        self.submitPairResult(device: newDevices.first!, result: true)
                     } else {
-                        self.transitionToChild(SCLPhonePickerAlertViewController(devices: newDevices, onBack: { [weak self] in
+                        self.transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: newDevices.isEmpty ? deviceList : newDevices, onVerified: { [weak self] device in
+                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
+                                let presentingVc = self?.presentingViewController
+                                presentingVc?.dismiss(animated: true, completion: {
+                                    presentingVc?.toast("配对校验通过")
+                                })
+                            } else {
+                                self?.toast("配对校验未通过")
+                            }
+                        }, onBack: { [weak self] in
                             if let self {
                                 self.transitionToChild(self.pairAlertVc) { childView in }
                             }
@@ -117,12 +128,14 @@ class SCLPairViewController: SCLBaseViewController {
                         }
                     }
                 } else {
+                    // MARK: 点击已配对获取到列表后跳转设置
                     self.pcPairedDevices = resp.content?.deviceList
                     let scheme = "App-Prefs:root=General"
             //        let scheme = "App-Prefs:root=Bluetooth"
                     if let url = URL(string: scheme) {
                         UIApplication.shared.open(url)
                     }
+                    button?.isEnabled = true
                 }
             case .failure(let e):
                 self.toast(e.localizedDescription)
@@ -133,12 +146,14 @@ class SCLPairViewController: SCLBaseViewController {
     
     private func requestPairVerification(device: SCLPCPairedDevice, button: UIButton?) {
         guard let socket else {
-            dismiss(animated: true) {
-                self.presentingViewController?.toast("连接已断开")
+            let presentingVc = presentingViewController
+            presentingVc?.dismiss(animated: true) {
+                presentingVc?.toast("连接已断开")
             }
             return
         }
-        SLSocketManager.shared.send(SCLSocketRequest(content: SCLPairVerificationReq(device: device)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self, weak btn = button] result in
+        SLLog.debug("请求蓝牙配对校验")
+        SLSocketManager.shared.send(SCLPairVerificationReq(device: device), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self, weak btn = button] result in
             guard let self else { return }
             btn?.isEnabled = true
             switch result {
@@ -154,6 +169,42 @@ class SCLPairViewController: SCLBaseViewController {
             case .failure(let e):
                 self.presentingViewController?.toast(e.localizedDescription)
                 self.dismiss(animated: true)
+            }
+        }
+    }
+    
+    private func submitPairResult(device: SCLPCPairedDevice, result: Bool) {
+        defer {
+            if result {
+                _ = SCLUtil.setBTMac(device.mac)
+            }
+            let presentingVc = presentingViewController
+            let completion = {
+                if !result {
+                    presentingVc?.toast("蓝牙配对校验失败")
+                }
+            }
+            presentingViewController?.dismiss(animated: true, completion: completion)
+        }
+        
+        if let socket {
+            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: device, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let resp):
+                    if resp.state == 1 {
+                        // MARK: 蓝牙配对校验通过
+                        self.presentingViewController?.toast("已完成蓝牙配对，回控功能已启用")
+                    } else {
+                        // MARK: 蓝牙配对校验未通过
+                        self.presentingViewController?.toast("蓝牙配对校验未通过")
+                    }
+                    self.presentingViewController?.dismiss(animated: true)
+                case .failure(_):
+    //                self.presentingViewController?.toast(e.localizedDescription)
+    //                self.dismiss(animated: true)
+                    break
+                }
             }
         }
     }

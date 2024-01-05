@@ -12,11 +12,11 @@ import HandyJSON
 struct SCLPCPairedDevice : HandyJSON, Equatable {
     init() {
         deviceName = ""
-        deviceMac = ""
+        mac = ""
     }
     
     let deviceName: String
-    let deviceMac: String
+    let mac: String
 }
 
 struct SCLGetPairedDeviceResp : SCLSocketConetent {
