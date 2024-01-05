@@ -94,12 +94,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let documentTypes = ["public.content", "public.text", "public.archive", "public.image",
                              "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
                              "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
-        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
+//        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
         let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
-        vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .overFullScreen
         vc.delegate = self
-        vc.allowsMultipleSelection = true;
-        vc.navigationController?.navigationBar.barTintColor = .white
+        vc.allowsMultipleSelection = true
+//        vc.navigationController?.navigationBar.barTintColor = .white
         UIApplication.shared.currentController().present(vc, animated: true)
     }
     
