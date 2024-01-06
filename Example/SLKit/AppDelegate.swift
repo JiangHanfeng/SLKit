@@ -214,7 +214,6 @@ extension AppDelegate {
         }
     }
     
-
     func selectFile() {
         let documentTypes = ["public.content", "public.text", "public.archive", "public.image",
                              "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",

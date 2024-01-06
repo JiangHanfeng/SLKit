@@ -55,6 +55,13 @@ static SLTransferManager *singleton = nil;
     self.deviceId = deviceId;
     self.deviceName = deviceName;
     [self.fileTransferManager activateWithDeviceId:self.deviceId deviceName:self.deviceName bufferSize:1024*1024*2 outTime:6];;
+    @weakify(self);
+    self.fileTransferManager.receiveFileRequestBlock = ^(NSString * _Nonnull taskId, NSString * _Nonnull mac, NSString * _Nonnull deviceName, NSArray<SLFileModel *> * _Nonnull files) {
+        @strongify(self);
+        if(self.receiveFileRequestBlock){
+            self.receiveFileRequestBlock(self.sendDeviceId,taskId,files);
+        }
+    };
 }
 
 - (void)configSendInfoWithDeviceId:(NSString *)deviceId Ip:(NSString *)ip controlPort:(int)controlPort dataPort:(int)dataPort {
