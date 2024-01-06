@@ -22,6 +22,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var connectionStateLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
     @IBOutlet weak var airplayBtn: UIButton!
+    @IBOutlet weak var fileTransferView: UIView!
     
     private var device: SLDevice?
     private var disconnectedCallback: (() -> Void)?
@@ -162,6 +163,20 @@ class SCLDeviceViewController: SCLBaseViewController {
 //        DispatchQueue.global().async {
 //            SLFileTransferManager.share().activate(withDeviceId: SCLUtil.getDeviceMac(), deviceName: SCLUtil.getDeviceName(), bufferSize: 1024 * 1024 * 2, outTime: 5)
 //        }
+        if let socket = device?.localClient {
+            SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLTransferManager.share().controlPort), port3: UInt16(SLTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self) { result in
+                switch result {
+                case .success(let resp):
+                    SLTransferManager.share().configSendInfo(withDeviceId: self.device?.id ?? "", ip: self.device?.localClient.host ?? "", controlPort: Int32(resp.port2), dataPort: Int32(resp.port3))
+                case .failure(_):
+                    break
+                }
+            }
+        }
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onFileTransfer))
+        fileTransferView.isUserInteractionEnabled = true
+        fileTransferView.addGestureRecognizer(tap)
     }
 
     private func startReconnect() {
@@ -190,6 +205,10 @@ class SCLDeviceViewController: SCLBaseViewController {
         default:
             break
         }
+    }
+    
+    @objc private func onFileTransfer() {
+        (UIApplication.shared.delegate as? AppDelegate)?.selectFile()
     }
     
     private func requestScreen(isInitiative: Bool = true) {
