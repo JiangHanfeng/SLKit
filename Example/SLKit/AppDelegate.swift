@@ -313,6 +313,7 @@ extension AppDelegate : UIDocumentPickerDelegate {
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        SLTransferManager.share().startSendFile()
         var files:[SLFileModel] = []
         _ = urls.map({ url in
             if url.startAccessingSecurityScopedResource(),

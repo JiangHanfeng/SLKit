@@ -18,7 +18,6 @@ static SLTransferManager *singleton = nil;
 @interface SLTransferManager()
 @property (nonatomic,strong) SLFileTransferManager *fileTransferManager;
 
-@property (nonatomic,copy) NSString *tmpPath;
 //同时只能发送一个
 @property (nonatomic,strong) NSMutableArray<SLWaitSendFileModel *> *sendIOModels;
 @property (nonatomic,strong,nullable) SLFileIOModel *currentSendIOModel;
@@ -314,8 +313,11 @@ static SLTransferManager *singleton = nil;
     }
 }
 
-- (SLFileIOModel *)createFileIoModelWithIp:(nullable NSString *)ip taskId:(nullable NSString *)taskId files:(NSArray<SLFileModel *> *)files type:(SLFileIOModelType)type {
-    __block NSString *rootPath = self.tmpPath;
+- (SLFileIOModel *)createFileIoModelWithIp:(nullable NSString *)ip
+                                    taskId:(nullable NSString *)taskId
+                                     files:(NSArray<SLFileModel *> *)files
+                                      type:(SLFileIOModelType)type {
+    __block NSString *rootPath = [self tmpFilesPath];
     SLFileIOModel *ioModel = nil;
     if (type == receiveFile) {
         ioModel =  [[SLFileIOModel alloc] initWithTaskId:taskId deviceId:self.sendDeviceId  files:files type:receiveFile];
@@ -324,7 +326,6 @@ static SLTransferManager *singleton = nil;
     }
     __block SLFileIOModel *brIoModel = ioModel;
     @weakify(self);
-    
     ioModel.updateStatusBlock = ^(SLFileIOModelStatusType status){
         @strongify(self);
         if (status == CompleteTransfer){
@@ -537,6 +538,12 @@ static SLTransferManager *singleton = nil;
     return _fileManager;
 }
 
+- (NSMutableArray<SLWaitSendFileModel *> *)sendIOModels {
+    if(!_sendIOModels){
+        _sendIOModels = [NSMutableArray array];
+    }
+    return _sendIOModels;
+}
 
 
 
