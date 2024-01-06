@@ -49,4 +49,6 @@
 "SLAdjustingTimeoutHintContentString4" = "辅助触控";
 "SLAdjustingTimeoutHintSettingTitle" = "前往系统设置";
 
+"SLCancelTitle" = "取消";
+"SLNextTitle" = "下一步";
 
