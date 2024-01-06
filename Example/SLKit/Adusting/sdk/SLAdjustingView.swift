@@ -108,6 +108,7 @@ extension SLAdjustingView {
             return
         }
         //TODO: 提交校准点 SLAdjustingControlManager 里的 adjusting(_ point: CGPoint)
+        SLLog.debug("hid 点击 (x:\(point.x),y:\(point.y)")
         adjustingPointUpdated?(point)
     }
 }

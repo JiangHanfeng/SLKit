@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SLKit
 
 private let Adjusting_Base_X_Key = "Adj_Base_X"
 private let Adjusting_Base_Y_Key = "Adj_Base_Y"
@@ -148,7 +149,7 @@ class SLAdjustingControlManager: NSObject {
                     self.adjustingBasePoint(self.baseX, self.baseY)
                     self.adjustingBaseTimeout()
                 } else {
-                    print("基准点错误");
+                    SLLog.debug("基准点错误");
                     self.adjustingResultBlock?(false,nil)
                 }
             }

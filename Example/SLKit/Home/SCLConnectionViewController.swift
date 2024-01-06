@@ -61,7 +61,7 @@ class SCLConnectionViewController: SCLBaseViewController {
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
                             
                             if resp.state == 1 {
-                                let syncResp = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncReq(deviceName: SCLUtil.getDeviceName(), deviceId: SCLUtil.getDeviceMac().split(separator: ":").joined(), ip: sock.localHost ?? "", port1: 10001, port2: 10002, port3: 10003)), from: sock, for: SCLSyncResp.self)
+                                _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncReq(deviceName: SCLUtil.getDeviceName(), deviceId: SCLUtil.getDeviceMac().split(separator: ":").joined(), ip: sock.localHost ?? "", port1: 0, port2: UInt16(SLFileTransferManager.share().controlPort), port3: UInt16(SLFileTransferManager.share().dataPort))), from: sock, for: SCLSyncResp.self)
                                 let device = SLDevice(id: resp.dev_id, name: resp.dev_name, mac: mac, localClient: sock)
                                 self.connectedCallback?(device)
                                 self.state = .initialize

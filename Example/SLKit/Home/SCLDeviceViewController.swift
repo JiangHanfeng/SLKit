@@ -201,7 +201,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         Task {
             do {
                 if isInitiative {
-                    _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: 0, port3: 0)), from: socket, for: SCLScreenResp.self)
+                    _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLFileTransferManager.share().controlPort), port3: UInt16(SLFileTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self)
                 }
                 _ = try await SLSocketManager.shared.send(SCLInitReq(mac: SCLUtil.getBTMac() ?? ""), from: socket, for: SCLInitResp.self)
                 SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in

@@ -14,6 +14,8 @@ struct SCLSyncMovePointReq : SLSocketRequest, HandyJSON {
     init() {
         type = .businessMessage
         step = 0
+        x = 0
+        y = 0
     }
     
     var type: SLKit.SLSocketSessionItemType = .businessMessage
@@ -31,8 +33,12 @@ struct SCLSyncMovePointReq : SLSocketRequest, HandyJSON {
     
     let cmd: SCLCmd = .syncMovePoint
     let step: Int
+    let x: Int
+    let y: Int
     
-    init(step: Int) {
+    init(step: Int, x: Int, y: Int) {
         self.step = step
+        self.x = x
+        self.y = y
     }
 }

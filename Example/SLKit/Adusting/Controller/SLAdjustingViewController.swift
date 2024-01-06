@@ -273,14 +273,14 @@ class SLAdjustingViewController: SCLBaseViewController {
             self?.present(SLAdjustingTimeoutViewController(), animated: false)
         }
         
-        manager.adjustingMoveBlock = { [weak self] (step, _, _) in
+        manager.adjustingMoveBlock = { [weak self] (step, x, y) in
             guard let socket = self?.device?.localClient else {
                 SLLog.debug("同步校准点时已断开连接")
                 self?.status = .fail
                 return
             }
             SLSocketManager.shared.send(
-                SCLSyncMovePointReq(step: step),
+                SCLSyncMovePointReq(step: step, x: x, y: y),
                 from: socket,
                 for: SCLSyncMovePointResp.self) { _ in }
         }
@@ -495,7 +495,7 @@ class SLAdjustingViewController: SCLBaseViewController {
     @objc
     func btnPrssed(){
         if self.status == .start {
-//            manager.startAdjustingControl()
+            manager.startAdjustingControl()
             self.adjustingView.startAdjustingOrientation()
             self.status = .horizontalOri
             self.upView()
