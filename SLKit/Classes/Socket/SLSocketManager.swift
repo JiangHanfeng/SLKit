@@ -529,8 +529,22 @@ public final class SLSocketManager: NSObject {
     }
     
     /// 从某个socket client发送请求，无需响应
-    public func send<T: SLSocketRequest>(request: T, from sock: SLSocketClient) throws {
-        
+    public func send<T: SLSocketRequest>(request: T, from sock: SLSocketClient, completion: @escaping ((SLResult<Void, Error>) -> Void)) {
+        self.getSocketClient(host: sock.host, port: sock.port) { socket in
+            guard let socket, socket.isConnected else {
+                completion(.failure(SLError.socketSendFailureNotConnected))
+                return
+            }
+            guard let data = request.data, !data.isEmpty else {
+                completion(.failure(SLError.socketSendFailureEmptyData))
+                return
+            }
+            do {
+                try socket.send(data, type: request.type.rawValue)
+            } catch let e {
+                completion(.failure(e))
+            }
+        }
     }
     
     /// 从某个socket client发送请求，并指定响应类型
@@ -628,4 +642,3 @@ public final class SLSocketManager: NSObject {
         }
     }
 }
-

@@ -271,6 +271,7 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         let type = bytes.first!
         let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
         let packetLength = 1 + 4 + length
+        let start = cachedData!.startIndex
         if packetLength == cachedData!.count {
             // 如果读取的数据长度与当前保存的字节流长度一致，说明是一次完成的数据
             if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
@@ -282,12 +283,12 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
             cachedData!.removeAll()
         } else if packetLength < cachedData!.count {
             if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
-                let totalData = cachedData![5..<(5+Int(length))]
+                let totalData = cachedData![cachedData!.index(start, offsetBy: 5)..<cachedData!.index(start, offsetBy: 5 + Int(length))]
                 let string = String(data: totalData, encoding: .utf8)
                 SLLog.debug("收到:\(string ?? "")")
                 dataHandler?(totalData)
             }
-            cachedData = cachedData![(5+Int(length))..<cachedData!.count]
+            cachedData = cachedData![cachedData!.index(start, offsetBy: 5 + Int(length))..<cachedData!.endIndex]
         }
     }
 }
