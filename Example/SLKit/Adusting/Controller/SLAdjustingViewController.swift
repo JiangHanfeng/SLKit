@@ -273,6 +273,18 @@ class SLAdjustingViewController: SCLBaseViewController {
             self?.present(SLAdjustingTimeoutViewController(), animated: false)
         }
         
+        manager.adjustingMoveBlock = { [weak self] (step, _, _) in
+            guard let socket = self?.device?.localClient else {
+                SLLog.debug("同步校准点时已断开连接")
+                self?.status = .fail
+                return
+            }
+            SLSocketManager.shared.send(
+                SCLSyncMovePointReq(step: step),
+                from: socket,
+                for: SCLSyncMovePointResp.self) { _ in }
+        }
+        
         manager.adjustingResultBlock = { [weak self] (result, adjustingData) in
             if let adjustingData, result {
                 // MARK: 校准成功，保存校准数据到本地，并上传
@@ -483,7 +495,7 @@ class SLAdjustingViewController: SCLBaseViewController {
     @objc
     func btnPrssed(){
         if self.status == .start {
-            manager.startAdjustingControl()
+//            manager.startAdjustingControl()
             self.adjustingView.startAdjustingOrientation()
             self.status = .horizontalOri
             self.upView()

@@ -20,6 +20,7 @@ class SLAdjustingView: UIView {
     private lazy var detectionComplete = false
     private var detectionIndex = 0
     private var lockOrientation = false
+    private var motionManager = SLMotionManager()
     
     var adjustingOrientationCompleteBlock:(()->Void)?
     var adjustingLeftOrRightOrientationCompleteBlock:(()->Void)?
@@ -38,6 +39,7 @@ class SLAdjustingView: UIView {
         if self.runingAdjustingOri {
             return
         }
+        self.motionManager.start()
         self.runingAdjustingOri = true
         self.detectionIndex = 0
         self.detectionComplete = false
@@ -49,6 +51,7 @@ class SLAdjustingView: UIView {
         if !self.runingAdjustingOri {
             return
         }
+        self.motionManager.stop()
         self.runingAdjustingOri = false
     }
     
@@ -56,7 +59,8 @@ class SLAdjustingView: UIView {
         if !self.runingAdjustingOri {
             return
         }
-        let ori = UIInterfaceOrientation.portrait //陀螺仪方向
+        
+        let ori = motionManager.orientation // 陀螺仪方向
         if self.detectionComplete {
             if ori == .portrait {
                 self.adjustingOrientationCompleteBlock?()
@@ -104,6 +108,6 @@ extension SLAdjustingView {
             return
         }
         //TODO: 提交校准点 SLAdjustingControlManager 里的 adjusting(_ point: CGPoint)
-        
+        adjustingPointUpdated?(point)
     }
 }

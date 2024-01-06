@@ -30,6 +30,10 @@ struct SCLUtil {
         return uuid
     }
     
+    static func getDeviceId() -> String {
+        return getTempMac().split(separator: ":").joined()
+    }
+    
     static func getTempMac() -> String {
         var mac = getStringValue(for: TEMP_MAC_KEY) ?? ""
         if mac.isEmpty {

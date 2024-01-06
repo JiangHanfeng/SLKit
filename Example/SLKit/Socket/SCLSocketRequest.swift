@@ -53,7 +53,7 @@ struct SCLSocketGenericContent: SCLSocketConetent {
 
 struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
-    let dev_id = SCLUtil.getDeviceMac().split(separator: ":").joined()
+    let dev_id = SCLUtil.getDeviceId()
     let dev_mac = SCLUtil.getBTMac()?.split(separator: ":").joined() ?? SCLUtil.getDeviceMac().split(separator: ":").joined()
     let deviceName = UIDevice.current.name
     let os = 1

@@ -81,6 +81,9 @@ class SCLHomeViewController: SCLBaseViewController {
                         }
                     }
                 } else {
+                    if let _ = self?.presentedViewController {
+                        self?.dismiss(animated: true, completion: nil)
+                    }
                     if ip.isEmpty {
                         self?.ipv4 = nil
                         self?.stopListenPort()

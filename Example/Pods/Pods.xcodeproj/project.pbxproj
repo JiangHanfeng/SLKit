@@ -227,6 +227,7 @@
 		4B310FA02B44197900A3081B /* SLAnyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B310F9D2B44197900A3081B /* SLAnyDevice.swift */; };
 		4B310FA12B44197900A3081B /* SLDeviceScanTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B310F9E2B44197900A3081B /* SLDeviceScanTask.swift */; };
 		4B310FA22B44197900A3081B /* SLDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B310F9F2B44197900A3081B /* SLDeviceBuilder.swift */; };
+		4B95D8742B492A3D0049355C /* SLMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B95D8732B492A3D0049355C /* SLMotionManager.swift */; };
 		4BACC0B96C228B50D439B679648BCE21 /* SLA2DPMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8C5681A51C0E672B32ED4F3AB90E4B /* SLA2DPMonitor.swift */; };
 		4BAD99B7394E225CEDBF94B8100BCC7F /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D355476A524DB9D7DA045D4B5872C73F /* ConstraintRelation.swift */; };
 		4BAF573897710520938345414DD44802 /* RLMAsyncTask_Private.h in Copy . Private Headers */ = {isa = PBXBuildFile; fileRef = 996F1E80C7175029422C0287C91B5995 /* RLMAsyncTask_Private.h */; };
@@ -1246,6 +1247,7 @@
 		4B310F9F2B44197900A3081B /* SLDeviceBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDeviceBuilder.swift; sourceTree = "<group>"; };
 		4B597382F21A884DF2E94C641112CCB3 /* Realm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Realm.debug.xcconfig; sourceTree = "<group>"; };
 		4B7D3AACACCB55B841FE9E1C72CCA69C /* OtherExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OtherExtension.swift; path = Source/OtherExtension.swift; sourceTree = "<group>"; };
+		4B95D8732B492A3D0049355C /* SLMotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SLMotionManager.swift; path = SLKit/Classes/SLMotionManager.swift; sourceTree = "<group>"; };
 		4BB1E77F33F6A358D5E253B10138ACFF /* RLMSyncManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RLMSyncManager.mm; path = Realm/RLMSyncManager.mm; sourceTree = "<group>"; };
 		4BBC4366468938BA90D5B39E839FC150 /* RxTableViewDataSourceProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RxTableViewDataSourceProxy.swift; path = RxCocoa/iOS/Proxies/RxTableViewDataSourceProxy.swift; sourceTree = "<group>"; };
 		4BC15B7BEA3B7C9F204760B016FA5B74 /* DispatchQueue+XCGAdditions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+XCGAdditions.swift"; path = "Sources/XCGLogger/Extensions/DispatchQueue+XCGAdditions.swift"; sourceTree = "<group>"; };
@@ -2134,6 +2136,7 @@
 		410775506F82458DA898F74DD289A643 /* SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4B95D8732B492A3D0049355C /* SLMotionManager.swift */,
 				4B310F8E2B4418AA00A3081B /* BleCentral */,
 				4B310F9C2B44197900A3081B /* Device */,
 				4B310F802B44179C00A3081B /* Socket */,
@@ -4408,6 +4411,7 @@
 				4B310F8C2B44179C00A3081B /* SLSocketClient.swift in Sources */,
 				4B310F9A2B4418AA00A3081B /* SLCentralManager.swift in Sources */,
 				4B310FA22B44197900A3081B /* SLDeviceBuilder.swift in Sources */,
+				4B95D8742B492A3D0049355C /* SLMotionManager.swift in Sources */,
 				90C5816673767D8B96630ECB2BBA4C06 /* SLError.swift in Sources */,
 				4B310F962B4418AA00A3081B /* SLScanPeripheralTask.swift in Sources */,
 				ACBA4F57F172886334224156C72CB58A /* SLKit.swift in Sources */,
