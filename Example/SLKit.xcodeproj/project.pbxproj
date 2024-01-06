@@ -58,10 +58,16 @@
 		4B72F5CD2B45B3EC00074E28 /* libXTunnelFileTransfer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B72F5C92B45B3EC00074E28 /* libXTunnelFileTransfer.a */; };
 		4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */; };
 		4B72F5D92B45CBF300074E28 /* SLDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5D82B45CBF300074E28 /* SLDevice.swift */; };
+		4B95D86E2B4919560049355C /* SCLSyncCalibrationStateResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B95D86D2B4919560049355C /* SCLSyncCalibrationStateResp.swift */; };
 		4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */; };
 		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
 		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
 		4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */; };
+		4BC2DFAE2B48E81D00F82972 /* SLAdjustingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */; };
+		4BC2DFB12B48EBF700F82972 /* SCLAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */; };
+		4BC2DFB32B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */; };
+		4BC2DFB72B48FA5A00F82972 /* SCLUploadCalibrationDataReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB62B48FA5A00F82972 /* SCLUploadCalibrationDataReq.swift */; };
+		4BC2DFB92B48FB9F00F82972 /* SCLUploadCalibrationDataResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB82B48FB9F00F82972 /* SCLUploadCalibrationDataResp.swift */; };
 		4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34072B3441CB00E14D40 /* SCLUtil.swift */; };
 		4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCE34092B34436C00E14D40 /* SCLQRResult.swift */; };
 		4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */; };
@@ -75,7 +81,6 @@
 		4BE13FF92B4826AC00606BE6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4BE13FFB2B4826AC00606BE6 /* Localizable.strings */; };
 		4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */; };
 		4BE1400C2B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */; };
-		4BE1400D2B48271C00606BE6 /* SLAdjustingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */; };
 		4BE1400E2B48271C00606BE6 /* SLAdustingControlAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140032B48271C00606BE6 /* SLAdustingControlAnimationView.swift */; };
 		4BE1400F2B48271C00606BE6 /* SLAdjustingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140042B48271C00606BE6 /* SLAdjustingView.swift */; };
 		4BE140102B48271C00606BE6 /* SLAdjustingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BE140052B48271C00606BE6 /* SLAdjustingManager.swift */; };
@@ -186,10 +191,16 @@
 		4B72F5D42B45BCC500074E28 /* NSString+Transition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Transition.h"; sourceTree = "<group>"; };
 		4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSString+Transition.mm"; sourceTree = "<group>"; };
 		4B72F5D82B45CBF300074E28 /* SLDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLDevice.swift; sourceTree = "<group>"; };
+		4B95D86D2B4919560049355C /* SCLSyncCalibrationStateResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncCalibrationStateResp.swift; sourceTree = "<group>"; };
 		4B9996C62B20098E00F74D34 /* SLFreeStyleDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDevice.swift; sourceTree = "<group>"; };
 		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
 		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
 		4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDeviceBuilder.swift; sourceTree = "<group>"; };
+		4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingViewController.swift; sourceTree = "<group>"; };
+		4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertViewController.swift; sourceTree = "<group>"; };
+		4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncCalibrationStateReq.swift; sourceTree = "<group>"; };
+		4BC2DFB62B48FA5A00F82972 /* SCLUploadCalibrationDataReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLUploadCalibrationDataReq.swift; sourceTree = "<group>"; };
+		4BC2DFB82B48FB9F00F82972 /* SCLUploadCalibrationDataResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLUploadCalibrationDataResp.swift; sourceTree = "<group>"; };
 		4BCE34072B3441CB00E14D40 /* SCLUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLUtil.swift; sourceTree = "<group>"; };
 		4BCE34092B34436C00E14D40 /* SCLQRResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLQRResult.swift; sourceTree = "<group>"; };
 		4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLReconnectViewController.swift; sourceTree = "<group>"; };
@@ -206,7 +217,6 @@
 		4BE13FFC2B4826B100606BE6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingTimeoutViewController.swift; sourceTree = "<group>"; };
 		4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingSensitivityBigHintViewController.swift; sourceTree = "<group>"; };
-		4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingViewController.swift; sourceTree = "<group>"; };
 		4BE140032B48271C00606BE6 /* SLAdustingControlAnimationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdustingControlAnimationView.swift; sourceTree = "<group>"; };
 		4BE140042B48271C00606BE6 /* SLAdjustingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingView.swift; sourceTree = "<group>"; };
 		4BE140052B48271C00606BE6 /* SLAdjustingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingManager.swift; sourceTree = "<group>"; };
@@ -284,6 +294,10 @@
 				4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */,
 				4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */,
 				4BE13FEE2B4819CF00606BE6 /* SCLSyncPairReq.swift */,
+				4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */,
+				4B95D86D2B4919560049355C /* SCLSyncCalibrationStateResp.swift */,
+				4BC2DFB62B48FA5A00F82972 /* SCLUploadCalibrationDataReq.swift */,
+				4BC2DFB82B48FB9F00F82972 /* SCLUploadCalibrationDataResp.swift */,
 			);
 			path = Socket;
 			sourceTree = "<group>";
@@ -432,6 +446,14 @@
 			path = Pair;
 			sourceTree = "<group>";
 		};
+		4BC2DFAF2B48EBE500F82972 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
 		4BE13FFD2B48271C00606BE6 /* Adusting */ = {
 			isa = PBXGroup;
 			children = (
@@ -445,9 +467,9 @@
 		4BE13FFE2B48271C00606BE6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */,
 				4BE13FFF2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift */,
 				4BE140002B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift */,
-				4BE140012B48271C00606BE6 /* SLAdjustingViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -497,6 +519,7 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4BC2DFAF2B48EBE500F82972 /* Alert */,
 				4BE13FFD2B48271C00606BE6 /* Adusting */,
 				4B72F5A72B45B3EC00074E28 /* FileTransfer */,
 				4B33D24E2B4547AB002B0C5B /* Socket */,
@@ -810,6 +833,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */,
+				4BC2DFAE2B48E81D00F82972 /* SLAdjustingViewController.swift in Sources */,
+				4BC2DFB12B48EBF700F82972 /* SCLAlertViewController.swift in Sources */,
 				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
 				4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */,
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
@@ -830,6 +855,7 @@
 				4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */,
 				4BDE22F12B328C4000D1A50C /* SLWebViewController.swift in Sources */,
 				4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */,
+				4BC2DFB32B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
 				4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
@@ -842,7 +868,7 @@
 				4B33D2562B45729E002B0C5B /* SCLInitReq.swift in Sources */,
 				4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */,
 				4BE140102B48271C00606BE6 /* SLAdjustingManager.swift in Sources */,
-				4BE1400D2B48271C00606BE6 /* SLAdjustingViewController.swift in Sources */,
+				4BC2DFB92B48FB9F00F82972 /* SCLUploadCalibrationDataResp.swift in Sources */,
 				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
 				4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */,
 				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
@@ -851,6 +877,7 @@
 				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
 				4B72F5D92B45CBF300074E28 /* SLDevice.swift in Sources */,
 				4BE1400C2B48271C00606BE6 /* SLAdjustingSensitivityBigHintViewController.swift in Sources */,
+				4BC2DFB72B48FA5A00F82972 /* SCLUploadCalibrationDataReq.swift in Sources */,
 				4BCEEA952B3D808E003C036A /* SCLPairVerificationReq.swift in Sources */,
 				4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */,
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
@@ -869,6 +896,7 @@
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
 				4BCE34082B3441CB00E14D40 /* SCLUtil.swift in Sources */,
+				4B95D86E2B4919560049355C /* SCLSyncCalibrationStateResp.swift in Sources */,
 				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,
 				4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */,
 				4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */,

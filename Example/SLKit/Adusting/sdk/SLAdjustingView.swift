@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SLKit
 
 class SLAdjustingView: UIView {
 
@@ -22,6 +23,7 @@ class SLAdjustingView: UIView {
     
     var adjustingOrientationCompleteBlock:(()->Void)?
     var adjustingLeftOrRightOrientationCompleteBlock:(()->Void)?
+    var adjustingPointUpdated:((_ point: CGPoint) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,19 +79,18 @@ class SLAdjustingView: UIView {
         }
     }
         
-    func prepareStartAdjustingControl(_ block:(Bool)->Void){
-        //准备校准控制 tcp 发 cmd: 10 回复 cmd 10 
-        
-    }
+//    func prepareStartAdjustingControl(_ block:(Bool)->Void){
+//        //TODO: 准备校准控制 tcp 发 cmd: 10 回复 cmd 10
+//    }
     
     func startAdjustingControl(){
         self.animationView.startAnimation()
-        //开始校准控制 SLAdjustingControlManager 里的 startAdjustingControl()
+        //TODO: 开始校准控制 SLAdjustingControlManager 里的 startAdjustingControl()
     }
 
     func endAdjustingControl(){
         self.animationView.endAnimation()
-        //开始校准控制 SLAdjustingControlManager 里的 endAdjustingControl()
+        //TODO: 开始校准控制 SLAdjustingControlManager 里的 endAdjustingControl()
     }
     
     override func layoutSubviews() {
@@ -102,7 +103,7 @@ extension SLAdjustingView {
         guard let point = touches.first?.location(in: self) else {
             return
         }
-        //提交校准点 SLAdjustingControlManager 里的 adjusting(_ point: CGPoint)
+        //TODO: 提交校准点 SLAdjustingControlManager 里的 adjusting(_ point: CGPoint)
         
     }
 }

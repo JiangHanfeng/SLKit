@@ -32,6 +32,17 @@ class SCLDeviceViewController: SCLBaseViewController {
     private var airplaySuccess = false {
         didSet {
             airplayBtn.setTitle(airplaySuccess ? "停止投屏" : "开始投屏", for: .normal)
+            if airplaySuccess && hidConnected {
+                calibrationIfNeed()
+            }
+        }
+    }
+    
+    private var hidConnected = false {
+        didSet {
+            if airplaySuccess && hidConnected {
+                calibrationIfNeed()
+            }
         }
     }
     
@@ -72,10 +83,18 @@ class SCLDeviceViewController: SCLBaseViewController {
                     }
                     if result {
                         SLLog.debug("投屏成功")
-//                        self.requestScreen()
                         self.toast("投屏成功")
+                        let mac = SCLUtil.getBTMac()
+                        if mac?.isEmpty ?? true {
+                            if let socket = self.device?.localClient {
+                                self.present(SCLPairViewController(sock: socket), animated: true)
+                            } else {
+                                SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
+                            }
+                        }
                         self.airplaySuccess = true
                     } else {
+                        SLLog.debug("投屏失败")
                         self.toast("投屏失败")
                         self.airplaySuccess = false
                     }
@@ -117,11 +136,23 @@ class SCLDeviceViewController: SCLBaseViewController {
                     if newDevices.count == 1 {
                         // MARK: 认为本机是此设备
                         SLLog.debug("配对成功，本机mac：\(newDevices.first!.mac)，本机名称：\(newDevices.first!.deviceName)")
-                        self.toast("配对成功")
+                        self.submitPairResult(pairedDevice: newDevices.first!, result: true)
                     } else {
                         // MARK: 弹出列表供用户选择
-                        self.toast("弹出列表供用户选择")
+                        if let socket = self.device?.localClient {
+                            self.present(SCLPairViewController(sock: socket), animated: true)
+                        } else {
+                            SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
+                        }
                     }
+                case SCLCmd.hidConnected.rawValue:
+                    var state: Int?
+                    if let intValue = dict["state"] as? Int {
+                        state = intValue
+                    } else if let stringValue = dict["state"] as? String {
+                        state = Int(stringValue)
+                    }
+                    self.hidConnected = state == 0
                 default:
                     break
                 }
@@ -167,10 +198,6 @@ class SCLDeviceViewController: SCLBaseViewController {
         guard let socket = device?.localClient else {
             return
         }
-//        guard let mac = SCLUtil.getBTMac(), !mac.isEmpty else {
-//            present(SCLPairViewController(sock: socket), animated: true)
-//            return
-//        }
         Task {
             do {
                 if isInitiative {
@@ -203,6 +230,52 @@ class SCLDeviceViewController: SCLBaseViewController {
         }
         SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
             
+        }
+    }
+    
+    private func submitPairResult(pairedDevice: SCLPCPairedDevice, result: Bool) {
+        SLLog.debug("提交蓝牙配对校验结果：\(result ? "通过" : "未通过")")
+        defer {
+            if result {
+                _ = SCLUtil.setBTMac(pairedDevice.mac)
+                _ = SCLUtil.setDeviceName(pairedDevice.deviceName)
+            }
+        }
+        
+        if let socket = device?.localClient {
+            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let resp):
+                    if resp.state == 1 {
+                        // MARK: 蓝牙配对校验通过
+                        self.toast("已完成蓝牙配对，回控功能已启用")
+                    } else {
+                        // MARK: 蓝牙配对校验未通过
+                        self.toast("蓝牙配对校验未通过")
+                    }
+                case .failure(_):
+                    break
+                }
+            }
+        }
+    }
+    
+    private func calibrationIfNeed() {
+        let needCalibratiopn =  SCLUtil.getCalibrationData()?.isEmpty ?? true
+        SLLog.debug("投屏成功，hid已连接，\(needCalibratiopn ? "需要" : "不需要")校准")
+        guard let device = self.device else {
+            SLLog.debug("启动校准失败：当前设备已被释放")
+            return
+        }
+        if let presentedViewController {
+            if !presentedViewController.isKind(of: SLAdjustingViewController.self) {
+                dismiss(animated: true) {
+                    self.present(SLAdjustingViewController(initiative: false, device: device), animated: true)
+                }
+            }
+        } else {
+            present(SLAdjustingViewController(initiative: false, device: device), animated: true)
         }
     }
 }

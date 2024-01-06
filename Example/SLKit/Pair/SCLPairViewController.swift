@@ -18,9 +18,10 @@ class SCLPairViewController: SCLBaseViewController {
     private var a2dpMonitorTask: SLA2DPMonitorTask?
     private var a2dpDevice: SLA2DPDevice?
     
-    convenience init(sock: SLSocketClient) {
+    convenience init(sock: SLSocketClient, deviceList: [SCLPCPairedDevice]? = nil) {
         self.init()
         self.socket = sock
+        self.pcPairedDevices = deviceList
         self.modalPresentationStyle = .overFullScreen
         self.modalTransitionStyle = .crossDissolve
     }
@@ -61,10 +62,14 @@ class SCLPairViewController: SCLBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        transitionToChild(pairAlertVc) { childView in
-            childView.snp.makeConstraints { make in
-                make.size.equalToSuperview()
-                make.center.equalToSuperview()
+        if let pcPairedDevices, !pcPairedDevices.isEmpty {
+            transitionToPhonePicker(devices: pcPairedDevices.reversed())
+        } else {
+            transitionToChild(pairAlertVc) { childView in
+                childView.snp.makeConstraints { make in
+                    make.size.equalToSuperview()
+                    make.center.equalToSuperview()
+                }
             }
         }
     }
@@ -107,26 +112,8 @@ class SCLPairViewController: SCLBaseViewController {
 //                        self.requestPairVerification(device: newDevices.first!, button: btn)
                         self.submitPairResult(device: newDevices.first!, result: true)
                     } else {
-                        self.transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: newDevices.isEmpty ? deviceList : newDevices, onVerified: { [weak self] device in
-//                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
-                                self?.submitPairResult(device: device, result: true)
-                                let presentingVc = self?.presentingViewController
-                                presentingVc?.dismiss(animated: true, completion: {
-                                    presentingVc?.toast("配对校验通过")
-                                })
-//                            } else {
-//                                self?.toast("配对校验未通过")
-//                            }
-                        }, onBack: { [weak self] in
-                            if let self {
-                                self.transitionToChild(self.pairAlertVc) { childView in }
-                            }
-                        })) { childView in
-                            childView.snp.makeConstraints { make in
-                                make.size.equalToSuperview()
-                                make.center.equalToSuperview()
-                            }
-                        }
+                        // MARK: diff两次列表，相差不为1，让用户选择
+                        self.transitionToPhonePicker(devices: newDevices.isEmpty ? deviceList.reversed() : newDevices.reversed())
                     }
                 } else {
                     // MARK: 点击已配对获取到列表后跳转设置
@@ -206,6 +193,36 @@ class SCLPairViewController: SCLBaseViewController {
     //                self.dismiss(animated: true)
                     break
                 }
+            }
+        }
+    }
+    
+    /// 跳转至设备列表
+    private func transitionToPhonePicker(devices: [SCLPCPairedDevice]) {
+        guard let socket else {
+            presentingViewController?.dismiss(animated: true, completion: {
+                self.presentingViewController?.toast("已断开连接")
+            })
+            return
+        }
+        transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: devices, onVerified: { [weak self] device in
+//                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
+                self?.submitPairResult(device: device, result: true)
+                let presentingVc = self?.presentingViewController
+                presentingVc?.dismiss(animated: true, completion: {
+                    presentingVc?.toast("配对校验通过")
+                })
+//                            } else {
+//                                self?.toast("配对校验未通过")
+//                            }
+        }, onBack: { [weak self] in
+            if let self {
+                self.presentingViewController?.dismiss(animated: true)
+            }
+        })) { childView in
+            childView.snp.makeConstraints { make in
+                make.size.equalToSuperview()
+                make.center.equalToSuperview()
             }
         }
     }

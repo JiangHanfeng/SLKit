@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SLKit
 
 fileprivate enum SLAdjustingStatusType {
     case start
@@ -17,11 +18,13 @@ fileprivate enum SLAdjustingStatusType {
     case fail
 }
 
-class SLAdjustingViewController: UIViewController {
+class SLAdjustingViewController: SCLBaseViewController {
     
     private lazy var status: SLAdjustingStatusType = .start
     var dismissBlock:(()->Void)?
     private var isInitiative = false
+    private var device: SLDevice?
+    private let manager = SLAdjustingControlManager()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel(frame: CGRect.zero)
@@ -141,10 +144,11 @@ class SLAdjustingViewController: UIViewController {
         return btn
     }()
     
-    init(_ initiative: Bool) {
+    init(initiative: Bool, device: SLDevice) {
         super.init(nibName: nil, bundle: nil)
         self.modalPresentationStyle = .custom
         self.isInitiative = initiative
+        self.device = device
     }
     
     required init?(coder: NSCoder) {
@@ -208,18 +212,18 @@ class SLAdjustingViewController: UIViewController {
             make.top.equalTo(self.hintLabel.snp.bottom).offset(20)
         }
         
-        self.hintContentBackView.addSubview(self.openTouchView)
-        self.openTouchView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(300)
-            make.top.equalTo(self.hintContentLabel.snp.bottom).offset(20)
-        }
-        
         self.hintContentBackView.addSubview(self.adjustingSortView)
         self.adjustingSortView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(self.hintContentLabel.snp.bottom).offset(40)
-            make.bottom.equalTo(-10)
+            make.bottom.equalToSuperview().offset(-10)
+        }
+        
+        self.view.addSubview(self.openTouchView)
+        self.openTouchView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalTo(300)
+            make.top.equalTo(self.imageView.snp.bottom).offset(75)
         }
         
         self.view.addSubview(self.statusBtn)
@@ -239,7 +243,10 @@ class SLAdjustingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
+        // TODO: 设置断开连接的回调
+//        NotificationCenter.default.addObserver(self, selector: #selector(disconnectDevice), name:Notification.Name(K_Notice_Disonnect), object: nil)
+        
         self.view.backgroundColor = UIColor.colorWithHex(hexStr: "#000000", alpha: 0.9)
         self.upView()
         
@@ -247,43 +254,106 @@ class SLAdjustingViewController: UIViewController {
             self?.status = .verticalOri
             self?.upView()
         }
-
+        
         self.adjustingView.adjustingOrientationCompleteBlock = { [weak self] in
             self?.adjustingView.endAdjustingOrientation()
             self?.status = .prepareAdjusting
             self?.upView()
         }
         
+        self.adjustingView.adjustingPointUpdated = { [weak self] point in
+            self?.manager.adjusting(point)
+        }
         
-        //断开连接通知
-//        NotificationCenter.default.addObserver(self, selector: #selector(disconnectDevice), name:Notification.Name(K_Notice_Disonnect), object: nil)
+        manager.adjustingSensitivityBigBlock = {[weak self] in
+            self?.present(SLAdjustingSensitivityBigHintViewController(), animated: false)
+        }
         
-        //触控过大  SLAdjustingControlManager 里的 adjustingSensitivityBigBlock
-//        SLConnectManager.share().adjustingSensitivityBigBlock = {[weak self]  dev in
-//            self?.present(SLAdjustingSensitivityBigHintViewController(), animated: false)
-//        }
+        manager.adjustingTimeoutBlock = {[weak self] in
+            self?.present(SLAdjustingTimeoutViewController(), animated: false)
+        }
         
-         //校准超时 SLAdjustingControlManager 里的 adjustingTimeoutBlock
-//        SLConnectManager.share().adjustingTimeoutBlock = {[weak self]  dev in
-//            self?.present(SLAdjustingTimeoutViewController(), animated: false)
-//        }
-        
-//        SLConnectManager.share().prepareAdjusting(withInitiative: self.isInitiative)
+        manager.adjustingResultBlock = { [weak self] (result, adjustingData) in
+            if let adjustingData, result {
+                // MARK: 校准成功，保存校准数据到本地，并上传
+                let saveAdjustingData = SCLUtil.setCalibrationData(adjustingData)
+                SLLog.debug("保存校准数据\(saveAdjustingData ? "成功" : "失败")")
+                guard saveAdjustingData else {
+                    self?.status = .fail
+                    return
+                }
+                guard let socket = self?.device?.localClient else {
+                    SLLog.debug("上传校准数据时已断开连接")
+                    self?.status = .fail
+                    return
+                }
+                SLSocketManager.shared.send(
+                    SCLSocketRequest(content: SCLUploadCalibrationDataReq(data: adjustingData)),
+                    from: socket,
+                    for: SCLSocketResponse<SCLUploadCalibrationDataResp>.self)
+                { [weak self] result in
+                    var error: String?
+                    switch result {
+                    case .success(let resp):
+                        error = resp.content?.succ == 1 ? nil : "upload adjusting data failed"
+                    case .failure(let e):
+                        error = e.localizedDescription
+                    }
+                    DispatchQueue.main.async {
+                        if let error {
+                            self?.toast(error)
+                        }
+                    }
+                }
+                self?.status = .succeed
+            } else {
+                self?.status = .fail
+            }
+            self?.upView()
+        }
+//        manager.prepareAdjusting(withInitiative: self.isInitiative)
     }
     
     deinit {
-//        SLConnectManager.share().adjustingSensitivityBigBlock = nil
-//        SLConnectManager.share().adjustingTimeoutBlock = nil
-//        NotificationCenter.default.removeObserver(self)
+        manager.adjustingSensitivityBigBlock = nil
+        manager.adjustingTimeoutBlock = nil
+        NotificationCenter.default.removeObserver(self)
     }
     
     func prepareAdjusting(){
-        
-        self.adjustingView.prepareStartAdjustingControl { [weak self] _ in
-            self?.status = .adjusting
-            self?.upView()
-            self?.adjustingView.startAdjustingControl()
+        guard let socket = device?.localClient else {
+            // TODO: 已断开连接
+            return
         }
+        // MARK: 发送cmd10 state 1表示开始校准 2表示取消校准
+        SLSocketManager.shared.send(
+            SCLSyncCalibrationStateReq(state: 1),
+            from: socket,
+            for: SCLSyncCalibrationStateResp.self)
+        { [weak self] result in
+            var error: String?
+            switch result {
+            case .success(let resp):
+                error = resp.state == 1 ? nil : "sync adjustting state failed"
+            case .failure(let e):
+                error = e.localizedDescription
+            }
+            DispatchQueue.main.async {
+                if let error {
+                    self?.toast(error)
+                } else {
+                    self?.status = .adjusting
+                    self?.upView()
+                    self?.adjustingView.startAdjustingControl()
+                    self?.manager.startAdjustingControl()
+                }
+            }
+        }
+//        self.adjustingView.prepareStartAdjustingControl { [weak self] _  in
+//            self?.status = .adjusting
+//            self?.upView()
+//            self?.adjustingView.startAdjustingControl()
+//        }
     }
     
     func adjustingResult(_ ret : Bool) {
@@ -301,6 +371,7 @@ class SLAdjustingViewController: UIViewController {
         self.hintContentLabel.attributedText = nil
         self.hintContentLabel.text = nil
         self.openTouchView.isHidden = true
+        self.openTouchView.isUserInteractionEnabled = false
    
         self.statusBtn.isUserInteractionEnabled = true
         self.statusBtn.alpha = 1
@@ -317,17 +388,17 @@ class SLAdjustingViewController: UIViewController {
         self.adjustingImageView.stopAnimating()
         self.adjustingImageView.isHidden = true
         
+        
         if self.status == .start {
             
             self.imageView.isHidden = false
             self.imageView.image = UIImage.init(named: "adjusting_prepare_icon")
             self.hintLabel.text = NSLocalizedString("SLAdjustingStratHindString", comment: "")
             
-            
-            //  SLAdjustingManager 里的isOpenTouchControl()
-//            if SLConnectManager.share().isOpenTouchControl() {
+            if manager.isOpenTouchControl() {
                 self.openTouchView.isHidden = false
-//            }
+                self.openTouchView.isUserInteractionEnabled = true
+            }
     
             self.statusBtn.setTitle(NSLocalizedString("SLAdjustingStratBtnString", comment: ""), for: .normal)
             
@@ -412,6 +483,7 @@ class SLAdjustingViewController: UIViewController {
     @objc
     func btnPrssed(){
         if self.status == .start {
+            manager.startAdjustingControl()
             self.adjustingView.startAdjustingOrientation()
             self.status = .horizontalOri
             self.upView()
@@ -441,22 +513,19 @@ class SLAdjustingViewController: UIViewController {
     
     @objc
     func disconnectDevice(){
-        //校准中断开连接
-//        let vc = SLAlertViewController(.error,
-//                                       NSLocalizedString("SLAdjustingDisconnectDeviceString", comment: ""),
-//                                       NSLocalizedString("SLAffirmTitle", comment: ""),
-//                                       NSLocalizedString("SLAffirmTitle", comment: ""))
-//        vc.finishBlock = {[weak self] _ in
-//            self?.back()
-//        }
-//        self.present(vc, animated: false)
+        let vc = SCLAlertViewController(.error,
+                                       NSLocalizedString("SLAdjustingDisconnectDeviceString", comment: ""),
+                                       NSLocalizedString("SLAffirmTitle", comment: ""),
+                                       NSLocalizedString("SLAffirmTitle", comment: ""))
+        vc.finishBlock = {[weak self] _ in
+            self?.back()
+        }
+        self.present(vc, animated: false)
     }
     
     @objc
     func back(){
-        //取消校准
-        self.adjustingView.endAdjustingOrientation()
-        self.adjustingView.endAdjustingControl()
+        manager.endAdjustingControl()
         self.dismiss(animated: false) {}
     }
     
@@ -481,6 +550,13 @@ class SLAdjustingViewController: UIViewController {
                 make.left.equalTo(40)
                 make.right.equalTo(-40)
                 make.top.equalTo(self.imageView.snp.bottom).offset(15)
+            }
+            
+            self.view.addSubview(self.openTouchView)
+            self.openTouchView.snp.remakeConstraints { make in
+                make.centerX.equalToSuperview()
+                make.width.equalTo(300)
+                make.top.equalTo(self.imageView.snp.bottom).offset(75)
             }
 
             self.statusBtn.snp.remakeConstraints { make in
@@ -515,12 +591,18 @@ class SLAdjustingViewController: UIViewController {
                 make.centerY.equalToSuperview()
                 make.centerX.equalTo((width/4.0) * 3)
             }
-
+            
             self.statusBtn.snp.remakeConstraints { make in
                 make.width.equalTo(300)
                 make.height.equalTo(44)
                 make.bottom.equalTo(-20)
                 make.centerX.equalToSuperview()
+            }
+            
+            self.openTouchView.snp.remakeConstraints { make in
+                make.centerX.equalTo((width/4.0) * 3)
+                make.width.equalTo(300)
+                make.bottom.equalTo(self.statusBtn.snp.top).offset(-20)
             }
             
             if self.status == .prepareAdjusting {

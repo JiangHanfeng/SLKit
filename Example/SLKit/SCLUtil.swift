@@ -19,6 +19,7 @@ struct SCLUtil {
     static let DEVICE_NAME_KEY : String = "DEVICE_NAME_KEY"
     static let FIRST_LAUNCH_KEY : String = "FIRST_LAUNCH_KEY"
     static let FIRST_AIR_PLAY_KEY : String = "FIRST_AIR_PLAY_KEY"
+    static let CALIBRATION_DATA_KEY : String = "CALIBRATION_DATA_KEY"
     
     static func getUUID() -> String {
         var uuid = getStringValue(for: UUID_KEY, description: "设备uuid") ?? ""
@@ -85,6 +86,17 @@ struct SCLUtil {
     static func setFirstAirPlay(_ value: Bool) {
         UserDefaults.standard.setValue(value, forKey: FIRST_AIR_PLAY_KEY)
         UserDefaults.standard.synchronize()
+    }
+    
+    // 获取校准数据
+    static func getCalibrationData() -> String? {
+        return UserDefaults.standard.string(forKey: CALIBRATION_DATA_KEY)
+    }
+    
+    // 保存校准数据
+    static func setCalibrationData(_ value: String?) -> Bool {
+        UserDefaults.standard.setValue(value, forKey: CALIBRATION_DATA_KEY)
+        return UserDefaults.standard.synchronize()
     }
     
     private static func getStringValue(for key: String, description: String? = nil) -> String? {

@@ -15,8 +15,8 @@ enum SCLCmd: Int, HandyJSONEnum {
     case login = 0
     case initPlatform = 1
     case end = 5
-    case requestCalibration = 10
-    case submitCalibrationData = 11
+    case syncCalibrationState = 10
+    case uploadCalibrationData = 11
     case screenLocked = 13
     case updateBrightness = 14
     case updateUIOrientation = 15

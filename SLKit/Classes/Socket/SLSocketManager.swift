@@ -528,6 +528,11 @@ public final class SLSocketManager: NSObject {
         }
     }
     
+    /// 从某个socket client发送请求，无需响应
+    public func send<T: SLSocketRequest>(request: T, from sock: SLSocketClient) throws {
+        
+    }
+    
     /// 从某个socket client发送请求，并指定响应类型
     @available(*, renamed: "send(_:from:for:timeout:)")
     public func send<T: SLSocketRequest, U: SLSocketDataMapper>(_ request: T, from sock: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10), completion: @escaping ((SLResult<U, Error>) -> Void)) {
@@ -581,7 +586,7 @@ public final class SLSocketManager: NSObject {
                                 return true
                             } else {
                                 // MARK: wait until socket write and receive timeout
-                                print("wait until socket write and receive timeout")
+                                SLLog.debug("wait until socket write and receive timeout")
                                 return false
                             }
                         }
