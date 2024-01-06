@@ -31,7 +31,7 @@ struct SCLUtil {
     }
     
     static func getDeviceId() -> String {
-        return getTempMac().split(separator: ":").joined()
+        return getUUID()
     }
     
     static func getTempMac() -> String {
