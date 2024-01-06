@@ -9,6 +9,6 @@
 #ifndef SLKit_Bridging_Header_h
 #define SLKit_Bridging_Header_h
 
-#import "SLFileTransferManager.h"
+#import "SLTransferManager.h"
 
 #endif /* SLKit_Bridging_Header_h */

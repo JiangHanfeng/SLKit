@@ -8,6 +8,7 @@
 
 import UIKit
 import SLKit
+import TZImagePickerController
 
 enum SCLUserDefaultKey: String {
     case agreedPrivacyPolicy = "agreedPrivacyPolicy"
@@ -34,6 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let tempMac = SCLUtil.getTempMac()
             SLLog.debug("设备临时mac地址：\(tempMac)")
         }
+        
+        self.configFileTransfer()
+        
         if let backImage = UIImage(named: "icon_back_dark") {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage.withRenderingMode(.alwaysOriginal)
@@ -93,18 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SLLog.debug("程序即将退出")
     }
     
-    func selectFile() {
-        let documentTypes = ["public.content", "public.text", "public.archive", "public.image",
-                             "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
-                             "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
-//        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
-        let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
-        vc.modalPresentationStyle = .overFullScreen
-        vc.delegate = self
-        vc.allowsMultipleSelection = true
-//        vc.navigationController?.navigationBar.barTintColor = .white
-        UIApplication.shared.currentController().present(vc, animated: true)
-    }
+  
     
     private func applyTimeForBackgroundTask() {
         if backgroundId == nil {
@@ -126,52 +119,185 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+extension AppDelegate {
+    
+    private func configFileTransfer(){
+        SLTransferManager.share().config(withDeviceId: SCLUtil.getDeviceId(),
+                                         deviceName: SCLUtil.getDeviceName())
+        
+        SLTransferManager.share().receiveFileRequestBlock = { _,taskId,files in
+            SLTransferManager.share().respondReceiveFiles(withTaskId: taskId, files:files, accept: true)
+        }
+        
+        SLTransferManager.share().startReceiveFileBlock = { [weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().receiveFileProgressBlock = {[weak self] _,taskId,progress in
+            
+        }
+        
+        SLTransferManager.share().cancelReceiveFileBlock = {[weak self] _,taskId,_ in
+            
+        }
+        
+        SLTransferManager.share().completeReceiveFileBlock = {[weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().receiveFileFailBlock = {[weak self] _,taskId,_ in
+            
+        }
+        
+        SLTransferManager.share().nonReceiveFileBlock = {[weak self] _ in
+            
+        }
+           
+        SLTransferManager.share().waitSendFileBlock = { [weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().startSendFileBlock = {[weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().sendFileProgressBlock = { [weak self] _,taskId,progress in
+            
+        }
+        
+        SLTransferManager.share().refuseSendFileBlock = { [weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().cancelSendFileBlock = { [weak self] _,taskId,initiative in
+           
+        }
+        
+        SLTransferManager.share().completeSendFileBlock = { [weak self] _,taskId in
+            
+        }
+        
+        SLTransferManager.share().sendFileFailBlock = { [weak self] _,taskId,_ in
+            
+        }
+    
+        SLTransferManager.share().nonSendFileBlock = { [weak self] _ in
+           
+        }
+
+        SLTransferManager.share().upDateSendFileBlock = { [weak self] _,taskId in
+            
+        }
+    }
+    
+
+    func selectFile() {
+        let documentTypes = ["public.content", "public.text", "public.archive", "public.image",
+                             "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
+                             "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
+//        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
+        let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.delegate = self
+        vc.allowsMultipleSelection = true
+//        vc.navigationController?.navigationBar.barTintColor = .white
+        UIApplication.shared.currentController().present(vc, animated: true)
+    }
+    
+    func sendPhoto(){
+        let status = PHPhotoLibrary.authorizationStatus()
+        if status == .notDetermined {
+            PHPhotoLibrary.requestAuthorization {[weak self] _ in
+                DispatchQueue.main.async {
+                    self?.sendPhoto()
+                }
+            }
+            return
+        }
+        if status == .denied || status == .restricted {
+            //没有相册权限
+            return
+        }
+        self.selectSendPhoto()
+    }
+    
+    private func selectSendPhoto() {
+        let rootVc =  UIApplication.shared.currentController()
+        //maxImagesCount:最多可以选择几张图片
+        let vc = TZImagePickerController(maxImagesCount: 9, delegate: nil)!
+        vc.allowTakeVideo = false //是否允许拍视频
+        vc.allowPickingVideo = true //是否允许选择视频
+        vc.allowCrop = true //是否裁剪
+        vc.needCircleCrop = false //是否带边框裁剪
+        vc.allowCameraLocation = false
+        vc.modalPresentationStyle = .custom
+        rootVc.present(vc, animated: true)
+        //选中图片后做相应的处理
+        vc.didFinishPickingPhotosHandle = { photos,assets,isSelectOriginalPhoto in
+            if let imgs = photos {
+                if imgs.count > 0 {
+                    SLTransferManager.share().startSendFile()
+                    //拿到图片 做相应的处理
+                    var files: [SLFileModel] = []
+                    _  = imgs.map { img in
+                        if let model = SLTransferManager.share().createSendFileModel(with: img) {
+                            files.append(model)
+                        }
+                    }
+                    SLTransferManager.share().sendFiles(files) { _, _ in }
+                }
+            }
+        }
+        
+        vc.didFinishPickingVideoHandle = { coverImage,asset in
+            if let aideoAsset = asset, aideoAsset.mediaType == .video {
+
+                let options = PHVideoRequestOptions()
+                options.version = .current
+                options.deliveryMode = .automatic
+                options.isNetworkAccessAllowed = true
+                
+                PHImageManager.default().requestAVAsset(forVideo: aideoAsset, options: options) { avasset,_,info in
+                    DispatchQueue.main.async {
+                        
+                        guard let assetUrl = avasset as? AVURLAsset else {
+                            return
+                        }
+                        SLTransferManager.share().startSendFile()
+                        let data = NSData.init(contentsOf: assetUrl.url) ?? NSData()
+                        let url = assetUrl.url.absoluteString
+                        let urls = url.split(separator: "/")
+
+                        if urls.count > 0,
+                           let name = aideoAsset.value(forKey: "filename") as? String,
+                           data.length > 0,
+                           let model =  SLTransferManager.share().createSendFileModel(withVideo: name, data: data as Data) {
+                            SLTransferManager.share().sendFiles([model]) { _,_ in }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 extension AppDelegate : UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        
+        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         var files:[SLFileModel] = []
         _ = urls.map({ url in
             if url.startAccessingSecurityScopedResource(),
-               let model = try? self.fileModel(with: url) {
+               let model = SLTransferManager.share().createSendFileModel(withPath: url.path) {
                 files.append(model)
                 url.stopAccessingSecurityScopedResource()
             }
         })
-        guard files.count > 0 else {
-            /*
-             sometimes the debugger will show "The view service did terminate with error: Error Domain=_UIViewServiceErrorDomain Code=1 "(null)" UserInfo={Terminated=disconnect method}"
-             then the file won't be choosen by app
-             */
-            return
-        }
-    }
-    
-    
-    private func fileModel(with documentUrl: URL) throws -> SLFileModel {
-        var path1 : String
-        if #available(iOS 16.0, *) {
-            path1 = documentUrl.path()
-        } else {
-            path1 = documentUrl.path
-        }
-        let dirs = path1.split(separator: "/")
-        guard !dirs.isEmpty else {
-            throw NSError(domain: NSCocoaErrorDomain, code: -999, userInfo: [NSLocalizedDescriptionKey:"文件路径错误"])
-        }
-        let fileName = String(dirs.last!)
-        let arr = String(dirs.last!).split(separator: ".")
-        guard arr.count > 1 else {
-            throw NSError(domain: NSCocoaErrorDomain, code: -999, userInfo: [NSLocalizedDescriptionKey:"文件名无法解析"])
-        }
-        let name = arr[0..<arr.count - 1].joined()
-        let extensionName = String(arr.last!)
-        let fm = FileManager()
-        let tempPath1 = try FileManager.tempPath()
-        try fm.copy(sourcePath: path1, desDirPath: tempPath1, renamed: fileName)
-        return SLFileModel(path: tempPath1 + "/\(fileName)", name: name, extensionName: extensionName, time: Int(Date().timeIntervalSince1970*1000))
+        SLTransferManager.share().sendFiles(files) { _, _ in }
     }
 }
 

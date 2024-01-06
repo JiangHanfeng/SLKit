@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29441C772B496931008C99DB /* SLFileTransferModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C6F2B496930008C99DB /* SLFileTransferModel.m */; };
+		29441C782B496931008C99DB /* SLWaitSendFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C712B496930008C99DB /* SLWaitSendFileModel.m */; };
+		29441C792B496931008C99DB /* SLLocalFileManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C732B496931008C99DB /* SLLocalFileManger.m */; };
+		29441C7A2B496931008C99DB /* SLTransferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C762B496931008C99DB /* SLTransferManager.m */; };
+		29441C812B496A72008C99DB /* SLFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C7C2B496A72008C99DB /* SLFileManager.m */; };
+		29441C822B496A72008C99DB /* SLLocalFileDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C802B496A72008C99DB /* SLLocalFileDBModel.m */; };
+		29441C852B496A9E008C99DB /* SLFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 29441C832B496A9E008C99DB /* SLFileModel.m */; };
 		4B0EC3842B479F0C00E01BBE /* SCLEndReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3832B479F0C00E01BBE /* SCLEndReq.swift */; };
 		4B0EC3882B47D02200E01BBE /* SCLSyncReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */; };
 		4B0EC38A2B47D9C000E01BBE /* SCLSyncResp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */; };
@@ -118,6 +125,21 @@
 		0EAC628545CAA7CE11A3FDBE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Example.debug.xcconfig"; path = "Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		18CE967A18D972234CC35A2A /* Pods_SLKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SLKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		29441C6E2B496930008C99DB /* SLWaitSendFileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLWaitSendFileModel.h; sourceTree = "<group>"; };
+		29441C6F2B496930008C99DB /* SLFileTransferModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFileTransferModel.m; sourceTree = "<group>"; };
+		29441C702B496930008C99DB /* SLTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLTransferManager.h; sourceTree = "<group>"; };
+		29441C712B496930008C99DB /* SLWaitSendFileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLWaitSendFileModel.m; sourceTree = "<group>"; };
+		29441C722B496931008C99DB /* SLHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLHeader.h; sourceTree = "<group>"; };
+		29441C732B496931008C99DB /* SLLocalFileManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLLocalFileManger.m; sourceTree = "<group>"; };
+		29441C742B496931008C99DB /* SLLocalFileManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLLocalFileManger.h; sourceTree = "<group>"; };
+		29441C752B496931008C99DB /* SLFileTransferModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileTransferModel.h; sourceTree = "<group>"; };
+		29441C762B496931008C99DB /* SLTransferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLTransferManager.m; sourceTree = "<group>"; };
+		29441C7C2B496A72008C99DB /* SLFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFileManager.m; sourceTree = "<group>"; };
+		29441C7D2B496A72008C99DB /* SLFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileManager.h; sourceTree = "<group>"; };
+		29441C7F2B496A72008C99DB /* SLLocalFileDBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLLocalFileDBModel.h; sourceTree = "<group>"; };
+		29441C802B496A72008C99DB /* SLLocalFileDBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLLocalFileDBModel.m; sourceTree = "<group>"; };
+		29441C832B496A9E008C99DB /* SLFileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SLFileModel.m; sourceTree = "<group>"; };
+		29441C842B496A9E008C99DB /* SLFileModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileModel.h; sourceTree = "<group>"; };
 		4B0EC3832B479F0C00E01BBE /* SCLEndReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLEndReq.swift; sourceTree = "<group>"; };
 		4B0EC3872B47D02200E01BBE /* SCLSyncReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncReq.swift; sourceTree = "<group>"; };
 		4B0EC3892B47D9C000E01BBE /* SCLSyncResp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncResp.swift; sourceTree = "<group>"; };
@@ -271,6 +293,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29441C7B2B496A72008C99DB /* FileManager */ = {
+			isa = PBXGroup;
+			children = (
+				29441C7C2B496A72008C99DB /* SLFileManager.m */,
+				29441C7D2B496A72008C99DB /* SLFileManager.h */,
+			);
+			path = FileManager;
+			sourceTree = "<group>";
+		};
+		29441C7E2B496A72008C99DB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				29441C7F2B496A72008C99DB /* SLLocalFileDBModel.h */,
+				29441C802B496A72008C99DB /* SLLocalFileDBModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		4B0EC3822B4795DF00E01BBE /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +368,19 @@
 		4B72F5A72B45B3EC00074E28 /* FileTransfer */ = {
 			isa = PBXGroup;
 			children = (
+				29441C842B496A9E008C99DB /* SLFileModel.h */,
+				29441C832B496A9E008C99DB /* SLFileModel.m */,
+				29441C7B2B496A72008C99DB /* FileManager */,
+				29441C7E2B496A72008C99DB /* Model */,
+				29441C752B496931008C99DB /* SLFileTransferModel.h */,
+				29441C6F2B496930008C99DB /* SLFileTransferModel.m */,
+				29441C722B496931008C99DB /* SLHeader.h */,
+				29441C742B496931008C99DB /* SLLocalFileManger.h */,
+				29441C732B496931008C99DB /* SLLocalFileManger.m */,
+				29441C702B496930008C99DB /* SLTransferManager.h */,
+				29441C762B496931008C99DB /* SLTransferManager.m */,
+				29441C6E2B496930008C99DB /* SLWaitSendFileModel.h */,
+				29441C712B496930008C99DB /* SLWaitSendFileModel.m */,
 				4B72F5D42B45BCC500074E28 /* NSString+Transition.h */,
 				4B72F5D52B45BCC500074E28 /* NSString+Transition.mm */,
 				4B72F5A82B45B3EC00074E28 /* SLFileIOModel.h */,
@@ -683,7 +736,7 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = CU2MX8X5N6;
+						DevelopmentTeam = 9CYW329KHD;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -849,17 +902,22 @@
 				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
 				4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */,
 				4B23D1F72B330B5C008724E5 /* SCLWelcomeViewController.swift in Sources */,
+				29441C822B496A72008C99DB /* SLLocalFileDBModel.m in Sources */,
 				4B33D2502B4548E4002B0C5B /* SCLSocketLoginReq.swift in Sources */,
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
 				4B0EC38A2B47D9C000E01BBE /* SCLSyncResp.swift in Sources */,
 				4B0EC3882B47D02200E01BBE /* SCLSyncReq.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
 				4BE140122B48271C00606BE6 /* SLAdjustingSortView.swift in Sources */,
+				29441C772B496931008C99DB /* SLFileTransferModel.m in Sources */,
+				29441C792B496931008C99DB /* SLLocalFileManger.m in Sources */,
 				4BE3B9512B3C320F00C48A71 /* SCLGetPairedDeviceResp.swift in Sources */,
 				4B2694F72B31347400B116BA /* SCLBaseViewController.swift in Sources */,
 				4B0EC3842B479F0C00E01BBE /* SCLEndReq.swift in Sources */,
 				4B14ACA32B3AB34F00FD0F9A /* SCLSocketRequest.swift in Sources */,
+				29441C852B496A9E008C99DB /* SLFileModel.m in Sources */,
 				4B33D2582B4575C5002B0C5B /* SCLScreenResp.swift in Sources */,
+				29441C812B496A72008C99DB /* SLFileManager.m in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
 				4BE1400E2B48271C00606BE6 /* SLAdustingControlAnimationView.swift in Sources */,
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
@@ -871,6 +929,7 @@
 				4B95D8722B4923860049355C /* SCLSyncMovePointResp.swift in Sources */,
 				4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
+				29441C782B496931008C99DB /* SLWaitSendFileModel.m in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
@@ -905,6 +964,7 @@
 				4B23D1EF2B330381008724E5 /* SCLGetAppPromptViewController.swift in Sources */,
 				4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */,
 				4B95D89D2B4950470049355C /* SCLSyncAirplayStateResp.swift in Sources */,
+				29441C7A2B496931008C99DB /* SLTransferManager.m in Sources */,
 				4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */,
@@ -1124,7 +1184,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 608124654EE78D1BA80409B2 /* Pods-SLKit_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = CU2MX8X5N6;
+				DEVELOPMENT_TEAM = 9CYW329KHD;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1148,7 +1208,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 540536ACE968C6C213F41F95 /* Pods-SLKit_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = CU2MX8X5N6;
+				DEVELOPMENT_TEAM = 9CYW329KHD;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",

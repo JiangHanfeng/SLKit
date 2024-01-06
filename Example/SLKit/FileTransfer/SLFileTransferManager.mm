@@ -76,7 +76,7 @@ FileTransfer ft;
     }
 }
 
-- (SLFileIOModel *)sendFileWithIp:(NSString *)ip controlPort:(int)controlPort dataPort:(int)dataPort rootPath:(NSString *)path device:(SLFreeStyleDevice *)device files:(NSArray<SLFileModel *> *)files{
+- (SLFileIOModel *)sendFileWithIp:(NSString *)ip controlPort:(int)controlPort deviceId:(NSString *)deviceId dataPort:(int)dataPort rootPath:(NSString *)path files:(NSArray<SLFileModel *> *)files{
     
     if(controlPort == 0 || dataPort == 0){
         NSLog(@"文件传输端口为空");
@@ -90,7 +90,7 @@ FileTransfer ft;
     }
     ft.RequestFileTransfer([ip toWString],controlPort,dataPort,0, fileLists, taskId);
     NSString *taskIdStr = [NSString stringWithWString:taskId];
-    SLFileIOModel *ioModel =  [[SLFileIOModel alloc] initWithTaskId:taskIdStr device:device files:files type:sendFile];
+    SLFileIOModel *ioModel =  [[SLFileIOModel alloc] initWithTaskId:taskIdStr deviceId:deviceId files:files type:sendFile];
     SLFileTransferFileModel *fileModel =  [[SLFileTransferFileModel alloc] initWithInnerPath:path
                                                                                       taskId:taskIdStr
                                                                                       ioModel:ioModel];

@@ -114,7 +114,7 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     
                 }, onCompleted: {
                     
-                }).disposed(by: disposeBag)
+                }).disposed(by: self.disposeBag)
             default:
                 break
             }

@@ -66,8 +66,8 @@ class SCLConnectionViewController: SCLBaseViewController {
                                     deviceId: SCLUtil.getDeviceId(),
                                     ip: sock.localHost ?? "",
                                     port1: 0,
-                                    port2: UInt16(SLFileTransferManager.share().controlPort),
-                                    port3: UInt16(SLFileTransferManager.share().dataPort))
+                                    port2: UInt16(SLTransferManager.share().controlPort),
+                                    port3: UInt16(SLTransferManager.share().dataPort))
                                 _ = try await SLSocketManager.shared.send(
                                     SCLSocketRequest(content: sync),
                                     from: sock,

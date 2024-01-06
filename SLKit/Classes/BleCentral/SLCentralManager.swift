@@ -27,7 +27,7 @@ public final class SLCentralManager: NSObject {
     
     public var state: CBManagerState = CBManagerState.unknown
     private var centralManager: CBCentralManager!
-    private lazy var queue: dispatch_queue_t = {
+    private lazy var queue: DispatchQueue = {
         let bundleId = Bundle.main.bundleIdentifier ?? ""
         let label = bundleId + ".ble"
         return DispatchQueue(label: label)

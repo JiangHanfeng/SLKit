@@ -212,8 +212,8 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
                 guard let self else { return }
                 self.heartbeatTimer?.invalidate()
                 self.heartbeatTimer = nil
-                self.heartbeatTimer = Timer(timeInterval: TimeInterval(1), target: self, selector: #selector(sendHeartbeat), userInfo: nil, repeats: true)
-                RunLoop.current.add(heartbeatTimer!, forMode: .commonModes)
+                self.heartbeatTimer = Timer(timeInterval: TimeInterval(1), target: self, selector: #selector(Self.sendHeartbeat), userInfo: nil, repeats: true)
+                RunLoop.current.add(self.heartbeatTimer!, forMode: .commonModes)
                 RunLoop.current.run()
             }
         }

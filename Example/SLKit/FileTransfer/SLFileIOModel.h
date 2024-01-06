@@ -13,8 +13,11 @@
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKScriptMessageHandler.h>
 #import <CoreLocation/CLLocationManager.h>
+
+
+#import "SLFileTransferModel.h"
 //#import "SLKit_Example-Swift.h"
-//@class SLFileModel;
+@class SLFileModel;
 @class SLFreeStyleDevice;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -45,8 +48,8 @@ typedef NS_ENUM(NSInteger,SLFileIOModelStatusType) {
 @property (nonatomic,strong) NSString *taskId;
 @property (nonatomic,assign) SLFileIOModelStatusType status;
 @property (nonatomic,assign) SLFileIOModelType type;
+@property (nonatomic,copy) NSString *deviceId;
 @property (nonatomic,copy) NSArray<SLFileModel *> *fileModels;
-@property (nonatomic,strong) SLFreeStyleDevice *deviceModel;
 @property (nonatomic,assign) float currentProgress;
 @property (nonatomic,assign) float transferLength;
 
@@ -54,7 +57,9 @@ typedef NS_ENUM(NSInteger,SLFileIOModelStatusType) {
 @property (nonatomic,copy) void(^updateProgressBlock)(float,float,float);
 @property (nonatomic,copy) void(^completeSendFileBlock)(SLFileModel *file);
 
-- (instancetype)initWithTaskId:(NSString *)taskId device:(SLFreeStyleDevice *)device files:(NSArray<SLFileModel *> *)files type:(SLFileIOModelType)type;
+- (instancetype)initWithTaskId:(NSString *)taskId deviceId:(NSString *)deviceId files:(NSArray<SLFileModel *> *)files type:(SLFileIOModelType)type;
+
+- (nullable SLFileTransferModel *)toFileTransferModel;
 
 @end
 

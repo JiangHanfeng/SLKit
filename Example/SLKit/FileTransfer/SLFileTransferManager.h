@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)deactivation;
 
-- (SLFileIOModel *)sendFileWithIp:(NSString *)ip controlPort:(int)controlPort dataPort:(int)dataPort rootPath:(NSString *)path device:(SLFreeStyleDevice *)device files:(NSArray<SLFileModel *> *)files;
+- (SLFileIOModel *)sendFileWithIp:(NSString *)ip controlPort:(int)controlPort deviceId:(NSString *)deviceId dataPort:(int)dataPort rootPath:(NSString *)path files:(NSArray<SLFileModel *> *)files;
 
 - (void)receiveFileWithIoModel:(SLFileIOModel *)model savepath:(NSString *)savepath accept:(BOOL)accept;
 

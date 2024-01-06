@@ -170,7 +170,7 @@ class SCLDeviceViewController: SCLBaseViewController {
 
     @IBAction private func onDisconnect() {
         if let sock = device?.localClient {
-            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
+//            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
                 SLSocketManager.shared.disconnect(sock) { [weak self] in
                     DispatchQueue.main.async {
@@ -199,10 +199,10 @@ class SCLDeviceViewController: SCLBaseViewController {
         Task {
             do {
                 if isInitiative {
-                    _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLFileTransferManager.share().controlPort), port3: UInt16(SLFileTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self)
+                    _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLTransferManager.share().controlPort), port3: UInt16(SLTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self)
                 }
                 _ = try await SLSocketManager.shared.send(SCLInitReq(mac: SCLUtil.getBTMac() ?? ""), from: socket, for: SCLInitResp.self)
-                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
+//                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
                 present(SCLAirPlayGuideViewController(onCancel: {
                     let completion = {
                         SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
@@ -224,7 +224,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         guard let socket = device?.localClient else {
             return
         }
-        SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket) { _ in }
+//        SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket) { _ in }
     }
     
     private func submitPairResult(pairedDevice: SCLPCPairedDevice, result: Bool) {
