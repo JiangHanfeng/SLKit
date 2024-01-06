@@ -86,6 +86,7 @@ FileTransfer ft;
     std::list<std::wstring> fileLists = std::list<std::wstring>();
     for (SLFileModel *file in files) {
         NSString *filePath = [NSString stringWithFormat:@"%@%@",path,[file fullPath]];
+        NSLog(@"filePath = %@",filePath);
         fileLists.push_front([filePath toWString]);
     }
     ft.RequestFileTransfer([ip toWString],controlPort,dataPort,0, fileLists, taskId);
