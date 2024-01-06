@@ -17,7 +17,7 @@ class SCLConnectionViewController: SCLBaseViewController {
         case initialize
         case scanStarting
         case scanning(_ previewLayer: AVCaptureVideoPreviewLayer)
-        case connecting(_ host: String, _ port: UInt16, _ mac: String, _ name: String)
+        case connecting(_ qrInfo: SCLQRResult)
         case cancelConnect
         
         var rawValue: Int {
@@ -28,7 +28,7 @@ class SCLConnectionViewController: SCLBaseViewController {
                 return 1
             case .scanning(_):
                 return 2
-            case .connecting(_, _, _, _):
+            case .connecting(_):
                 return 3
             case .cancelConnect:
                 return 4
@@ -46,10 +46,10 @@ class SCLConnectionViewController: SCLBaseViewController {
             if state.rawValue != oldValue.rawValue {
                 updateViews()
                 switch state {
-                case .connecting(let host, let port, let mac, let name):
+                case .connecting(let info):
                     Task {
                         do {
-                            let sock = try await SLSocketManager.shared.connect(host: host, port: port, heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestValue: "ping", reponseValue: "pong"))
+                            let sock = try await SLSocketManager.shared.connect(host: info.ip, port: UInt16(info.port)!, heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestValue: "ping", reponseValue: "pong"))
                             sock.unexpectedDisconnectHandler = { [weak self] error in
                                 DispatchQueue.main.async {
                                     self?.state = .initialize
@@ -61,13 +61,29 @@ class SCLConnectionViewController: SCLBaseViewController {
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
                             
                             if resp.state == 1 {
-                                _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncReq(deviceName: SCLUtil.getDeviceName(), deviceId: SCLUtil.getDeviceMac().split(separator: ":").joined(), ip: sock.localHost ?? "", port1: 0, port2: UInt16(SLFileTransferManager.share().controlPort), port3: UInt16(SLFileTransferManager.share().dataPort))), from: sock, for: SCLSyncResp.self)
-                                let device = SLDevice(id: resp.dev_id, name: resp.dev_name, mac: mac, localClient: sock)
+                                let sync = SCLSyncReq(
+                                    deviceName: SCLUtil.getDeviceName(),
+                                    deviceId: SCLUtil.getDeviceId(),
+                                    ip: sock.localHost ?? "",
+                                    port1: 0,
+                                    port2: UInt16(SLFileTransferManager.share().controlPort),
+                                    port3: UInt16(SLFileTransferManager.share().dataPort))
+                                _ = try await SLSocketManager.shared.send(
+                                    SCLSocketRequest(content: sync),
+                                    from: sock,
+                                    for: SCLSyncResp.self)
+                                let device = SLDevice(
+                                    id: resp.dev_id,
+                                    name: resp.dev_name,
+                                    mac: info.deviceMac,
+                                    bleName: info.bleName.isEmpty ? info.deviceName : info.bleName,
+                                    localClient: sock
+                                )
                                 self.connectedCallback?(device)
                                 self.state = .initialize
                             } else {
                                 self.state = .initialize
-                                self.toast("连接失败，请查看连接须知")
+                                self.toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
                                 sock.disconnect()
                             }
                         } catch let e {
@@ -78,10 +94,10 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 case .taskCanceled:
                                     break
                                 default:
-                                    self.toast("连接失败，请查看连接须知")
+                                    self.toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
                                 }
                             } else {
-                                self.toast("连接失败，请查看连接须知")
+                                self.toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
                             }
                         }
                     }
@@ -225,7 +241,7 @@ class SCLConnectionViewController: SCLBaseViewController {
             cameraView.layer.addSublayer(maskLayer)
             cameraView.layer.addSublayer(cornerBorderLayer)
             cameraView.isHidden = false
-        case .connecting(_, _, _, _):
+        case .connecting(_):
             bottomButton.setImage(nil, for: .normal)
             bottomButton.setTitle("取消", for: .normal)
             bottomButton.setTitleColor(UIColor(red: 25/255.0, green: 25/255.0, blue: 25/255.0, alpha: 1), for: .normal)
@@ -284,9 +300,9 @@ class SCLConnectionViewController: SCLBaseViewController {
             stopCamera {
                 self.state = .initialize
             }
-        case .connecting(let host, let port, _, _):
+        case .connecting(let info):
             state = .cancelConnect
-            SLSocketManager.shared.cancelConnect(host: host, port: port) { [weak self] in
+            SLSocketManager.shared.cancelConnect(host: info.ip, port: UInt16(info.port)!) { [weak self] in
                 self?.state = .initialize
             }
         case .cancelConnect:
@@ -295,7 +311,13 @@ class SCLConnectionViewController: SCLBaseViewController {
     }
     
     public func startConnect(host: String, port: UInt16, mac: String, name: String) {
-        state = .connecting(host, port, mac, name)
+        var info = SCLQRResult()
+        info.ip = host
+        info.port = "\(port)"
+        info.deviceMac = mac
+        info.deviceName = name
+        info.bleName = name
+        state = .connecting(info)
     }
     
     private func startAnimation() {
@@ -414,8 +436,8 @@ extension SCLConnectionViewController: AVCaptureMetadataOutputObjectsDelegate {
         if let string = object.stringValue, let urlEncoded = string.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: urlEncoded), let parameters = url.parameters, let result = SCLQRResult.deserialize(from: parameters), result.available {
             print("识别到可连接设备:\(result.deviceName)")
             DispatchQueue.main.async {
-                if let port = UInt16(result.port) {
-                    self.state = .connecting(result.ip, port, result.deviceMac, result.deviceName)
+                if let _ = UInt16(result.port) {
+                    self.state = .connecting(result)
                 } else {
                     self.state = .initialize
                     self.toast("端口号错误")

@@ -13,23 +13,27 @@ import SLKit
 class SCLPairGuideViewController: SCLBaseViewController {
     
     @IBOutlet private weak var scrollView: UIScrollView!
+    @IBOutlet private weak var hintLabel: UILabel!
     @IBOutlet private weak var cancelBtn: UIButton!
     @IBOutlet private weak var pairBtn: UIButton!
     @IBOutlet private weak var pairedBtn: UIButton!
     @IBOutlet private weak var pairedBtnHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var pairedBtnBottomConstraint: NSLayoutConstraint!
     
+    private var bleName: String?
     private var cancel: (() -> Void)?
     private var pair: (() -> Void)?
     private var paired: ((_ button: UIButton) -> Void)?
     private var scrollToNext: SLCancelableWork?
     
     convenience init(
+        bleName: String,
         onCancel: @escaping (() -> Void),
         onPair: @escaping (() -> Void),
         onPaired: @escaping ((_ button: UIButton) -> Void)
     ) {
         self.init()
+        self.bleName = bleName
         self.cancel = onCancel
         self.pair = onPair
         self.paired = onPaired
@@ -37,6 +41,10 @@ class SCLPairGuideViewController: SCLBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let attributedText = NSMutableAttributedString(attributedString: hintLabel.attributedText!)
+        let range = attributedText.mutableString.range(of: "XXXXXX")
+        attributedText.replaceCharacters(in: range, with: bleName ?? "")
+        hintLabel.attributedText = attributedText
         cancelBtn.layer.borderColor = UIColor.init(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1).cgColor
         pairedBtn.setBackgroundColor(color: UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1), forState: .disabled)
         pairedBtn.setBackgroundColor(color: UIColor(red: 54/255.0, green: 120/255.0, blue: 1, alpha: 0.4), forState: .disabled)

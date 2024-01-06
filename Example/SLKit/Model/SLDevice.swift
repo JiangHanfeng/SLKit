@@ -39,11 +39,13 @@ import SLKit
     let id: String
     let name: String
     let mac: String
+    let bleName: String
     let localClient: SLSocketClient
-    init(id: String, name: String, mac: String, localClient: SLSocketClient) {
+    init(id: String, name: String, mac: String, bleName: String, localClient: SLSocketClient) {
         self.id = id
         self.name = name
         self.mac = mac
+        self.bleName = bleName
         self.localClient = localClient
     }
     

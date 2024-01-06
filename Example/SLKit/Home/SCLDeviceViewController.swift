@@ -86,8 +86,8 @@ class SCLDeviceViewController: SCLBaseViewController {
                         self.toast("投屏成功")
                         let mac = SCLUtil.getBTMac()
                         if mac?.isEmpty ?? true {
-                            if let socket = self.device?.localClient {
-                                self.present(SCLPairViewController(sock: socket), animated: true)
+                            if let device = self.device {
+                                self.present(SCLPairViewController(device: device), animated: true)
                             } else {
                                 SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
                             }
@@ -139,8 +139,8 @@ class SCLDeviceViewController: SCLBaseViewController {
                         self.submitPairResult(pairedDevice: newDevices.first!, result: true)
                     } else {
                         // MARK: 弹出列表供用户选择
-                        if let socket = self.device?.localClient {
-                            self.present(SCLPairViewController(sock: socket), animated: true)
+                        if let device = self.device {
+                            self.present(SCLPairViewController(device: device), animated: true)
                         } else {
                             SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
                         }
@@ -170,9 +170,7 @@ class SCLDeviceViewController: SCLBaseViewController {
 
     @IBAction private func onDisconnect() {
         if let sock = device?.localClient {
-            SLSocketManager.shared.send(SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
-                
-            }
+            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
                 SLSocketManager.shared.disconnect(sock) { [weak self] in
                     DispatchQueue.main.async {
@@ -204,9 +202,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                     _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLFileTransferManager.share().controlPort), port3: UInt16(SLFileTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self)
                 }
                 _ = try await SLSocketManager.shared.send(SCLInitReq(mac: SCLUtil.getBTMac() ?? ""), from: socket, for: SCLInitResp.self)
-                SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
-
-                }
+                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
                 present(SCLAirPlayGuideViewController(onCancel: {
                     let completion = {
                         SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
@@ -228,9 +224,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         guard let socket = device?.localClient else {
             return
         }
-        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
-            
-        }
+        SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket) { _ in }
     }
     
     private func submitPairResult(pairedDevice: SCLPCPairedDevice, result: Bool) {

@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLPairGuideViewController" customModule="SLKit_Example" customModuleProvider="target">
             <connections>
                 <outlet property="cancelBtn" destination="E5B-Xp-JOm" id="HFM-Xc-tTh"/>
+                <outlet property="hintLabel" destination="d4t-A1-whu" id="Q1t-Av-KS3"/>
                 <outlet property="pairBtn" destination="OyY-4Y-K8J" id="vee-fi-Vp4"/>
                 <outlet property="pairedBtn" destination="J63-zl-J0s" id="lTE-ct-S2J"/>
                 <outlet property="pairedBtnBottomConstraint" destination="Bvm-Iw-vqz" id="ELs-pa-W64"/>

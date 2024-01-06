@@ -352,8 +352,10 @@ class SLAdjustingViewController: SCLBaseViewController {
             }
             DispatchQueue.main.async {
                 if let error {
+                    SLLog.debug("开启校准失败：\(error)")
                     self?.toast(error)
                 } else {
+                    SLLog.debug("开启校准成功")
                     self?.status = .adjusting
                     self?.upView()
                     self?.adjustingView.startAdjustingControl()
@@ -495,7 +497,7 @@ class SLAdjustingViewController: SCLBaseViewController {
     @objc
     func btnPrssed(){
         if self.status == .start {
-            manager.startAdjustingControl()
+//            manager.startAdjustingControl()
             self.adjustingView.startAdjustingOrientation()
             self.status = .horizontalOri
             self.upView()

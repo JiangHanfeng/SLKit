@@ -11,16 +11,16 @@ import SLKit
 
 class SCLPairViewController: SCLBaseViewController {
     
-    private var socket: SLSocketClient?
+    private var device: SLDevice?
     
     private var pcPairedDevices: [SCLPCPairedDevice]?
     
     private var a2dpMonitorTask: SLA2DPMonitorTask?
     private var a2dpDevice: SLA2DPDevice?
     
-    convenience init(sock: SLSocketClient, deviceList: [SCLPCPairedDevice]? = nil) {
+    convenience init(device: SLDevice, deviceList: [SCLPCPairedDevice]? = nil) {
         self.init()
-        self.socket = sock
+        self.device = device
         self.pcPairedDevices = deviceList
         self.modalPresentationStyle = .overFullScreen
         self.modalTransitionStyle = .crossDissolve
@@ -32,8 +32,8 @@ class SCLPairViewController: SCLBaseViewController {
     }
     
     private lazy var pairAlertVc = {
-        return SCLPairGuideViewController { [unowned self] in
-            self.dismiss(animated: true)
+        return SCLPairGuideViewController(bleName: device?.bleName ?? "") { [unowned self] in
+            self.presentingViewController?.dismiss(animated: true)
         } onPair: { [unowned self] in
             // MARK: 获取pc的已配对列表，开启A2DP检测，跳转到设置
             self.getPairedDevices(onPaired: false, button: nil)
@@ -75,7 +75,7 @@ class SCLPairViewController: SCLBaseViewController {
     }
     
     private func getPairedDevices(onPaired: Bool, button: UIButton?) {
-        guard let socket else {
+        guard let socket = device?.localClient else {
             dismiss(animated: true) {
                 self.presentingViewController?.toast("连接已断开")
             }
@@ -133,7 +133,7 @@ class SCLPairViewController: SCLBaseViewController {
     }
     
     private func requestPairVerification(device: SCLPCPairedDevice, button: UIButton?) {
-        guard let socket else {
+        guard let socket = self.device?.localClient else {
             let presentingVc = presentingViewController
             presentingVc?.dismiss(animated: true) {
                 presentingVc?.toast("连接已断开")
@@ -175,7 +175,7 @@ class SCLPairViewController: SCLBaseViewController {
             presentingViewController?.dismiss(animated: true, completion: completion)
         }
         
-        if let socket {
+        if let socket = self.device?.localClient {
             SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: device, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
                 guard let self else { return }
                 switch result {
@@ -199,7 +199,7 @@ class SCLPairViewController: SCLBaseViewController {
     
     /// 跳转至设备列表
     private func transitionToPhonePicker(devices: [SCLPCPairedDevice]) {
-        guard let socket else {
+        guard let socket = self.device?.localClient else {
             presentingViewController?.dismiss(animated: true, completion: {
                 self.presentingViewController?.toast("已断开连接")
             })

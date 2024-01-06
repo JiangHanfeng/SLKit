@@ -50,5 +50,7 @@
 "SLAdjustingTimeoutHintSettingTitle" = "前往系统设置";
 
 "SLCancelTitle" = "取消";
+"SLConnectionFailedGeneralHint" = "连接失败，请查看连接须知";
+"SLConnectionRefused" = "连接失败：PC拒绝连接";
 "SLNextTitle" = "下一步";
 

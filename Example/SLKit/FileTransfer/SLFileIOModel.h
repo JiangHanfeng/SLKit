@@ -14,7 +14,7 @@
 #import <WebKit/WKScriptMessageHandler.h>
 #import <CoreLocation/CLLocationManager.h>
 //#import "SLKit_Example-Swift.h"
-@class SLFileModel;
+//@class SLFileModel;
 @class SLFreeStyleDevice;
 
 NS_ASSUME_NONNULL_BEGIN
