@@ -14,6 +14,9 @@ enum SCLUserDefaultKey: String {
     case agreedPrivacyPolicy = "agreedPrivacyPolicy"
 }
 
+public let enterForegroundNoti: Notification.Name =  NSNotification.Name.init("enterForeground")
+public let enterBackgroundNoti: Notification.Name =  NSNotification.Name.init("enterBackground")
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -22,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var dateFormatter = DateFormatter()
     
     private var backgroundId: UIBackgroundTaskIdentifier?
+    fileprivate var backgroundTask = UIBackgroundTaskInvalid
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SLLog.prepare()
@@ -72,19 +76,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 //        print("\(dateFormatter.string(from: Date())):程序已进入后台\n开启后台保活任务")
-        SLLog.debug("程序已进入后台")
-        applyTimeForBackgroundTask()
+//        SLLog.debug("程序已进入后台")
+//        applyTimeForBackgroundTask()
+        SLKeepAliveManager.shared.enterBackground()
+        NotificationCenter.default.post(Notification(name: enterBackgroundNoti))
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 //        print("\(dateFormatter.string(from: Date())):程序将进入前台")
-        SLLog.debug("程序将进入前台")
-        if let backgroundId, backgroundId != UIBackgroundTaskInvalid {
-            application.endBackgroundTask(backgroundId)
-            self.backgroundId = nil
-            SLLog.debug("终止后台任务")
-        }
+//        SLLog.debug("程序将进入前台")
+//        if let backgroundId, backgroundId != UIBackgroundTaskInvalid {
+//            application.endBackgroundTask(backgroundId)
+//            self.backgroundId = nil
+//            SLLog.debug("终止后台任务")
+//        }
+        SLKeepAliveManager.shared.enterForeground()
+        NotificationCenter.default.post(Notification(name: enterForegroundNoti))
+        backgroundTask = UIBackgroundTaskInvalid
+        application.endBackgroundTask(backgroundTask)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -120,6 +130,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate {
+    
+    func backgroundRun() {
+        let application = UIApplication.shared
+        if backgroundTask == UIBackgroundTaskInvalid {
+            let begintime = CFAbsoluteTimeGetCurrent()
+            SLLog.debug("申请后台运行:\(begintime)")
+            backgroundTask = application.beginBackgroundTask(expirationHandler: {
+                let endtime = CFAbsoluteTimeGetCurrent()
+                SLLog.debug("===========后台任务结束了==========时间： \(endtime - begintime)")
+                application.endBackgroundTask(self.backgroundTask)
+                self.backgroundTask = UIBackgroundTaskInvalid
+            })
+        }
+    }
     
     private func configFileTransfer(){
         SLTransferManager.share().config(withDeviceId: SCLUtil.getDeviceId(),
@@ -197,7 +221,7 @@ extension AppDelegate {
                              "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
         let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
-        vc.modalPresentationStyle = .overFullScreen
+        vc.modalPresentationStyle = .fullScreen
         vc.delegate = self
         vc.allowsMultipleSelection = true
         vc.navigationController?.navigationBar.barTintColor = .white

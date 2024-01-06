@@ -73,6 +73,10 @@
 		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
 		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
 		4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */; };
+		4BBA6A9B2B4988C100E207F5 /* silentAudio.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4BBA6A982B4988C100E207F5 /* silentAudio.m4a */; };
+		4BBA6A9C2B4988C100E207F5 /* SLBLEBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A992B4988C100E207F5 /* SLBLEBackgroundTask.swift */; };
+		4BBA6A9D2B4988C100E207F5 /* SLBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A9A2B4988C100E207F5 /* SLBackgroundTask.swift */; };
+		4BBA6A9F2B498B3900E207F5 /* SLKeepAliveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */; };
 		4BC2DFAE2B48E81D00F82972 /* SLAdjustingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */; };
 		4BC2DFB12B48EBF700F82972 /* SCLAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */; };
 		4BC2DFB32B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */; };
@@ -224,6 +228,10 @@
 		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
 		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
 		4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDeviceBuilder.swift; sourceTree = "<group>"; };
+		4BBA6A982B4988C100E207F5 /* silentAudio.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silentAudio.m4a; sourceTree = "<group>"; };
+		4BBA6A992B4988C100E207F5 /* SLBLEBackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLBLEBackgroundTask.swift; sourceTree = "<group>"; };
+		4BBA6A9A2B4988C100E207F5 /* SLBackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLBackgroundTask.swift; sourceTree = "<group>"; };
+		4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLKeepAliveManager.swift; sourceTree = "<group>"; };
 		4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingViewController.swift; sourceTree = "<group>"; };
 		4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertViewController.swift; sourceTree = "<group>"; };
 		4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncCalibrationStateReq.swift; sourceTree = "<group>"; };
@@ -509,6 +517,17 @@
 			path = Pair;
 			sourceTree = "<group>";
 		};
+		4BBA6A972B4988C100E207F5 /* BackgroundTask */ = {
+			isa = PBXGroup;
+			children = (
+				4BBA6A982B4988C100E207F5 /* silentAudio.m4a */,
+				4BBA6A992B4988C100E207F5 /* SLBLEBackgroundTask.swift */,
+				4BBA6A9A2B4988C100E207F5 /* SLBackgroundTask.swift */,
+				4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */,
+			);
+			path = BackgroundTask;
+			sourceTree = "<group>";
+		};
 		4BC2DFAF2B48EBE500F82972 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +601,7 @@
 		607FACD21AFB9204008FA782 /* Example for SLKit */ = {
 			isa = PBXGroup;
 			children = (
+				4BBA6A972B4988C100E207F5 /* BackgroundTask */,
 				4BC2DFAF2B48EBE500F82972 /* Alert */,
 				4BE13FFD2B48271C00606BE6 /* Adusting */,
 				4B72F5A72B45B3EC00074E28 /* FileTransfer */,
@@ -780,6 +800,7 @@
 				4B23D1F42B3306D8008724E5 /* SCLRequestPermissionViewController.xib in Resources */,
 				4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */,
 				4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */,
+				4BBA6A9B2B4988C100E207F5 /* silentAudio.m4a in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				4BE13FF92B4826AC00606BE6 /* Localizable.strings in Resources */,
 				4B4290EB2B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib in Resources */,
@@ -929,6 +950,7 @@
 				4B95D8722B4923860049355C /* SCLSyncMovePointResp.swift in Sources */,
 				4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
+				4BBA6A9F2B498B3900E207F5 /* SLKeepAliveManager.swift in Sources */,
 				29441C782B496931008C99DB /* SLWaitSendFileModel.m in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
@@ -953,6 +975,7 @@
 				4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */,
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
 				4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */,
+				4BBA6A9C2B4988C100E207F5 /* SLBLEBackgroundTask.swift in Sources */,
 				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
 				4B14ACA52B3ABC7000FD0F9A /* SCLSocketResponse.swift in Sources */,
 				4BDE22E42B31407600D1A50C /* SCLPairGuideViewController.swift in Sources */,
@@ -972,6 +995,7 @@
 				4B95D86E2B4919560049355C /* SCLSyncCalibrationStateResp.swift in Sources */,
 				4B2CA38E2B301DCA00D7F024 /* SCLDeviceViewController.swift in Sources */,
 				4B23D1F32B3306D8008724E5 /* SCLRequestPermissionViewController.swift in Sources */,
+				4BBA6A9D2B4988C100E207F5 /* SLBackgroundTask.swift in Sources */,
 				4B2CA3972B302B5A00D7F024 /* SCLExtension.swift in Sources */,
 				4B95D8702B49221E0049355C /* SCLSyncMovePointReq.swift in Sources */,
 				4B72F5CB2B45B3EC00074E28 /* SLFileTransferManager.mm in Sources */,

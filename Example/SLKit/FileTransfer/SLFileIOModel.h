@@ -13,6 +13,7 @@
 #import <WebKit/WKUIDelegate.h>
 #import <WebKit/WKScriptMessageHandler.h>
 #import <CoreLocation/CLLocationManager.h>
+#import <CoreBluetooth/CBPeripheralManager.h>
 
 
 #import "SLFileTransferModel.h"
