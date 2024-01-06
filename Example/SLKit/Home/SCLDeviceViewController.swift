@@ -22,6 +22,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var connectionStateLabel: UILabel!
     @IBOutlet weak var disconenctBtn: UIButton!
     @IBOutlet weak var airplayBtn: UIButton!
+    @IBOutlet weak var sendPhotoView: UIView!
     @IBOutlet weak var fileTransferView: UIView!
     
     private var device: SLDevice?
@@ -160,9 +161,6 @@ class SCLDeviceViewController: SCLBaseViewController {
             }
         })
         SLSocketManager.shared.addClientUnhandledDataHandler(socketDataListener!)
-//        DispatchQueue.global().async {
-//            SLFileTransferManager.share().activate(withDeviceId: SCLUtil.getDeviceMac(), deviceName: SCLUtil.getDeviceName(), bufferSize: 1024 * 1024 * 2, outTime: 5)
-//        }
         if let socket = device?.localClient {
             SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLTransferManager.share().controlPort), port3: UInt16(SLTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self) { result in
                 switch result {
@@ -174,9 +172,13 @@ class SCLDeviceViewController: SCLBaseViewController {
             }
         }
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onFileTransfer))
+        let tap1 = UITapGestureRecognizer(target: self, action: #selector(onSendPhoto))
+        sendPhotoView.isUserInteractionEnabled = true
+        sendPhotoView.addGestureRecognizer(tap1)
+        
+        let tap2 = UITapGestureRecognizer(target: self, action: #selector(onFileTransfer))
         fileTransferView.isUserInteractionEnabled = true
-        fileTransferView.addGestureRecognizer(tap)
+        fileTransferView.addGestureRecognizer(tap2)
     }
 
     private func startReconnect() {
@@ -185,7 +187,7 @@ class SCLDeviceViewController: SCLBaseViewController {
 
     @IBAction private func onDisconnect() {
         if let sock = device?.localClient {
-//            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
+            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
                 SLSocketManager.shared.disconnect(sock) { [weak self] in
                     DispatchQueue.main.async {
@@ -207,6 +209,10 @@ class SCLDeviceViewController: SCLBaseViewController {
         }
     }
     
+    @objc private func onSendPhoto() {
+        (UIApplication.shared.delegate as? AppDelegate)?.sendPhoto()
+    }
+    
     @objc private func onFileTransfer() {
         (UIApplication.shared.delegate as? AppDelegate)?.selectFile()
     }
@@ -221,7 +227,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                     _ = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLScreenReq(ip: SLNetworkManager.shared.ipv4OfWifi ?? "", port1: 0, port2: UInt16(SLTransferManager.share().controlPort), port3: UInt16(SLTransferManager.share().dataPort))), from: socket, for: SCLScreenResp.self)
                 }
                 _ = try await SLSocketManager.shared.send(SCLInitReq(mac: SCLUtil.getBTMac() ?? ""), from: socket, for: SCLInitResp.self)
-//                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
+                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
                 present(SCLAirPlayGuideViewController(onCancel: {
                     let completion = {
                         SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
@@ -243,7 +249,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         guard let socket = device?.localClient else {
             return
         }
-//        SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket) { _ in }
+        SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket) { _ in }
     }
     
     private func submitPairResult(pairedDevice: SCLPCPairedDevice, result: Bool) {

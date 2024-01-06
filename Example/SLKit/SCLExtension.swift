@@ -232,6 +232,8 @@ extension UIColor {
     }
 }
 
+let screenHeight: CGFloat = UIScreen.main.bounds.height
+let screenWidth: CGFloat = UIScreen.main.bounds.width
 extension UIDevice {
     class func heightOfAddtionHeader() -> CGFloat {
         if UIDevice.current.isIPhoneXorLater() {

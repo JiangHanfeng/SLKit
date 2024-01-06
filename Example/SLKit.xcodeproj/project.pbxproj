@@ -77,6 +77,13 @@
 		4BBA6A9C2B4988C100E207F5 /* SLBLEBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A992B4988C100E207F5 /* SLBLEBackgroundTask.swift */; };
 		4BBA6A9D2B4988C100E207F5 /* SLBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A9A2B4988C100E207F5 /* SLBackgroundTask.swift */; };
 		4BBA6A9F2B498B3900E207F5 /* SLKeepAliveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */; };
+		4BBA6AA12B49952C00E207F5 /* SLFilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA02B49952C00E207F5 /* SLFilesViewController.swift */; };
+		4BBA6AA92B4996AF00E207F5 /* SLReceiveFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA32B4996AF00E207F5 /* SLReceiveFileListView.swift */; };
+		4BBA6AAA2B4996AF00E207F5 /* SLSendFileListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA42B4996AF00E207F5 /* SLSendFileListView.swift */; };
+		4BBA6AAB2B4996AF00E207F5 /* SLReceiveFileProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA52B4996AF00E207F5 /* SLReceiveFileProgressView.swift */; };
+		4BBA6AAC2B4996AF00E207F5 /* SLFileListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA72B4996AF00E207F5 /* SLFileListTableViewCell.swift */; };
+		4BBA6AAD2B4996AF00E207F5 /* SLReceivingFileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AA82B4996AF00E207F5 /* SLReceivingFileTableViewCell.swift */; };
+		4BBA6AAF2B49986E00E207F5 /* SLFileOperateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBA6AAE2B49986E00E207F5 /* SLFileOperateModel.swift */; };
 		4BC2DFAE2B48E81D00F82972 /* SLAdjustingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */; };
 		4BC2DFB12B48EBF700F82972 /* SCLAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */; };
 		4BC2DFB32B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */; };
@@ -232,6 +239,13 @@
 		4BBA6A992B4988C100E207F5 /* SLBLEBackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLBLEBackgroundTask.swift; sourceTree = "<group>"; };
 		4BBA6A9A2B4988C100E207F5 /* SLBackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLBackgroundTask.swift; sourceTree = "<group>"; };
 		4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLKeepAliveManager.swift; sourceTree = "<group>"; };
+		4BBA6AA02B49952C00E207F5 /* SLFilesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFilesViewController.swift; sourceTree = "<group>"; };
+		4BBA6AA32B4996AF00E207F5 /* SLReceiveFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLReceiveFileListView.swift; sourceTree = "<group>"; };
+		4BBA6AA42B4996AF00E207F5 /* SLSendFileListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSendFileListView.swift; sourceTree = "<group>"; };
+		4BBA6AA52B4996AF00E207F5 /* SLReceiveFileProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLReceiveFileProgressView.swift; sourceTree = "<group>"; };
+		4BBA6AA72B4996AF00E207F5 /* SLFileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFileListTableViewCell.swift; sourceTree = "<group>"; };
+		4BBA6AA82B4996AF00E207F5 /* SLReceivingFileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLReceivingFileTableViewCell.swift; sourceTree = "<group>"; };
+		4BBA6AAE2B49986E00E207F5 /* SLFileOperateModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLFileOperateModel.swift; sourceTree = "<group>"; };
 		4BC2DFAD2B48E81D00F82972 /* SLAdjustingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAdjustingViewController.swift; sourceTree = "<group>"; };
 		4BC2DFB02B48EBF700F82972 /* SCLAlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertViewController.swift; sourceTree = "<group>"; };
 		4BC2DFB22B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSyncCalibrationStateReq.swift; sourceTree = "<group>"; };
@@ -304,8 +318,8 @@
 		29441C7B2B496A72008C99DB /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
-				29441C7C2B496A72008C99DB /* SLFileManager.m */,
 				29441C7D2B496A72008C99DB /* SLFileManager.h */,
+				29441C7C2B496A72008C99DB /* SLFileManager.m */,
 			);
 			path = FileManager;
 			sourceTree = "<group>";
@@ -313,6 +327,7 @@
 		29441C7E2B496A72008C99DB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4BBA6AAE2B49986E00E207F5 /* SLFileOperateModel.swift */,
 				29441C7F2B496A72008C99DB /* SLLocalFileDBModel.h */,
 				29441C802B496A72008C99DB /* SLLocalFileDBModel.m */,
 			);
@@ -376,6 +391,8 @@
 		4B72F5A72B45B3EC00074E28 /* FileTransfer */ = {
 			isa = PBXGroup;
 			children = (
+				4BBA6AA22B49969A00E207F5 /* View */,
+				4BBA6AA02B49952C00E207F5 /* SLFilesViewController.swift */,
 				29441C842B496A9E008C99DB /* SLFileModel.h */,
 				29441C832B496A9E008C99DB /* SLFileModel.m */,
 				29441C7B2B496A72008C99DB /* FileManager */,
@@ -526,6 +543,26 @@
 				4BBA6A9E2B498B3900E207F5 /* SLKeepAliveManager.swift */,
 			);
 			path = BackgroundTask;
+			sourceTree = "<group>";
+		};
+		4BBA6AA22B49969A00E207F5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4BBA6AA62B4996AF00E207F5 /* cell */,
+				4BBA6AA32B4996AF00E207F5 /* SLReceiveFileListView.swift */,
+				4BBA6AA52B4996AF00E207F5 /* SLReceiveFileProgressView.swift */,
+				4BBA6AA42B4996AF00E207F5 /* SLSendFileListView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4BBA6AA62B4996AF00E207F5 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				4BBA6AA72B4996AF00E207F5 /* SLFileListTableViewCell.swift */,
+				4BBA6AA82B4996AF00E207F5 /* SLReceivingFileTableViewCell.swift */,
+			);
+			path = cell;
 			sourceTree = "<group>";
 		};
 		4BC2DFAF2B48EBE500F82972 /* Alert */ = {
@@ -919,6 +956,7 @@
 			files = (
 				4B2694EF2B30448200B116BA /* SCLSettingCellModel.swift in Sources */,
 				4BC2DFAE2B48E81D00F82972 /* SLAdjustingViewController.swift in Sources */,
+				4BBA6AAA2B4996AF00E207F5 /* SLSendFileListView.swift in Sources */,
 				4BC2DFB12B48EBF700F82972 /* SCLAlertViewController.swift in Sources */,
 				4B2CA3822B2FD6A700D7F024 /* SCLHomeViewController.swift in Sources */,
 				4B72F5D62B45BCC500074E28 /* NSString+Transition.mm in Sources */,
@@ -928,6 +966,7 @@
 				4B4290EA2B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift in Sources */,
 				4B0EC38A2B47D9C000E01BBE /* SCLSyncResp.swift in Sources */,
 				4B0EC3882B47D02200E01BBE /* SCLSyncReq.swift in Sources */,
+				4BBA6AA92B4996AF00E207F5 /* SLReceiveFileListView.swift in Sources */,
 				4B4290E12B38196E000EE7AD /* SCLPhonePickerCell.swift in Sources */,
 				4BE140122B48271C00606BE6 /* SLAdjustingSortView.swift in Sources */,
 				29441C772B496931008C99DB /* SLFileTransferModel.m in Sources */,
@@ -937,9 +976,11 @@
 				4B0EC3842B479F0C00E01BBE /* SCLEndReq.swift in Sources */,
 				4B14ACA32B3AB34F00FD0F9A /* SCLSocketRequest.swift in Sources */,
 				29441C852B496A9E008C99DB /* SLFileModel.m in Sources */,
+				4BBA6AAB2B4996AF00E207F5 /* SLReceiveFileProgressView.swift in Sources */,
 				4B33D2582B4575C5002B0C5B /* SCLScreenResp.swift in Sources */,
 				29441C812B496A72008C99DB /* SLFileManager.m in Sources */,
 				4B2694F52B3060D800B116BA /* SCLSettingSectionBackgroundView.swift in Sources */,
+				4BBA6AAF2B49986E00E207F5 /* SLFileOperateModel.swift in Sources */,
 				4BE1400E2B48271C00606BE6 /* SLAdustingControlAnimationView.swift in Sources */,
 				4BDE22EE2B31B1AE00D1A50C /* SCLPrivacyPolicyViewController.swift in Sources */,
 				4B33D24A2B453CC4002B0C5B /* SCLHomeViewModel.swift in Sources */,
@@ -948,11 +989,13 @@
 				4BC2DFB32B48EE8000F82972 /* SCLSyncCalibrationStateReq.swift in Sources */,
 				4B4290DD2B3812A3000EE7AD /* SCLPhonePickerAlertViewController.swift in Sources */,
 				4B95D8722B4923860049355C /* SCLSyncMovePointResp.swift in Sources */,
+				4BBA6AA12B49952C00E207F5 /* SLFilesViewController.swift in Sources */,
 				4BE1400B2B48271C00606BE6 /* SLAdjustingTimeoutViewController.swift in Sources */,
 				4B2CA3862B301C6C00D7F024 /* SCLConnectionViewController.swift in Sources */,
 				4BBA6A9F2B498B3900E207F5 /* SLKeepAliveManager.swift in Sources */,
 				29441C782B496931008C99DB /* SLWaitSendFileModel.m in Sources */,
 				4B2694F22B304BB500B116BA /* SCLSettingCell.swift in Sources */,
+				4BBA6AAC2B4996AF00E207F5 /* SLFileListTableViewCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
 				4BE13FEF2B4819CF00606BE6 /* SCLSyncPairReq.swift in Sources */,
@@ -975,6 +1018,7 @@
 				4BCEEA932B3D068D003C036A /* SCLReconnectViewController.swift in Sources */,
 				4BCE340A2B34436C00E14D40 /* SCLQRResult.swift in Sources */,
 				4B4290E52B386083000EE7AD /* SCLPairViewController.swift in Sources */,
+				4BBA6AAD2B4996AF00E207F5 /* SLReceivingFileTableViewCell.swift in Sources */,
 				4BBA6A9C2B4988C100E207F5 /* SLBLEBackgroundTask.swift in Sources */,
 				4B9996C72B20098E00F74D34 /* SLFreeStyleDevice.swift in Sources */,
 				4B14ACA52B3ABC7000FD0F9A /* SCLSocketResponse.swift in Sources */,
