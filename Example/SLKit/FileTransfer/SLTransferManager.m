@@ -270,7 +270,7 @@ static SLTransferManager *singleton = nil;
 - (NSString *)filesPath {
     NSString *homeDir = NSHomeDirectory();
     NSString *docDir = [homeDir stringByAppendingPathComponent:@"Documents"];
-    NSString *path = [NSString stringWithFormat:@"%@/OMNIEnjoy",docDir];
+    NSString *path = [NSString stringWithFormat:@"%@/SCLite",docDir];
     [self.fileManager createFolderWithPath:path];
     return path;
 }

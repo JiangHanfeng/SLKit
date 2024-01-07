@@ -8,6 +8,32 @@
 
 import UIKit
 
+class SCLTransferringModel {
+    let taskId: String
+    let type: SCLFileTransferType
+    var name: String
+    var count: Int
+    var progress: Float
+    
+    init(taskId: String, type: SCLFileTransferType, name: String, count: Int, progress: Float) {
+        self.taskId = taskId
+        self.type = type
+        self.name = name
+        self.count = count
+        self.progress = progress
+    }
+}
+
+class DeleteFileAction {
+    let type: SCLFileTransferType
+    let files: [SCLFileRecordCellModel]
+    
+    init(type: SCLFileTransferType, files: [SCLFileRecordCellModel]) {
+        self.type = type
+        self.files = files
+    }
+}
+
 class SCLFileHistoryViewController: SCLBaseViewController {
 
     @IBOutlet private weak var receivedBtn: UIButton!
@@ -15,6 +41,13 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     @IBOutlet private weak var segementView: UIView!
     @IBOutlet private weak var bottomView: UIView!
     @IBOutlet private weak var bottomViewTopConstraint: NSLayoutConstraint!
+    private var currentIndex = 0
+    private var receivingModel: SCLTransferringModel?
+    private var sendingModel: SCLTransferringModel?
+    private var shouldDeleteFiles: DeleteFileAction?
+    private lazy var localFileManager: SLLocalFileManger = {
+        return SLLocalFileManger()
+    }()
     
     private lazy var segementLayer = {
         let layer = CAShapeLayer()
@@ -29,18 +62,20 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     }()
     
     private lazy var receivedFileVc = {
-        return SCLFileRecordViewController(transferType: .receive) {
-            
-        } selectedRecordsChanged: { [unowned self] selectedRecords in
-            self.setBottomView(hidden: selectedRecords.isEmpty)
+        return SCLFileRecordViewController(transferType: .receive) { [weak self] in
+            self?.startEditing(for: .receive)
+        } selectedRecordsChanged: { [weak self] selectedRecords in
+            self?.shouldDeleteFiles = DeleteFileAction(type: .receive, files: selectedRecords)
+            self?.setBottomView(hidden: selectedRecords.isEmpty)
         }
     }()
     
     private lazy var sendedFileVc = {
-        return SCLFileRecordViewController(transferType: .send) {
-            
-        } selectedRecordsChanged: { selectedRecords in
-            
+        return SCLFileRecordViewController(transferType: .send) { [weak self] in
+            self?.startEditing(for: .send)
+        } selectedRecordsChanged: { [weak self] selectedRecords in
+            self?.shouldDeleteFiles = DeleteFileAction(type: .send, files: selectedRecords)
+            self?.setBottomView(hidden: selectedRecords.isEmpty)
         }
     }()
     
@@ -55,6 +90,20 @@ class SCLFileHistoryViewController: SCLBaseViewController {
             self.setSelectedIndex(1)
         }.disposed(by: disposeBag)
         
+        let tap = UITapGestureRecognizer()
+        bottomView.addGestureRecognizer(tap)
+        bottomView.isUserInteractionEnabled = true
+        
+        tap.rx.event.bind { [weak self] ges in
+            if let shouldDelete = self?.shouldDeleteFiles {
+                for file in shouldDelete.files {
+                    self?.localFileManager.deleteData(withPath: file.record.path, name: file.record.name, extensionName: file.record.extensionName, isSend: shouldDelete.type == .send)
+                }
+                self?.stopEditing()
+                self?.updateFileRecords(type: shouldDelete.type)
+            }
+        }.disposed(by: disposeBag)
+        
         setSelectedIndex(0)
     }
     
@@ -62,8 +111,9 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
+
     private func setSelectedIndex(_ index: Int) {
+        currentIndex = index
         let btns = [receivedBtn, sendedBtn]
         guard index < btns.count else { return }
         for (i, btn) in btns.enumerated() {
@@ -83,38 +133,43 @@ class SCLFileHistoryViewController: SCLBaseViewController {
                 make.bottom.equalTo(self.bottomView.snp.top)
                 make.leading.trailing.equalTo(0)
             }
+            self.updateFileRecords(type: [SCLFileTransferType.receive, .send][index])
         }
+        
+        stopEditing()
     }
     
-    private func setIsEditing(_ isEditing: Bool) {
-        if isEditing {
-            navigationItem.title = "选择文件"
-            let selectAllBarButtonItem = UIBarButtonItem(title: "全选", style: .plain, target: self, action: nil)
-            selectAllBarButtonItem.setTitleTextAttributes([
-                NSAttributedStringKey.font:UIFont.systemFont(ofSize: 15, weight: .medium),
-                NSAttributedStringKey.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
-            ], for: .normal)
-            selectAllBarButtonItem.rx.tap.bind { _ in
-                self.receivedFileVc.selectAll()
-            }.disposed(by: disposeBag)
-            navigationItem.leftBarButtonItems = [selectAllBarButtonItem]
-            
-            let closeBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-            closeBarButtonItem.rx.tap.bind { _ in
-                self.receivedFileVc.cancelEdit()
-                self.setIsEditing(false)
-            }.disposed(by: disposeBag)
-            navigationItem.rightBarButtonItem = closeBarButtonItem
-        } else {
-            navigationItem.title = "联想闪传"
-            let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_back_dark")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-            backBarButtonItem.rx.tap.bind { _ in
-                self.navigationController?.popViewController(animated: true)
-            }.disposed(by: disposeBag)
-            navigationItem.leftBarButtonItem = backBarButtonItem
-            navigationItem.rightBarButtonItem = nil
-            setBottomView(hidden: true)
-        }
+    private func startEditing(for type: SCLFileTransferType) {
+        navigationItem.title = "选择文件"
+        let selectAllBarButtonItem = UIBarButtonItem(title: "全选", style: .plain, target: self, action: nil)
+        selectAllBarButtonItem.setTitleTextAttributes([
+            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 15, weight: .medium),
+            NSAttributedStringKey.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
+        ], for: .normal)
+        selectAllBarButtonItem.rx.tap.bind { _ in
+            [self.receivedFileVc,self.sendedFileVc][self.currentIndex].selectAll()
+        }.disposed(by: disposeBag)
+        navigationItem.leftBarButtonItems = [selectAllBarButtonItem]
+        
+        let closeBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
+        closeBarButtonItem.rx.tap.bind { _ in
+            self.stopEditing()
+        }.disposed(by: disposeBag)
+        navigationItem.rightBarButtonItem = closeBarButtonItem
+    }
+
+    @objc private func stopEditing() {
+        navigationItem.title = "联想闪传"
+        let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_back_dark")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
+        backBarButtonItem.rx.tap.bind { _ in
+            self.navigationController?.popViewController(animated: true)
+        }.disposed(by: disposeBag)
+        navigationItem.leftBarButtonItem = backBarButtonItem
+        navigationItem.rightBarButtonItem = nil
+        setBottomView(hidden: true)
+        
+        receivedFileVc.cancelEdit()
+        sendedFileVc.cancelEdit()
     }
     
     private func setBottomView(hidden: Bool) {
@@ -130,5 +185,52 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         } completion: { [weak self] _ in
             self?.bottomView.isHidden = hidden
         }
+    }
+    
+    func updateFileRecords(type: SCLFileTransferType) {
+        DispatchQueue.global().async { [weak self] in
+            let typeMapper = [
+                SLFileType.folderFileType:SCLFileType.folder,
+                SLFileType.videoFileType:SCLFileType.video,
+                SLFileType.imageFileType:SCLFileType.image,
+                SLFileType.audioFileType:SCLFileType.audio,
+                SLFileType.excelFileType:SCLFileType.excel,
+                SLFileType.pdfFileType:SCLFileType.pdf,
+                SLFileType.wordFileType:SCLFileType.word,
+                SLFileType.pptFileType:SCLFileType.ppt,
+                SLFileType.zipFileType:SCLFileType.compressed,
+                SLFileType.txtFileType:SCLFileType.text
+            ]
+            let source = type == .receive ? SLTransferManager.share().receiveFiles() : SLTransferManager.share().sendFiles()
+            var models: [SCLFileRecordCellModel] = []
+            for item in source {
+                let record = SCLFileRecord(
+                    name: item.name,
+                    fullName: item.fullFileNama(),
+                    extensionName: item.extensionName,
+                    path: item.path,
+                    fullPath: item.fullPath(),
+                    time: Int.timestamp2FormattedDataString(from: Int(item.time)),
+                    fileType: typeMapper[item.fileType()] ?? .folder, transferType: type)
+                let cellModel = SCLFileRecordCellModel(record: record, isSelected: false)
+                models.append(cellModel)
+            }
+            DispatchQueue.main.async { [weak self] in
+                switch type {
+                case .receive:
+                    self?.receivedFileVc.updateDataSource(models)
+                case .send:
+                    self?.sendedFileVc.updateDataSource(models)
+                }
+            }
+        }
+    }
+    
+    func updateReceivingFileModels(_ receivingModels: [SCLTransferringModel]) {
+        
+    }
+    
+    func updateSendingFileModels(_ receivingModels: [SCLTransferringModel]) {
+        
     }
 }

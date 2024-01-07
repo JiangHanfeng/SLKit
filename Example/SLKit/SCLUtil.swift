@@ -30,10 +30,6 @@ struct SCLUtil {
         return uuid
     }
     
-    static func getDeviceId() -> String {
-        return getTempMac()
-    }
-    
     static func getTempMac() -> String {
         var mac = getStringValue(for: TEMP_MAC_KEY) ?? ""
         if mac.isEmpty {
@@ -48,12 +44,12 @@ struct SCLUtil {
     }
     
     static func getBTMac() -> String? {
-//        return getStringValue(for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+        //        return getStringValue(for: BT_MAC_KEY, description: "设备蓝牙mac地址")
         return UserDefaults.standard.string(forKey: BT_MAC_KEY)
     }
     
     static func setBTMac(_ mac: String?) -> Bool {
-//        return set(stringValue: mac, for: BT_MAC_KEY, description: "设备蓝牙mac地址")
+        //        return set(stringValue: mac, for: BT_MAC_KEY, description: "设备蓝牙mac地址")
         UserDefaults.standard.set(mac, forKey: BT_MAC_KEY)
         return UserDefaults.standard.synchronize()
     }

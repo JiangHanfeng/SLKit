@@ -11,7 +11,7 @@ import RxCocoa
 //import RxSwift
 
 enum SCLFileType: String {
-    case audio, compressed, folder, image, text, video
+    case audio, compressed, excel, folder, image, pdf, ppt, text, video, word
 }
 
 enum SCLFileTransferType {
@@ -20,6 +20,10 @@ enum SCLFileTransferType {
 
 struct SCLFileRecord {
     let name: String
+    let fullName: String
+    let extensionName: String
+    let path: String
+    let fullPath: String
     let time: String
     let fileType: SCLFileType
     let transferType: SCLFileTransferType
@@ -34,7 +38,7 @@ class SCLFileRecordViewController: SCLBaseViewController {
     
     private var transferType: SCLFileTransferType
     private var onEnterEditing: (() -> Void)?
-    private var onSelectedRecordsChanged: ((_ selectedRecords: [Any]) -> Void)?
+    private var onSelectedRecordsChanged: ((_ selectedRecords: [SCLFileRecordCellModel]) -> Void)?
     
     private let tableView = UITableView()
     private var records: [SCLFileRecordCellModel] = []
@@ -44,7 +48,7 @@ class SCLFileRecordViewController: SCLBaseViewController {
     init(
         transferType: SCLFileTransferType,
         enterEditing: @escaping (() -> Void),
-        selectedRecordsChanged: @escaping ((_ selectedRecords: [Any]) -> Void)
+        selectedRecordsChanged: @escaping ((_ selectedRecords: [SCLFileRecordCellModel]) -> Void)
     ) {
         self.transferType = transferType
         self.onEnterEditing = enterEditing
@@ -70,6 +74,7 @@ class SCLFileRecordViewController: SCLBaseViewController {
         tableView.estimatedRowHeight = 76
         tableView.rowHeight = 76
         tableView.allowsSelectionDuringEditing = true
+        tableView.register(UINib(nibName: String(describing: SCLTransferringCell.self), bundle: Bundle.main), forCellReuseIdentifier: SCLTransferringCell.reuseIdentifier)
         tableView.register(UINib(nibName: String(describing: SCLFileRecordCell.self), bundle: Bundle.main), forCellReuseIdentifier: SCLFileRecordCell.reuseIdentifier)
         
         dataSource.bind(to: tableView.rx.items(cellIdentifier: SCLFileRecordCell.reuseIdentifier, cellType: SCLFileRecordCell.self)) { [unowned self] (row, model, cell) in
@@ -77,10 +82,23 @@ class SCLFileRecordViewController: SCLBaseViewController {
             cell.setTime(model.record.time)
             cell.setImage(UIImage(named: "icon_file_\(model.record.fileType.rawValue)"))
             cell.isSelected = model.isSelected
-            cell.setEditing(self.tableView.isEditing, animated: true)
+            if cell.showSelectionView != tableView.isEditing {
+                cell.setEditing(tableView.isEditing, animated: true)
+            }
         }.disposed(by: disposeBag)
         tableView.rx.itemSelected.subscribe { [weak self] indexPath in
-            self?.onSelectedRecordsChanged?([1])
+            guard self?.tableView.isEditing == true else {
+                return
+            }
+            if var records = self?.records {
+                let isSelected = records[indexPath.row].isSelected
+                records[indexPath.row].isSelected = !isSelected
+                self?.records = records
+                self?.dataSource.accept(records)
+                if let selectedRecords = self?.records.filter({ $0.isSelected }) {
+                    self?.onSelectedRecordsChanged?(selectedRecords)
+                }
+            }
         }.disposed(by: disposeBag)
         
         let longPress = UILongPressGestureRecognizer()
@@ -89,22 +107,49 @@ class SCLFileRecordViewController: SCLBaseViewController {
             self.tableView.setEditing(true, animated: true)
             self.onEnterEditing?()
         }.disposed(by: disposeBag)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.records.append(SCLFileRecordCellModel(record: SCLFileRecord(name: "name", time: "time", fileType: .compressed, transferType: .send), isSelected: true))
-            self.dataSource.accept(self.records)
-        })
     }
     
     func cancelEdit() {
         tableView.setEditing(false, animated: true)
+        DispatchQueue.global().async { [weak self] in
+            if let records = self?.records.map({ item in
+                var newItem = item
+                newItem.isSelected = false
+                return newItem
+            }) {
+                DispatchQueue.main.async {
+                    self?.records = records
+                    self?.dataSource.accept(records)
+                    self?.onSelectedRecordsChanged?([])
+                }
+            }
+        }
     }
     
     func selectAll() {
+        records = records.map { item in
+            var newItem = item
+            newItem.isSelected = true
+            return newItem
+        }
+        dataSource.accept(records)
+        onSelectedRecordsChanged?(records.filter({ $0.isSelected }))
+    }
+    
+    func updateDataSource(_ models: [SCLFileRecordCellModel]) {
+        DispatchQueue.main.async {
+            self.records = models
+            self.dataSource.accept(models)
+        }
+    }
+    
+    func updateTransferringFiles() {
         
     }
 }

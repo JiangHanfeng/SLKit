@@ -11,5 +11,6 @@
 
 #import "SLTransferManager.h"
 #import "SLFileManager.h"
+#import "SLLocalFileManger.h"
 
 #endif /* SLKit_Bridging_Header_h */

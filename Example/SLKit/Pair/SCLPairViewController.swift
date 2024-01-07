@@ -82,54 +82,54 @@ class SCLPairViewController: SCLBaseViewController {
             return
         }
         button?.isEnabled = false
-//        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .getPairedDevices)), from: socket, for: SCLSocketResponse<SCLGetPairedDeviceResp>.self) { [weak self, weak btn = button] result in
-//            guard let self else {
-//                return
-//            }
-//            switch result {
-//            case .success(let resp):
-//                if onPaired {
-//                    guard let pcPairedDevices else {
-//                        // 未获取到PC的已配对设备
-//                        self.toast("未获取到PC已配对的设备")
-//                        btn?.isEnabled = true
-//                        return
-//                    }
-//                    let deviceList = resp.content?.deviceList ?? []
-//                    guard !deviceList.isEmpty else {
-//                        self.toast("蓝牙未配对")
-//                        btn?.isEnabled = true
-//                        return
-//                    }
-//                    let newDevices = deviceList.filter { new in
-//                        !pcPairedDevices.contains { old in
-//                            old == new
-//                        }
-//                    }
-//                    SLLog.debug("newDevices.count = \(newDevices.count)")
-//                    if newDevices.count == 1 {
-//                        // 认为新增的这个配对设备就是本机，暂时不考虑判断a2dp连接状态
-////                        self.requestPairVerification(device: newDevices.first!, button: btn)
-//                        self.submitPairResult(device: newDevices.first!, result: true)
-//                    } else {
-//                        // MARK: diff两次列表，相差不为1，让用户选择
-//                        self.transitionToPhonePicker(devices: newDevices.isEmpty ? deviceList.reversed() : newDevices.reversed())
-//                    }
-//                } else {
-//                    // MARK: 点击已配对获取到列表后跳转设置
-//                    self.pcPairedDevices = resp.content?.deviceList
-//                    let scheme = "App-Prefs:root=General"
-//            //        let scheme = "App-Prefs:root=Bluetooth"
-//                    if let url = URL(string: scheme) {
-//                        UIApplication.shared.open(url)
-//                    }
-//                    button?.isEnabled = true
-//                }
-//            case .failure(let e):
-//                self.toast(e.localizedDescription)
-//                self.dismiss(animated: true, completion: nil)
-//            }
-//        }
+        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .getPairedDevices)), from: socket, for: SCLSocketResponse<SCLGetPairedDeviceResp>.self) { [weak self, weak btn = button] result in
+            guard let self else {
+                return
+            }
+            switch result {
+            case .success(let resp):
+                if onPaired {
+                    guard let pcPairedDevices else {
+                        // 未获取到PC的已配对设备
+                        self.toast("未获取到PC已配对的设备")
+                        btn?.isEnabled = true
+                        return
+                    }
+                    let deviceList = resp.content?.deviceList ?? []
+                    guard !deviceList.isEmpty else {
+                        self.toast("蓝牙未配对")
+                        btn?.isEnabled = true
+                        return
+                    }
+                    let newDevices = deviceList.filter { new in
+                        !pcPairedDevices.contains { old in
+                            old == new
+                        }
+                    }
+                    SLLog.debug("newDevices.count = \(newDevices.count)")
+                    if newDevices.count == 1 {
+                        // 认为新增的这个配对设备就是本机，暂时不考虑判断a2dp连接状态
+//                        self.requestPairVerification(device: newDevices.first!, button: btn)
+                        self.submitPairResult(device: newDevices.first!, result: true)
+                    } else {
+                        // MARK: diff两次列表，相差不为1，让用户选择
+                        self.transitionToPhonePicker(devices: newDevices.isEmpty ? deviceList.reversed() : newDevices.reversed())
+                    }
+                } else {
+                    // MARK: 点击已配对获取到列表后跳转设置
+                    self.pcPairedDevices = resp.content?.deviceList
+                    let scheme = "App-Prefs:root=General"
+            //        let scheme = "App-Prefs:root=Bluetooth"
+                    if let url = URL(string: scheme) {
+                        UIApplication.shared.open(url)
+                    }
+                    button?.isEnabled = true
+                }
+            case .failure(let e):
+                self.toast(e.localizedDescription)
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     private func requestPairVerification(device: SCLPCPairedDevice, button: UIButton?) {

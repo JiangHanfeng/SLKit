@@ -77,6 +77,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                     self.requestScreen()
                 case SCLCmd.stopAirplay.rawValue:
                     self.dismiss(animated: true)
+                    self.cancelScreen(isInitiative: false)
                 case SCLCmd.airplayUpdated.rawValue:
                     self.dismiss(animated: true)
                     var result = false
@@ -210,10 +211,22 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
     
     @objc private func onSendPhoto() {
+        if
+            let transfer = SLTransferManager.share().currentSendFileTransfer(),
+            transfer.files.count > 0 {
+            toast("当前文件传输中，请在传输结束后发送")
+            return
+        }
         (UIApplication.shared.delegate as? AppDelegate)?.sendPhoto()
     }
     
     @objc private func onFileTransfer() {
+        if
+            let transfer = SLTransferManager.share().currentSendFileTransfer(),
+            transfer.files.count > 0 {
+            toast("当前文件传输中，请在传输结束后发送")
+            return
+        }
         (UIApplication.shared.delegate as? AppDelegate)?.selectFile()
     }
     
@@ -242,9 +255,12 @@ class SCLDeviceViewController: SCLBaseViewController {
         }
     }
     
-    private func cancelScreen() {
+    private func cancelScreen(isInitiative: Bool = true) {
         defer {
             airplaySuccess = false
+        }
+        guard isInitiative else {
+            return
         }
         guard let socket = device?.localClient else {
             return

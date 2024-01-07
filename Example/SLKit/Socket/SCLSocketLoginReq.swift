@@ -13,7 +13,7 @@ import SLKit
 
 struct SCLSocketLoginReq {
     let cmd = 0
-    let dev_id = SCLUtil.getDeviceId()
+    let dev_id = (SCLUtil.getBTMac() ?? SCLUtil.getTempMac()).split(separator: ":").joined()
     let dev_mac = SCLUtil.getBTMac() ?? SCLUtil.getTempMac().split(separator: ":").joined()
     let deviceName = UIDevice.current.name
     let os = 1

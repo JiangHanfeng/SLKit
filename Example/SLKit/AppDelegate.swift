@@ -40,8 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SLLog.debug("设备临时mac地址：\(tempMac)")
         }
         
-        self.configFileTransfer()
-        
         if let backImage = UIImage(named: "icon_back_dark") {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage.withRenderingMode(.alwaysOriginal)
@@ -142,75 +140,6 @@ extension AppDelegate {
                 application.endBackgroundTask(self.backgroundTask)
                 self.backgroundTask = UIBackgroundTaskInvalid
             })
-        }
-    }
-    
-    private func configFileTransfer(){
-        SLTransferManager.share().config(withDeviceId: SCLUtil.getDeviceId(),
-                                         deviceName: SCLUtil.getDeviceName())
-        
-        SLTransferManager.share().receiveFileRequestBlock = { _,taskId,files in
-            SLTransferManager.share().respondReceiveFiles(withTaskId: taskId, files:files, accept: true)
-        }
-        
-        SLTransferManager.share().startReceiveFileBlock = { [weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().receiveFileProgressBlock = {[weak self] _,taskId,progress in
-            
-        }
-        
-        SLTransferManager.share().cancelReceiveFileBlock = {[weak self] _,taskId,_ in
-            
-        }
-        
-        SLTransferManager.share().completeReceiveFileBlock = {[weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().receiveFileFailBlock = {[weak self] _,taskId,_ in
-            
-        }
-        
-        SLTransferManager.share().nonReceiveFileBlock = {[weak self] _ in
-            
-        }
-           
-        SLTransferManager.share().waitSendFileBlock = { [weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().startSendFileBlock = {[weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().sendFileProgressBlock = { [weak self] _,taskId,progress in
-            
-        }
-        
-        SLTransferManager.share().refuseSendFileBlock = { [weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().cancelSendFileBlock = { [weak self] _,taskId,initiative in
-           
-        }
-        
-        SLTransferManager.share().completeSendFileBlock = { [weak self] _,taskId in
-            
-        }
-        
-        SLTransferManager.share().sendFileFailBlock = { [weak self] _,taskId,_ in
-            
-        }
-    
-        SLTransferManager.share().nonSendFileBlock = { [weak self] _ in
-           
-        }
-
-        SLTransferManager.share().upDateSendFileBlock = { [weak self] _,taskId in
-            
         }
     }
     

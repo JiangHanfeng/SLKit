@@ -6,6 +6,7 @@ target 'SLKit_Example' do
   pod 'SLKit', :path => '../'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'RxDataSources'
   pod 'XCGLogger'
   pod 'SnapKit'
   pod 'CocoaAsyncSocket'

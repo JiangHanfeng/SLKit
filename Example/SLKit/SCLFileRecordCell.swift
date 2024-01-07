@@ -22,6 +22,8 @@ class SCLFileRecordCell: UITableViewCell {
     
     
     var showAccessoryView = false
+    var showSelectionView = false
+    
     override var isSelected: Bool {
         didSet {
             editStateImageView.image = UIImage(named: isSelected ? "icon_circle_checked" :"icon_circle_uncheck")
@@ -37,13 +39,19 @@ class SCLFileRecordCell: UITableViewCell {
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
-        editStateViewWidthConstraint.constant = editing ? 36 : 0
-        accessoryViewWidthConstraint.constant = editing ? 0 : (showAccessoryView ? 12 : 0)
-        if animated {
-            UIView.animate(withDuration: 0.25) {
-                self.layoutIfNeeded()
-            } completion: { _ in
-                
+        showSelectionView = editing
+        let editStateViewWidthConstraintConstant = editing ? 36.0 : 0.0
+        let accessoryViewWidthConstraintConstant = editing ? 0.0 : (showAccessoryView ? 12.0 : 0.0)
+        if
+            editStateViewWidthConstraint.constant != editStateViewWidthConstraintConstant
+                ||
+            accessoryViewWidthConstraint.constant != accessoryViewWidthConstraintConstant {
+            editStateViewWidthConstraint.constant = editStateViewWidthConstraintConstant
+            accessoryViewWidthConstraint.constant = accessoryViewWidthConstraintConstant
+            if animated {
+                UIView.animate(withDuration: 0.25) {
+                    self.layoutIfNeeded()
+                } completion: { _ in }
             }
         }
     }

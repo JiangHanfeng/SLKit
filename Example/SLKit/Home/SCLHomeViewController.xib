@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SCLHomeViewController" customModule="SLKit_Example" customModuleProvider="target">
             <connections>
                 <outlet property="topBar" destination="Nbp-BF-jyq" id="7He-qL-FJW"/>
+                <outlet property="transferringCountLabel" destination="a5n-RV-2Os" id="6kZ-My-5v2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -29,7 +30,11 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cho-1P-Kph">
-                            <rect key="frame" x="345" y="8" width="28" height="28"/>
+                            <rect key="frame" x="349" y="0.0" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="44" id="PaW-UI-ZXa"/>
+                                <constraint firstAttribute="height" constant="44" id="SID-Aa-oqg"/>
+                            </constraints>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" image="icon_setting"/>
                             <connections>
@@ -37,23 +42,46 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7c-Tt-lOU">
-                            <rect key="frame" x="309" y="8" width="28" height="28"/>
+                            <rect key="frame" x="305" y="0.0" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="Geq-H1-Oqt"/>
+                                <constraint firstAttribute="width" constant="44" id="JIJ-70-qL1"/>
+                            </constraints>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             <state key="normal" image="icon_file_transfer"/>
                             <connections>
                                 <action selector="onFileTransfer" destination="-1" eventType="touchUpInside" id="yKR-Or-BrJ"/>
                             </connections>
                         </button>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a5n-RV-2Os">
+                            <rect key="frame" x="333" y="4" width="20" height="20"/>
+                            <color key="backgroundColor" red="0.21176470588235294" green="0.47058823529411764" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="20" id="Ikk-oR-UfU"/>
+                                <constraint firstAttribute="height" constant="20" id="tQx-uY-TZJ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="10"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="a5n-RV-2Os" firstAttribute="trailing" secondItem="u7c-Tt-lOU" secondAttribute="trailing" constant="4" id="0Oh-C0-A1m"/>
+                        <constraint firstItem="a5n-RV-2Os" firstAttribute="top" secondItem="u7c-Tt-lOU" secondAttribute="top" constant="4" id="69S-7e-CR7"/>
                         <constraint firstItem="Cho-1P-Kph" firstAttribute="centerY" secondItem="Nbp-BF-jyq" secondAttribute="centerY" id="KWh-T3-cUU"/>
                         <constraint firstItem="TYc-Lm-bId" firstAttribute="leading" secondItem="Nbp-BF-jyq" secondAttribute="leading" constant="20" symbolic="YES" id="MDH-7q-Hgd"/>
                         <constraint firstAttribute="height" constant="44" id="N6A-ge-ogP"/>
-                        <constraint firstAttribute="trailing" secondItem="Cho-1P-Kph" secondAttribute="trailing" constant="20" symbolic="YES" id="OZU-Xy-evw"/>
+                        <constraint firstAttribute="trailing" secondItem="Cho-1P-Kph" secondAttribute="trailing" id="OZU-Xy-evw"/>
                         <constraint firstItem="u7c-Tt-lOU" firstAttribute="centerY" secondItem="Nbp-BF-jyq" secondAttribute="centerY" id="ZHE-EE-JLu"/>
                         <constraint firstItem="TYc-Lm-bId" firstAttribute="centerY" secondItem="Nbp-BF-jyq" secondAttribute="centerY" id="hMf-ev-eos"/>
-                        <constraint firstItem="Cho-1P-Kph" firstAttribute="leading" secondItem="u7c-Tt-lOU" secondAttribute="trailing" constant="8" symbolic="YES" id="snO-Kp-4ho"/>
+                        <constraint firstItem="Cho-1P-Kph" firstAttribute="leading" secondItem="u7c-Tt-lOU" secondAttribute="trailing" id="snO-Kp-4ho"/>
                     </constraints>
                 </view>
             </subviews>

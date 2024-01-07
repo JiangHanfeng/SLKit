@@ -463,3 +463,12 @@ extension UIFont {
         return UIFont.systemFont(ofSize: size, weight: weight)
     }
 }
+
+extension Int {
+    static func timestamp2FormattedDataString(from: Int, format: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(from))
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: date)
+    }
+}
