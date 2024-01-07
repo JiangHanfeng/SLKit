@@ -8,19 +8,36 @@
 
 import UIKit
 
+let SCLFileTypeMapper = [
+    SLFileType.folderFileType:SCLFileType.folder,
+    SLFileType.videoFileType:SCLFileType.video,
+    SLFileType.imageFileType:SCLFileType.image,
+    SLFileType.audioFileType:SCLFileType.audio,
+    SLFileType.excelFileType:SCLFileType.excel,
+    SLFileType.pdfFileType:SCLFileType.pdf,
+    SLFileType.wordFileType:SCLFileType.word,
+    SLFileType.pptFileType:SCLFileType.ppt,
+    SLFileType.zipFileType:SCLFileType.compressed,
+    SLFileType.txtFileType:SCLFileType.text
+]
+
 class SCLTransferringModel {
     let taskId: String
     let type: SCLFileTransferType
+    var fileType: SCLFileType
     var name: String
     var count: Int
     var progress: Float
+    var status: String
     
-    init(taskId: String, type: SCLFileTransferType, name: String, count: Int, progress: Float) {
+    init(taskId: String, type: SCLFileTransferType, fileType: SCLFileType, name: String, count: Int, progress: Float, status: String) {
         self.taskId = taskId
         self.type = type
+        self.fileType = fileType
         self.name = name
         self.count = count
         self.progress = progress
+        self.status = status
     }
 }
 
@@ -64,18 +81,22 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     private lazy var receivedFileVc = {
         return SCLFileRecordViewController(transferType: .receive) { [weak self] in
             self?.startEditing(for: .receive)
-        } selectedRecordsChanged: { [weak self] selectedRecords in
+        } onSelectedRecordsChanged: { [weak self] selectedRecords in
             self?.shouldDeleteFiles = DeleteFileAction(type: .receive, files: selectedRecords)
             self?.setBottomView(hidden: selectedRecords.isEmpty)
+        } onCancelTransfer: { taskId in
+            SLTransferManager.share().cancelFiles(withTaskId: taskId)
         }
     }()
     
     private lazy var sendedFileVc = {
         return SCLFileRecordViewController(transferType: .send) { [weak self] in
             self?.startEditing(for: .send)
-        } selectedRecordsChanged: { [weak self] selectedRecords in
+        } onSelectedRecordsChanged: { [weak self] selectedRecords in
             self?.shouldDeleteFiles = DeleteFileAction(type: .send, files: selectedRecords)
             self?.setBottomView(hidden: selectedRecords.isEmpty)
+        } onCancelTransfer: { taskId in
+            SLTransferManager.share().cancelFiles(withTaskId: taskId)
         }
     }()
     
@@ -128,12 +149,18 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         segementLayer.strokeEnd = end
         
         transitionToChild([receivedFileVc, sendedFileVc][index], removeCurrent: false) { childView in
-            childView.snp.makeConstraints { make in
+            childView.snp.makeConstraints {[weak self] make in
+                guard let self else { return }
                 make.top.equalTo(self.segementView.snp.bottom).offset(20)
                 make.bottom.equalTo(self.bottomView.snp.top)
                 make.leading.trailing.equalTo(0)
             }
             self.updateFileRecords(type: [SCLFileTransferType.receive, .send][index])
+            if index > 0 {
+                self.updateSendingFiles()
+            } else {
+                self.updateReceivingFiles()
+            }
         }
         
         stopEditing()
@@ -152,8 +179,8 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         navigationItem.leftBarButtonItems = [selectAllBarButtonItem]
         
         let closeBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-        closeBarButtonItem.rx.tap.bind { _ in
-            self.stopEditing()
+        closeBarButtonItem.rx.tap.bind { [weak self] _ in
+            self?.stopEditing()
         }.disposed(by: disposeBag)
         navigationItem.rightBarButtonItem = closeBarButtonItem
     }
@@ -161,8 +188,8 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     @objc private func stopEditing() {
         navigationItem.title = "联想闪传"
         let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_back_dark")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-        backBarButtonItem.rx.tap.bind { _ in
-            self.navigationController?.popViewController(animated: true)
+        backBarButtonItem.rx.tap.bind { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
         }.disposed(by: disposeBag)
         navigationItem.leftBarButtonItem = backBarButtonItem
         navigationItem.rightBarButtonItem = nil
@@ -189,18 +216,6 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     
     func updateFileRecords(type: SCLFileTransferType) {
         DispatchQueue.global().async { [weak self] in
-            let typeMapper = [
-                SLFileType.folderFileType:SCLFileType.folder,
-                SLFileType.videoFileType:SCLFileType.video,
-                SLFileType.imageFileType:SCLFileType.image,
-                SLFileType.audioFileType:SCLFileType.audio,
-                SLFileType.excelFileType:SCLFileType.excel,
-                SLFileType.pdfFileType:SCLFileType.pdf,
-                SLFileType.wordFileType:SCLFileType.word,
-                SLFileType.pptFileType:SCLFileType.ppt,
-                SLFileType.zipFileType:SCLFileType.compressed,
-                SLFileType.txtFileType:SCLFileType.text
-            ]
             let source = type == .receive ? SLTransferManager.share().receiveFiles() : SLTransferManager.share().sendFiles()
             var models: [SCLFileRecordCellModel] = []
             for item in source {
@@ -211,26 +226,39 @@ class SCLFileHistoryViewController: SCLBaseViewController {
                     path: item.path,
                     fullPath: item.fullPath(),
                     time: Int.timestamp2FormattedDataString(from: Int(item.time)),
-                    fileType: typeMapper[item.fileType()] ?? .folder, transferType: type)
+                    fileType: SCLFileTypeMapper[item.fileType()] ?? .unknown, transferType: type)
                 let cellModel = SCLFileRecordCellModel(record: record, isSelected: false)
                 models.append(cellModel)
             }
             DispatchQueue.main.async { [weak self] in
                 switch type {
                 case .receive:
-                    self?.receivedFileVc.updateDataSource(models)
+                    print("查询到\(models.count)条已接收文件")
+                    self?.receivedFileVc.updateFileRecords(models)
                 case .send:
-                    self?.sendedFileVc.updateDataSource(models)
+                    print("查询到\(models.count)条已发送文件")
+                    self?.sendedFileVc.updateFileRecords(models)
                 }
             }
         }
     }
     
-    func updateReceivingFileModels(_ receivingModels: [SCLTransferringModel]) {
-        
+    func updateReceivingFiles() {
+        let receivingModels = SLTransferManager.share().currentReceiveFileTransfer().filter { item in
+            !item.files.isEmpty
+        }.map { item in
+            let name = item.files.count > 1 ? "正在接收\(item.files.first!.name)等文件" : "正在接收\(item.files.first!.name)"
+            return SCLTransferringModel(taskId: item.taskId, type: .receive, fileType: SCLFileTypeMapper[item.files.first!.fileType()] ?? .unknown, name: name, count: item.files.count, progress: item.currentProgress, status: "%\(item.currentProgress * 100)")
+        }
+        receivedFileVc.updateTransferringFiles(receivingModels)
     }
     
-    func updateSendingFileModels(_ receivingModels: [SCLTransferringModel]) {
-        
+    func updateSendingFiles() {
+        if let sendFile = SLTransferManager.share().currentSendFileTransfer(), !sendFile.files.isEmpty {
+            let sendModel = SCLTransferringModel(taskId: sendFile.taskId, type: .send, fileType: SCLFileTypeMapper[sendFile.files.first!.fileType()] ?? .unknown, name: sendFile.files.first!.name, count: sendFile.files.count, progress: sendFile.currentProgress, status: "%\(sendFile.currentProgress * 100)")
+            sendedFileVc.updateTransferringFiles([sendModel])
+        } else {
+            sendedFileVc.updateTransferringFiles([])
+        }
     }
 }

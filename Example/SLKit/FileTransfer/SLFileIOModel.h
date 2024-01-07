@@ -14,6 +14,7 @@
 #import <WebKit/WKScriptMessageHandler.h>
 #import <CoreLocation/CLLocationManager.h>
 #import <CoreBluetooth/CBPeripheralManager.h>
+#import <QuickLook/QuickLook.h>
 
 
 #import "SLFileTransferModel.h"

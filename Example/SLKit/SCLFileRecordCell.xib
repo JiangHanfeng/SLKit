@@ -36,7 +36,7 @@
                                     <constraint firstItem="KPV-gH-Ovx" firstAttribute="leading" secondItem="gkV-Gi-bkP" secondAttribute="leading" id="oIv-fM-QDt"/>
                                 </constraints>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_file_image" translatesAutoresizingMaskIntoConstraints="NO" id="NOn-vf-g5A">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_file_unknown" translatesAutoresizingMaskIntoConstraints="NO" id="NOn-vf-g5A">
                                 <rect key="frame" x="20" y="16" width="36" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="di7-Ka-6ZG"/>
@@ -115,7 +115,7 @@
     <resources>
         <image name="icon_arrow_right" width="12" height="12"/>
         <image name="icon_circle_uncheck" width="20" height="20"/>
-        <image name="icon_file_image" width="36" height="36"/>
+        <image name="icon_file_unknown" width="36" height="36"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -73,8 +73,6 @@
 		4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */; };
 		4B9996D12B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */; };
 		4B9996D32B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */; };
-		4BA6B02F2B4ABD3E00D35F6A /* SCLTransferringFileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA6B02E2B4ABD3E00D35F6A /* SCLTransferringFileView.swift */; };
-		4BA6B0312B4ABD4B00D35F6A /* SCLTransferringFileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BA6B0302B4ABD4B00D35F6A /* SCLTransferringFileView.xib */; };
 		4BA6B0342B4ACBFC00D35F6A /* SCLTransferringCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA6B0322B4ACBFC00D35F6A /* SCLTransferringCell.swift */; };
 		4BA6B0352B4ACBFC00D35F6A /* SCLTransferringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4BA6B0332B4ACBFC00D35F6A /* SCLTransferringCell.xib */; };
 		4BBA6A9B2B4988C100E207F5 /* silentAudio.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 4BBA6A982B4988C100E207F5 /* silentAudio.m4a */; };
@@ -242,8 +240,6 @@
 		4B9996CA2B204CFB00F74D34 /* SLVehicleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDevice.swift; sourceTree = "<group>"; };
 		4B9996D02B21AA5A00F74D34 /* SLVehicleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLVehicleDeviceBuilder.swift; sourceTree = "<group>"; };
 		4B9996D22B21AA9800F74D34 /* SLFreeStyleDeviceBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLFreeStyleDeviceBuilder.swift; sourceTree = "<group>"; };
-		4BA6B02E2B4ABD3E00D35F6A /* SCLTransferringFileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLTransferringFileView.swift; sourceTree = "<group>"; };
-		4BA6B0302B4ABD4B00D35F6A /* SCLTransferringFileView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLTransferringFileView.xib; sourceTree = "<group>"; };
 		4BA6B0322B4ACBFC00D35F6A /* SCLTransferringCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLTransferringCell.swift; sourceTree = "<group>"; };
 		4BA6B0332B4ACBFC00D35F6A /* SCLTransferringCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLTransferringCell.xib; sourceTree = "<group>"; };
 		4BBA6A982B4988C100E207F5 /* silentAudio.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = silentAudio.m4a; sourceTree = "<group>"; };
@@ -694,8 +690,6 @@
 				4B33D2492B453CC4002B0C5B /* SCLHomeViewModel.swift */,
 				4B72F5D12B45B47C00074E28 /* SLKit-Bridging-Header.h */,
 				4BE13FFB2B4826AC00606BE6 /* Localizable.strings */,
-				4BA6B02E2B4ABD3E00D35F6A /* SCLTransferringFileView.swift */,
-				4BA6B0302B4ABD4B00D35F6A /* SCLTransferringFileView.xib */,
 			);
 			name = "Example for SLKit";
 			path = SLKit;
@@ -857,7 +851,6 @@
 				4B2E00172B394B8D00E2191E /* SCLFileHistoryViewController.xib in Resources */,
 				4BBA6AB72B4A946500E207F5 /* FileDecisionViewController.xib in Resources */,
 				4B4AF96D2B391459001C8214 /* SCLFileRecordCell.xib in Resources */,
-				4BA6B0312B4ABD4B00D35F6A /* SCLTransferringFileView.xib in Resources */,
 				4B23D1F42B3306D8008724E5 /* SCLRequestPermissionViewController.xib in Resources */,
 				4BDE22E52B31407600D1A50C /* SCLPairGuideViewController.xib in Resources */,
 				4B2694F32B304BB500B116BA /* SCLSettingCell.xib in Resources */,
@@ -911,6 +904,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/Differentiator/Differentiator.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework",
 				"${BUILT_PRODUCTS_DIR}/LLNetworkAccessibility-Swift/LLNetworkAccessibility_Swift.framework",
@@ -918,6 +912,7 @@
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxDataSources/RxDataSources.framework",
 				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SLKit/SLKit.framework",
@@ -929,6 +924,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differentiator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainAccess.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LLNetworkAccessibility_Swift.framework",
@@ -936,6 +932,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxDataSources.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SLKit.framework",
@@ -1024,7 +1021,6 @@
 				4BBA6AAC2B4996AF00E207F5 /* SLFileListTableViewCell.swift in Sources */,
 				4B6B9DCD2AF8AB0F00EEB598 /* TestViewController.swift in Sources */,
 				4B33D2522B454A40002B0C5B /* SCLSocketLoginResp.swift in Sources */,
-				4BA6B02F2B4ABD3E00D35F6A /* SCLTransferringFileView.swift in Sources */,
 				4BE13FEF2B4819CF00606BE6 /* SCLSyncPairReq.swift in Sources */,
 				4B95D89B2B494FE40049355C /* SCLSyncAirplayStateReq.swift in Sources */,
 				4BE140142B48271C00606BE6 /* SLAdjustingBackgroundView.swift in Sources */,

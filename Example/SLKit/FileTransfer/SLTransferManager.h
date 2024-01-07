@@ -93,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
 //文件路径，用于显示
 - (NSString *)localFilePath:(SLFileModel *)file;
 
+- (NSString *)filesPath;
+
 @end
 
 NS_ASSUME_NONNULL_END

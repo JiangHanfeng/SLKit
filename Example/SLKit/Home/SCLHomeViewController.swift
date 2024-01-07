@@ -226,24 +226,14 @@ class SCLHomeViewController: SCLBaseViewController {
         guard let fileVc = UIApplication.shared.currentController() as? SCLFileHistoryViewController else {
             return
         }
-        let receivingModels = SLTransferManager.share().currentReceiveFileTransfer().filter { item in
-            !item.files.isEmpty
-        }.map { item in
-            return SCLTransferringModel(taskId: item.taskId, type: .receive, name: item.files.first!.name, count: item.files.count, progress: item.currentProgress)
-        }
-        fileVc.updateReceivingFileModels(receivingModels)
+        fileVc.updateReceivingFiles()
     }
     
     private func updateSendingFiels() {
         guard let fileVc = UIApplication.shared.currentController() as? SCLFileHistoryViewController else {
             return
         }
-        if let sendFile = SLTransferManager.share().currentSendFileTransfer(), !sendFile.files.isEmpty {
-            let sendModel = SCLTransferringModel(taskId: sendFile.taskId, type: .send, name: sendFile.files.first!.name, count: sendFile.files.count, progress: sendFile.currentProgress)
-            fileVc.updateSendingFileModels([sendModel])
-        } else {
-            fileVc.updateSendingFileModels([])
-        }
+        fileVc.updateSendingFiles()
     }
 }
 
@@ -385,18 +375,21 @@ extension SCLHomeViewController {
             SLLog.debug("SLTransferManager.share().cancelReceiveFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateReceivingFiles()
+            self?.toast("已取消接收文件")
         }
         
         SLTransferManager.share().completeReceiveFileBlock = {[weak self] _,taskId in
             SLLog.debug("SLTransferManager.share().completeReceiveFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateReceivingFiles()
+            self?.toast("文件接收完成")
         }
         
         SLTransferManager.share().receiveFileFailBlock = {[weak self] _,taskId,_ in
             SLLog.debug("SLTransferManager.share().receiveFileFailBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateReceivingFiles()
+            self?.toast("文件接收失败")
         }
         
         SLTransferManager.share().nonReceiveFileBlock = {[weak self] _ in
@@ -436,18 +429,21 @@ extension SCLHomeViewController {
                         SLLog.debug("SLTransferManager.share().cancelSendFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
+            self?.toast("已取消发送文件")
         }
         
         SLTransferManager.share().completeSendFileBlock = { [weak self] _,taskId in
             SLLog.debug("SLTransferManager.share().completeSendFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
+            self?.toast("文件发送已完成")
         }
         
         SLTransferManager.share().sendFileFailBlock = { [weak self] _,taskId,_ in
             SLLog.debug("SLTransferManager.share().sendFileFailBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
+            self?.toast("文件发送失败")
         }
     
         SLTransferManager.share().nonSendFileBlock = { [weak self] _ in
