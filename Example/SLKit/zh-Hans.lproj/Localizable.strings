@@ -6,6 +6,16 @@
   Copyright © 2024 CocoaPods. All rights reserved.
 */
 
+"SLNextTitle" = "下一步";
+"SLCancelTitle" = "取消";
+"SLAffirmTitle" = "确认";
+"SLAcceptTitle" = "接收";
+"SLRefuseTitle" = "拒绝";
+"SLOffTitle" = "关闭";
+"SLCompleteTitle" = "完成";
+"SLYESTitle" = "是";
+"SLNOTitle" = "否";
+
 "SLAdjustingtitleString" = "屏幕校准";
 "SLAdjustingStratBtnString" = "开始校准";
 "SLAdjustingBtnString" = "校准中，请稍后...";
@@ -54,3 +64,39 @@
 "SLConnectionRefused" = "连接失败：PC拒绝连接";
 "SLNextTitle" = "下一步";
 
+"SLFunctionIntroduceTitle" = "功能介绍";
+"SLFunctionIntroduceScreenTitle" = "镜像投屏";
+"SLFunctionIntroduceScreenContent" = "将您的手机&平板融入电脑，直接在电脑屏幕上操作手机&平板，尽享无缝融合体验";
+"SLFunctionIntroduceFileTransferTitle" = "联想闪传";
+"SLFunctionIntroduceFileTransferContent" = "可以将本机的文件发送给任意搭载了超级互联 Lite的设备上";
+"SLFunctionIntroduceDownloadUrlString" = "Windows客户端下载地址: ";
+
+"SLAboutTitle" = "关于超级互联 Lite";
+"SLAboutUpdateTitle" = "版本更新";
+"SLAboutCollectTitle" = "允许联想收集匿名数据以改进我们的产品和服务";
+"SLAboutPrivacyString" = "《隐私》";
+"SLAboutPrivacyStatementString" = "《联想隐私声明》";
+"SLAboutPermissionString" = "《联想许可协议》";
+"SLAboutSourceString" = "《开源信息》";
+"SLAboutCopyrightString" = "联想集团 版权所有\n2023 Lenovo Freestyle lite Version 2.0-1.0.0";
+
+"SLSettingTitleString" = "设置";
+"SLSettingNameTitleString" = "设备名称";
+"SLSettingDeviceTitleString" = "设备管理";
+"SLSettingAdjustingTitleString" = "屏幕校准";
+"SLSettingFunctionTitleString" = "功能介绍";
+"SLSettingVersionTitleString" = "关于超级互联 Lite";
+"SLSettingDeviceForgetString" = "忘记";
+"SLSettingDeviceCurrentScreeningString" = "投屏中";
+"SLSettingDeviceCurrentFileTransferingString" = "文件传输中";
+"SLSettingDeviceHintString" = "可信设备（仅电脑）";
+"SLSettingNotDeviceHintString" = "暂无设备";
+"SLSettingConnectDeviceHintString" = "需先连接设备";
+"SLSettingWaitHintString" = "请稍等，设备正在准备";
+"SLSettingSetDeviceNameTitle" = "修改设备名称";
+"SLSettingSetDeviceNameSuccessString" = "修改设备名称成功";
+"SLSettingSetDeviceNamePlaceholderTitle" = "请输入设备名称";
+"SLSettingSetDeviceNameErrorString" = "名称不超过32个英文或16个汉字";
+"SLSettingDeleteDeviceSucceedTitle" = "忘记成功";
+"SLSettingDeleteDeviceSucceedString" = "请继续前往手机「设置->蓝牙」中忽略此设备";
+"SLSettingDeleteDeviceSucceedBtnTitle" = "前往设置";

@@ -102,6 +102,7 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         segementView.layer.addSublayer(segementLayer)
         
         receivedBtn.rx.tap.bind { [unowned self] _ in
@@ -134,7 +135,7 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
-
+    
     private func setSelectedIndex(_ index: Int) {
         currentIndex = index
         let btns = [receivedBtn, sendedBtn]
@@ -153,7 +154,7 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         transitionToChild([receivedFileVc, sendedFileVc][index], removeCurrent: false) { childView in
             childView.snp.makeConstraints {[weak self] make in
                 guard let self else { return }
-                make.top.equalTo(self.segementView.snp.bottom).offset(20)
+                make.top.equalTo(self.segementView.snp.bottom).offset(0)
                 make.bottom.equalTo(self.bottomView.snp.top)
                 make.leading.trailing.equalTo(0)
             }
@@ -285,4 +286,8 @@ class SCLFileHistoryViewController: SCLBaseViewController {
             sendedFileVc.updateTransferringFiles([])
         }
     }
+}
+
+extension SCLFileHistoryViewController : UINavigationControllerDelegate {
+        
 }

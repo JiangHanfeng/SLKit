@@ -101,6 +101,27 @@ class SCLDeviceViewController: SCLBaseViewController {
                             } else {
                                 SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
                             }
+                        } else if let calibrationData = SCLUtil.getCalibrationData(), !calibrationData.isEmpty, let socket = self.device?.localClient {
+                            SLSocketManager.shared.send(
+                                SCLSocketRequest(content: SCLUploadCalibrationDataReq(data: calibrationData)),
+                                from: socket,
+                                for: SCLSocketResponse<SCLUploadCalibrationDataResp>.self)
+                            { result in
+                                var error: String?
+                                switch result {
+                                case .success(let resp):
+                                    error = resp.content?.succ == 1 ? nil : "upload adjusting data failed"
+                                case .failure(let e):
+                                    error = e.localizedDescription
+                                }
+                                DispatchQueue.main.async {
+                                    if let error {
+                                        SLLog.debug("上传校准数据失败\n\(error.localizedLowercase)")
+                                    } else {
+                                        SLLog.debug("上传校准数据成功")
+                                    }
+                                }
+                            }
                         }
 //                        if SCLUtil.isFirstAirPlay(), let device = self.device {
 //                            self.present(SCLPairViewController(device: device), animated: true)
@@ -322,9 +343,38 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
     
     private func calibrationIfNeed() {
-        let needCalibration = SCLUtil.getCalibrationData()?.isEmpty ?? true
-        SLLog.debug("投屏成功，hid已连接，\(needCalibration ? "需要" : "不需要")校准")
-        guard needCalibration, let device = self.device else {
+        let calibrationData = SCLUtil.getCalibrationData() ?? ""
+        let needCalibration = calibrationData.isEmpty
+        guard needCalibration else {
+            SLLog.debug("投屏成功，hid已连接，不需要校准，准备提交校准数据")
+            if let socket = device?.localClient {
+                SLSocketManager.shared.send(
+                    SCLSocketRequest(content: SCLUploadCalibrationDataReq(data: calibrationData)),
+                    from: socket,
+                    for: SCLSocketResponse<SCLUploadCalibrationDataResp>.self)
+                { result in
+                    var error: String?
+                    switch result {
+                    case .success(let resp):
+                        error = resp.content?.succ == 1 ? nil : "upload adjusting data failed"
+                    case .failure(let e):
+                        error = e.localizedDescription
+                    }
+                    DispatchQueue.main.async {
+                        if let error {
+                            SLLog.debug("上传校准数据失败\n\(error.localizedLowercase)")
+                        } else {
+                            SLLog.debug("上传校准数据成功")
+                        }
+                    }
+                }
+            } else {
+                SLLog.debug("上传校准数据失败:socket已被释放")
+            }
+            return
+        } 
+        SLLog.debug("投屏成功，hid已连接，需要校准")
+        guard let device = self.device else {
             SLLog.debug("启动校准失败：当前设备已被释放")
             return
         }

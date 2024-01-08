@@ -12,7 +12,7 @@ import SnapKit
 class SCLSettingViewController: SCLBaseViewController {
     
     enum Section {
-    case one, two
+        case one, two
     }
     
     private var collectionView: UICollectionView!
@@ -83,6 +83,41 @@ class SCLSettingViewController: SCLBaseViewController {
 
 extension SCLSettingViewController : UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.toast(items[indexPath.section][indexPath.row].title ?? "")
+//        self.toast(items[indexPath.section][indexPath.row].title ?? "")
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                // MARK: 设备名
+                let vc = SCLSetDeviceNameViewController()
+                vc.updataNameBlock = { [weak self] name in
+                    self?.items[0][0].content = name
+                    self?.collectionView.reloadItems(at: [indexPath])
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                        return
+                    }
+                    self?.toast(NSLocalizedString("SLSettingSetDeviceNameSuccessString", comment: ""))
+                }
+                self.navigationController?.present(vc, animated: false)
+            case 1:
+                // MARK: 屏幕校准
+                break
+            default:
+                break
+            }
+        case 1:
+            switch indexPath.row {
+            case 0:
+                // MARK: 功能介绍
+                navigationController?.show(SCLFunctionViewController(), sender: nil)
+            case 1:
+                // MARK: 关于
+                break
+            default:
+                break
+            }
+        default:
+            break
+        }
     }
 }

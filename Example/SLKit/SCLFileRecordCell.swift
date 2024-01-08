@@ -26,7 +26,7 @@ class SCLFileRecordCell: UITableViewCell {
     
     override var isSelected: Bool {
         didSet {
-            editStateImageView.image = UIImage(named: isSelected ? "icon_circle_checked" :"icon_circle_uncheck")
+            editStateImageView.image = UIImage(named: isSelected ? "icon_square_checkbox_true" :"icon_square_checkbox_false")
         }
     }
     
