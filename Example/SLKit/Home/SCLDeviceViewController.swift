@@ -86,17 +86,17 @@ class SCLDeviceViewController: SCLBaseViewController {
                     if result {
                         SLLog.debug("投屏成功")
                         self.toast("投屏成功")
-//                        let mac = SCLUtil.getBTMac()
-//                        if mac?.isEmpty ?? true {
-//                            if let device = self.device {
-//                                self.present(SCLPairViewController(device: device), animated: true)
-//                            } else {
-//                                SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
-//                            }
-//                        }
-                        if SCLUtil.isFirstAirPlay(), let device = self.device {
-                            self.present(SCLPairViewController(device: device), animated: true)
+                        let mac = SCLUtil.getBTMac()
+                        if mac?.isEmpty ?? true {
+                            if let device = self.device {
+                                self.present(SCLPairViewController(device: device), animated: true)
+                            } else {
+                                SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
+                            }
                         }
+//                        if SCLUtil.isFirstAirPlay(), let device = self.device {
+//                            self.present(SCLPairViewController(device: device), animated: true)
+//                        }
                         self.airplaySuccess = true
                     } else {
                         SLLog.debug("投屏失败")

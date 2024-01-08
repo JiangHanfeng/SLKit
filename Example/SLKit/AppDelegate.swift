@@ -29,10 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SLLog.prepare()
-        if SCLUtil.isFirstLaunch() {
-            SCLUtil.setFirstAirPlay(true)
-            SCLUtil.markNotFirstLaunch()
-        }
+//        if SCLUtil.isFirstLaunch() {
+//            SCLUtil.setFirstAirPlay(true)
+//            SCLUtil.markNotFirstLaunch()
+//        }
         if let btMac = SCLUtil.getBTMac(), !btMac.isEmpty {
 //            SCLUtil.setBTMac(nil)
         } else {
