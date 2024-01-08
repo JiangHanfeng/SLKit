@@ -31,7 +31,7 @@ struct SCLSyncPairReq : SLSocketRequest, HandyJSON {
         state = -1
     }
     
-    var cmd: SCLCmd = .requestPairVerification
+    var cmd: SCLCmd = .syncPairSuccess
     
     init(device: SCLPCPairedDevice, pairResult: Bool) {
         self.mac = device.mac
@@ -39,7 +39,7 @@ struct SCLSyncPairReq : SLSocketRequest, HandyJSON {
         self.state = pairResult ? 1 : 0
     }
     
-    let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
+    let taskId = SCLUtil.getTempMac() + "_\(Date().timeIntervalSince1970)"
     let dev_id = SCLUtil.getTempMac().split(separator: ":").joined()
     let mac : String
     let deviceName : String

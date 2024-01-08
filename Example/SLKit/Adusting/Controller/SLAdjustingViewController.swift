@@ -346,7 +346,7 @@ class SLAdjustingViewController: SCLBaseViewController {
             var error: String?
             switch result {
             case .success(let resp):
-                error = resp.state == 1 ? nil : "sync adjustting state failed"
+                error = resp.state == 3 ? nil : "sync adjustting state failed"
             case .failure(let e):
                 error = e.localizedDescription
             }
