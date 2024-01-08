@@ -42,7 +42,7 @@ struct SCLInitReq : SLSocketRequest, HandyJSON {
     let isHomeKey = false
     
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
-    let dev_id : String = SCLUtil.getDeviceMac().split(separator: ":").joined()
+    let dev_id : String = SCLUtil.getTempMac().split(separator: ":").joined()
     let mac : String
     let deviceName = UIDevice.current.name
     let os = 1

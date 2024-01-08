@@ -122,6 +122,10 @@ class SCLFileRecordViewController: SCLBaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
+    func enterEdit() {
+        tableView.setEditing(true, animated: true)
+    }
+    
     func cancelEdit() {
         tableView.setEditing(false, animated: true)
         DispatchQueue.global().async { [weak self] in

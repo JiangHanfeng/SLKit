@@ -126,6 +126,8 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         }.disposed(by: disposeBag)
         
         setSelectedIndex(0)
+        
+        addEditBarButtonItem()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -178,13 +180,29 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         }.disposed(by: disposeBag)
         navigationItem.leftBarButtonItems = [selectAllBarButtonItem]
         
-        let closeBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
-        closeBarButtonItem.rx.tap.bind { [weak self] _ in
+        addCancelEditBarButtonItem()
+    }
+    
+    private func addEditBarButtonItem() {
+        let editBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_edit_file")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
+        editBarButtonItem.rx.tap.bind { [weak self] _ in
+            guard let self else {
+                return
+            }
+            self.startEditing(for: [SCLFileTransferType.receive, .send][self.currentIndex])
+            [self.receivedFileVc,self.sendedFileVc][self.currentIndex].enterEdit()
+        }.disposed(by: disposeBag)
+        navigationItem.rightBarButtonItem = editBarButtonItem
+    }
+    
+    private func addCancelEditBarButtonItem() {
+        let cancelEditingBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_close")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
+        cancelEditingBarButtonItem.rx.tap.bind { [weak self] _ in
             self?.stopEditing()
         }.disposed(by: disposeBag)
-        navigationItem.rightBarButtonItem = closeBarButtonItem
+        navigationItem.rightBarButtonItem = cancelEditingBarButtonItem
     }
-
+    
     @objc private func stopEditing() {
         navigationItem.title = "联想闪传"
         let backBarButtonItem = UIBarButtonItem(image: UIImage(named: "icon_back_dark")?.withRenderingMode(.alwaysOriginal), style: .done, target: self, action: nil)
@@ -193,6 +211,9 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         }.disposed(by: disposeBag)
         navigationItem.leftBarButtonItem = backBarButtonItem
         navigationItem.rightBarButtonItem = nil
+        
+        addEditBarButtonItem()
+        
         setBottomView(hidden: true)
         
         receivedFileVc.cancelEdit()
@@ -200,17 +221,20 @@ class SCLFileHistoryViewController: SCLBaseViewController {
     }
     
     private func setBottomView(hidden: Bool) {
-        guard bottomView.isHidden != hidden else {
-            return
-        }
-        bottomView.isHidden = false
-        bottomView.alpha = hidden ? 1 : 0
-        bottomViewTopConstraint.constant = hidden ? 0 : 45
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            self?.bottomView.alpha = hidden ? 0 : 1
-            self?.view.layoutIfNeeded()
-        } completion: { [weak self] _ in
-            self?.bottomView.isHidden = hidden
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            guard self.bottomView.isHidden != hidden else {
+                return
+            }
+            self.bottomView.isHidden = false
+            self.bottomView.alpha = hidden ? 1 : 0
+            self.bottomViewTopConstraint.constant = hidden ? 0 : 45
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                self?.bottomView.alpha = hidden ? 0 : 1
+                self?.view.layoutIfNeeded()
+            } completion: { [weak self] _ in
+                self?.bottomView.isHidden = hidden
+            }
         }
     }
     

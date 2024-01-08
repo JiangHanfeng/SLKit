@@ -38,7 +38,7 @@ struct SCLPairVerificationReq : SLSocketRequest, HandyJSON {
     }
     
     let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
-    let dev_id = SCLUtil.getDeviceMac().split(separator: ":").joined()
+    let dev_id = SCLUtil.getTempMac().split(separator: ":").joined()
     let mac : String
     let deviceName : String
     let os = 1

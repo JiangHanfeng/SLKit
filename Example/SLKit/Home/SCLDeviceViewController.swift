@@ -58,7 +58,6 @@ class SCLDeviceViewController: SCLBaseViewController {
         if let socketDataListener {
             SLSocketManager.shared.removeClientUnhandledDataHandler(socketDataListener)
         }
-        SLLog.debug("\(self) deinit")
     }
     
     override func viewDidLoad() {
@@ -87,13 +86,16 @@ class SCLDeviceViewController: SCLBaseViewController {
                     if result {
                         SLLog.debug("投屏成功")
                         self.toast("投屏成功")
-                        let mac = SCLUtil.getBTMac()
-                        if mac?.isEmpty ?? true {
-                            if let device = self.device {
-                                self.present(SCLPairViewController(device: device), animated: true)
-                            } else {
-                                SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
-                            }
+//                        let mac = SCLUtil.getBTMac()
+//                        if mac?.isEmpty ?? true {
+//                            if let device = self.device {
+//                                self.present(SCLPairViewController(device: device), animated: true)
+//                            } else {
+//                                SLLog.debug("检测到蓝牙未配对，弹窗提示时socket已释放")
+//                            }
+//                        }
+                        if SCLUtil.isFirstAirPlay(), let device = self.device {
+                            self.present(SCLPairViewController(device: device), animated: true)
                         }
                         self.airplaySuccess = true
                     } else {
@@ -272,26 +274,39 @@ class SCLDeviceViewController: SCLBaseViewController {
         SLLog.debug("提交蓝牙配对校验结果：\(result ? "通过" : "未通过")")
         defer {
             if result {
+                SLLog.debug("保存蓝牙mac:\(pairedDevice.mac)")
                 _ = SCLUtil.setBTMac(pairedDevice.mac)
                 _ = SCLUtil.setDeviceName(pairedDevice.deviceName)
             }
         }
         
         if let socket = device?.localClient {
-            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success(let resp):
-                    if resp.state == 1 {
+//            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
+//                guard let self else { return }
+//                switch result {
+//                case .success(let resp):
+//                    if resp.state == 1 {
+//                        // MARK: 蓝牙配对校验通过
+//                        self.toast("已完成蓝牙配对，回控功能已启用")
+//                    } else {
+//                        // MARK: 蓝牙配对校验未通过
+//                        self.toast("蓝牙配对校验未通过")
+//                    }
+//                case .failure(_):
+//                    break
+//                }
+//            }
+            // MARK: 本机确认配对成功，只发送，无需等pc回复
+            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket) { [weak self] resp in
+                    guard let self else { return }
+                    switch resp {
+                    case .success(_):
                         // MARK: 蓝牙配对校验通过
-                        self.toast("已完成蓝牙配对，回控功能已启用")
-                    } else {
+                        self.toast("已上报蓝牙配对成功，等待PC启用回控功能")
+                    case .failure(_):
                         // MARK: 蓝牙配对校验未通过
-                        self.toast("蓝牙配对校验未通过")
+                        self.toast("已完成蓝牙配对，上报结果失败")
                     }
-                case .failure(_):
-                    break
-                }
             }
         }
     }

@@ -33,6 +33,8 @@ class SCLPairViewController: SCLBaseViewController {
     
     private lazy var pairAlertVc = {
         return SCLPairGuideViewController(bleName: device?.bleName ?? "") { [unowned self] in
+            // MARK: 取消配对，标记为已投屏过
+            SCLUtil.setFirstAirPlay(false)
             self.presentingViewController?.dismiss(animated: true)
         } onPair: { [unowned self] in
             // MARK: 获取pc的已配对列表，开启A2DP检测，跳转到设置
@@ -164,6 +166,7 @@ class SCLPairViewController: SCLBaseViewController {
     private func submitPairResult(device: SCLPCPairedDevice, result: Bool) {
         defer {
             if result {
+                SLLog.debug("保存蓝牙mac:\(device.mac)")
                 _ = SCLUtil.setBTMac(device.mac)
             }
             let presentingVc = presentingViewController
@@ -206,6 +209,8 @@ class SCLPairViewController: SCLBaseViewController {
             return
         }
         transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: devices, onVerified: { [weak self] device in
+            // MARK: 取消配对，标记为已投屏过
+            SCLUtil.setFirstAirPlay(false)
 //                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
                 self?.submitPairResult(device: device, result: true)
                 let presentingVc = self?.presentingViewController
@@ -217,6 +222,8 @@ class SCLPairViewController: SCLBaseViewController {
 //                            }
         }, onBack: { [weak self] in
             if let self {
+                // MARK: 取消配对，标记为已投屏过
+                SCLUtil.setFirstAirPlay(false)
                 self.presentingViewController?.dismiss(animated: true)
             }
         })) { childView in

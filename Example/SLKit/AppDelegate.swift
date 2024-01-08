@@ -29,10 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SLLog.prepare()
-//        if SCLUtil.isFirstLaunch() {
-//            SCLUtil.setFirstAirPlay(true)
-//            SCLUtil.markNotFirstLaunch()
-//        }
+        if SCLUtil.isFirstLaunch() {
+            SCLUtil.setFirstAirPlay(true)
+            SCLUtil.markNotFirstLaunch()
+        }
         if let btMac = SCLUtil.getBTMac(), !btMac.isEmpty {
 //            SCLUtil.setBTMac(nil)
         } else {
@@ -148,6 +148,8 @@ extension AppDelegate {
                              "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
                              "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.black], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.black], for: .highlighted)
         let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
         vc.modalPresentationStyle = .fullScreen
         vc.delegate = self
@@ -236,10 +238,14 @@ extension AppDelegate {
 extension AppDelegate : UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
         SLTransferManager.share().startSendFile()
         var files:[SLFileModel] = []
         _ = urls.map({ url in

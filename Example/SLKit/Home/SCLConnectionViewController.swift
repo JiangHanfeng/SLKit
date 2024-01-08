@@ -63,7 +63,7 @@ class SCLConnectionViewController: SCLBaseViewController {
                             if resp.state == 1 {
                                 let sync = SCLSyncReq(
                                     deviceName: SCLUtil.getDeviceName(),
-                                    deviceId: SCLUtil.getDeviceMac().split(separator: ":").joined(),
+                                    deviceId: SCLUtil.getTempMac().split(separator: ":").joined(),
                                     ip: sock.localHost ?? "",
                                     port1: 0,
                                     port2: UInt16(SLTransferManager.share().controlPort),

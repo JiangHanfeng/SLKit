@@ -182,6 +182,7 @@ class SCLHomeViewController: SCLBaseViewController {
             guard let self else {
                 return
             }
+            self.device = nil
             self.transitionToChild(self.getConnectionVc()) { childView in
                 childView.snp.makeConstraints { make in
                     make.top.equalTo(self.topBar.snp.bottom)
@@ -268,6 +269,7 @@ extension SCLHomeViewController {
                     return .access(nil)
                 }
                 let shouldConnect = self?.device == nil
+                SLLog.debug("\(shouldConnect ? "需要" : "不需要")连接server:\(ip):\(port)")
                 let resp = [
                     "cmd":cmd,
                     "state":shouldConnect ? 1 : 0
