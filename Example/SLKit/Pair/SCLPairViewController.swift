@@ -179,7 +179,7 @@ class SCLPairViewController: SCLBaseViewController {
         }
         
         if let socket = self.device?.localClient {
-            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: device, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
+            SLSocketManager.shared.send(SCLSyncPairReq(device: device, pairResult: result), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
                 guard let self else { return }
                 switch result {
                 case .success(let resp):

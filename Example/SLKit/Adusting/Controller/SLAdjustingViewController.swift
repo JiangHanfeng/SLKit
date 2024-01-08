@@ -339,7 +339,7 @@ class SLAdjustingViewController: SCLBaseViewController {
         }
         // MARK: 发送cmd10 state 1表示开始校准 2表示取消校准
         SLSocketManager.shared.send(
-            SCLSyncCalibrationStateReq(state: 1),
+            SCLSyncCalibrationStateReq(state: 3),
             from: socket,
             for: SCLSyncCalibrationStateResp.self)
         { [weak self] result in

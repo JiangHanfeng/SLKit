@@ -1,6 +1,5 @@
 PODS:
   - CocoaAsyncSocket (7.6.5)
-  - Differentiator (5.0.0)
   - HandyJSON (5.0.2)
   - KeychainAccess (4.2.2)
   - LLNetworkAccessibility-Swift (1.0.3)
@@ -15,10 +14,6 @@ PODS:
   - RxCocoa (6.6.0):
     - RxRelay (= 6.6.0)
     - RxSwift (= 6.6.0)
-  - RxDataSources (5.0.0):
-    - Differentiator (~> 5.0)
-    - RxCocoa (~> 6.0)
-    - RxSwift (~> 6.0)
   - RxRelay (6.6.0):
     - RxSwift (= 6.6.0)
   - RxSwift (6.6.0)
@@ -47,7 +42,6 @@ DEPENDENCIES:
   - LLNetworkAccessibility-Swift
   - RealmSwift (~> 10)
   - RxCocoa
-  - RxDataSources
   - RxSwift
   - SLKit (from `../`)
   - SnapKit
@@ -58,7 +52,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - CocoaAsyncSocket
-    - Differentiator
     - HandyJSON
     - KeychainAccess
     - LLNetworkAccessibility-Swift
@@ -66,7 +59,6 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - RxCocoa
-    - RxDataSources
     - RxRelay
     - RxSwift
     - SnapKit
@@ -80,7 +72,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   LLNetworkAccessibility-Swift: f9d237d2589f92eaa9baaa5351a1043e730c4773
@@ -88,7 +79,6 @@ SPEC CHECKSUMS:
   Realm: bc4fc31783a0b3e355edca05f167f6a49c544dc2
   RealmSwift: 234003b5fdb187c4b439d478662636d62a1f9de0
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
-  RxDataSources: aa47cc1ed6c500fa0dfecac5c979b723542d79cf
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
   SLKit: e673ee93413f816e15f730d879cdce98e15d2085
@@ -97,6 +87,6 @@ SPEC CHECKSUMS:
   TZImagePickerController: f1c9f1cae6ac0e30b31aaa9698f9bf4a7cf5b84f
   XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
-PODFILE CHECKSUM: fada14bc77272f0c7808f9378aec2845509e8cdd
+PODFILE CHECKSUM: e688fa65a80e41d798b06693b5d6305abff4872a
 
 COCOAPODS: 1.13.0

@@ -7,20 +7,45 @@
 //
 
 import Foundation
+import HandyJSON
+import SLKit
 
-struct SCLSyncPairReq : SCLSocketConetent {
+struct SCLSyncPairReq : SLSocketRequest, HandyJSON {
+    var type: SLKit.SLSocketSessionItemType = .businessMessage
+    
+    var id: String {
+        return taskId
+    }
+    
+    var data: Data? {
+        if let json = toJSON() {
+            return try? JSONSerialization.data(withJSONObject: json)
+        }
+        return nil
+    }
+    
     init() {
         cmd = .syncPairSuccess
-        state = 0
+        mac = ""
+        deviceName = ""
+        state = -1
     }
     
-    var cmd: SCLCmd = .syncPairSuccess
-    var device: SCLPCPairedDevice = SCLPCPairedDevice()
-    var state: Int = 0
+    var cmd: SCLCmd = .requestPairVerification
+    
+    init(device: SCLPCPairedDevice, pairResult: Bool) {
+        self.mac = device.mac
+        self.deviceName = device.deviceName
+        self.state = pairResult ? 1 : 0
+    }
+    
+    let taskId = (UIDevice.current.identifierForVendor?.uuidString ?? "") + "_\(Date().timeIntervalSince1970)"
+    let dev_id = SCLUtil.getTempMac().split(separator: ":").joined()
+    let mac : String
+    let deviceName : String
     let os = 1
-    
-    init(device: SCLPCPairedDevice, state: Int) {
-        self.device = device
-        self.state = state
-    }
+    let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
+    let dbg_info = "bug"
+    let state : Int
 }
+

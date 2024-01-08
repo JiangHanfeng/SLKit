@@ -297,7 +297,7 @@ class SCLDeviceViewController: SCLBaseViewController {
 //                }
 //            }
             // MARK: 本机确认配对成功，只发送，无需等pc回复
-            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket) { [weak self] resp in
+            SLSocketManager.shared.send(request: SCLSyncPairReq(device: pairedDevice, pairResult: result), from: socket) { [weak self] resp in
                     guard let self else { return }
                     switch resp {
                     case .success(_):
