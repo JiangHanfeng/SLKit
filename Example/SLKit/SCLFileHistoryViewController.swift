@@ -272,14 +272,14 @@ class SCLFileHistoryViewController: SCLBaseViewController {
             !item.files.isEmpty
         }.map { item in
             let name = item.files.count > 1 ? "正在接收\(item.files.first!.name)等文件" : "正在接收\(item.files.first!.name)"
-            return SCLTransferringModel(taskId: item.taskId, type: .receive, fileType: SCLFileTypeMapper[item.files.first!.fileType()] ?? .unknown, name: name, count: item.files.count, progress: item.currentProgress, status: "%\(item.currentProgress * 100)")
+            return SCLTransferringModel(taskId: item.taskId, type: .receive, fileType: SCLFileTypeMapper[item.files.first!.fileType()] ?? .unknown, name: name, count: item.files.count, progress: item.currentProgress, status: "\(Int(item.currentProgress * 100))%")
         }
         receivedFileVc.updateTransferringFiles(receivingModels)
     }
     
     func updateSendingFiles() {
         if let sendFile = SLTransferManager.share().currentSendFileTransfer(), !sendFile.files.isEmpty {
-            let sendModel = SCLTransferringModel(taskId: sendFile.taskId, type: .send, fileType: SCLFileTypeMapper[sendFile.files.first!.fileType()] ?? .unknown, name: sendFile.files.first!.name, count: sendFile.files.count, progress: sendFile.currentProgress, status: "%\(sendFile.currentProgress * 100)")
+            let sendModel = SCLTransferringModel(taskId: sendFile.taskId, type: .send, fileType: SCLFileTypeMapper[sendFile.files.first!.fileType()] ?? .unknown, name: sendFile.files.first!.name, count: sendFile.files.count, progress: sendFile.currentProgress, status: "\(Int(sendFile.currentProgress * 100))%")
             sendedFileVc.updateTransferringFiles([sendModel])
         } else {
             sendedFileVc.updateTransferringFiles([])

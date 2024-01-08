@@ -24,8 +24,15 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var airplayBtn: UIButton!
     @IBOutlet weak var sendPhotoView: UIView!
     @IBOutlet weak var fileTransferView: UIView!
+    @IBOutlet weak var fileTransferTitleLabel: UILabel!
+    @IBOutlet weak var sendingView: UIView!
+    @IBOutlet weak var sendingViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var sendingViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var sendingProgressLabel: UILabel!
+    @IBOutlet weak var sendingProgressView: UIProgressView!
     
     private var device: SLDevice?
+    private var sendingTaskId: String?
     private var disconnectedCallback: (() -> Void)?
     private var state = State.connected
     private var socketDataListener: SLSocketClientUnhandledDataHandler?
@@ -64,6 +71,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         super.viewDidLoad()
         disconenctBtn.setBorder(width: 1, cornerRadius: 15, color: UIColor(red: 230/255.0, green: 230/255.0, blue: 230/255.0, alpha: 1))
         nameLabel.text = device?.name
+        // MARK: 设置pc主动发送的消息监听
         socketDataListener = SLSocketClientUnhandledDataHandler(id: String(describing: self), handle: { [weak self] data, client in
             guard let self else { return }
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else { return }
@@ -84,7 +92,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                         result = state == 1
                     }
                     if result {
-                        SLLog.debug("投屏成功")
+                        SLLog.debug("投屏状态：投屏中")
                         self.toast("投屏成功")
                         let mac = SCLUtil.getBTMac()
                         if mac?.isEmpty ?? true {
@@ -99,8 +107,10 @@ class SCLDeviceViewController: SCLBaseViewController {
 //                        }
                         self.airplaySuccess = true
                     } else {
-                        SLLog.debug("投屏失败")
-                        self.toast("投屏失败")
+                        SLLog.debug("投屏状态：断开")
+                        if self.airplaySuccess {
+                            self.toast("已断开投屏")
+                        }
                         self.airplaySuccess = false
                     }
                 case SCLCmd.requestPair.rawValue:
@@ -312,9 +322,9 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
     
     private func calibrationIfNeed() {
-        let needCalibratiopn =  SCLUtil.getCalibrationData()?.isEmpty ?? true
-        SLLog.debug("投屏成功，hid已连接，\(needCalibratiopn ? "需要" : "不需要")校准")
-        guard let device = self.device else {
+        let needCalibration = SCLUtil.getCalibrationData()?.isEmpty ?? true
+        SLLog.debug("投屏成功，hid已连接，\(needCalibration ? "需要" : "不需要")校准")
+        guard needCalibration, let device = self.device else {
             SLLog.debug("启动校准失败：当前设备已被释放")
             return
         }
@@ -326,6 +336,54 @@ class SCLDeviceViewController: SCLBaseViewController {
             }
         } else {
             present(SLAdjustingViewController(initiative: false, device: device), animated: true)
+        }
+    }
+    
+    func updateSendingProgress(_ progress: Float, taskId: String) {
+        sendingTaskId = taskId
+        let intProgress = Int(progress * 100)
+        sendingProgressLabel.text = "\(intProgress)%"
+        sendingProgressView.progress = progress
+    }
+    
+    func showSendingView() {
+        fileTransferTitleLabel.text = "文件发送中"
+        sendingProgressLabel.text = "0%"
+        sendingProgressView.progress = 0
+        sendingView.alpha = 0
+        sendingView.isHidden = false
+        sendingViewTopConstraint.constant = 10
+        sendingViewHeightConstraint.constant = 58
+        UIView.animate(withDuration: 0.25) {
+            self.sendingView.alpha = 1
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.sendingView.alpha = 1
+        }
+    }
+    
+    func hideSendingView() {
+        fileTransferTitleLabel.text = "文件传输"
+        sendingView.alpha = 1
+        sendingView.isHidden = false
+        sendingViewTopConstraint.constant = 0
+        sendingViewHeightConstraint.constant = 0
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            self?.sendingView.alpha = 0
+            self?.view.layoutIfNeeded()
+        } completion: { [weak self] _ in
+            self?.sendingView.alpha = 0
+            self?.sendingView.isHidden = true
+            self?.sendingProgressLabel.text = "0%"
+            self?.sendingProgressView.alpha = 0
+            self?.sendingProgressLabel.isHidden = true
+            self?.sendingProgressView.progress = 0
+        }
+    }
+    
+    @IBAction func onCancelSendFile(sender: UIButton) {
+        if let sendingTaskId {
+            SLTransferManager.share().cancelFiles(withTaskId: sendingTaskId)
         }
     }
 }

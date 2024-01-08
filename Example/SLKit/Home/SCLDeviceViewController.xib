@@ -14,9 +14,15 @@
                 <outlet property="airplayBtn" destination="koq-t6-q7x" id="zSf-Lu-njh"/>
                 <outlet property="connectionStateLabel" destination="Jos-Vk-RCW" id="gsc-RV-Ky9"/>
                 <outlet property="disconenctBtn" destination="Eai-do-Bfr" id="VEZ-qA-6GP"/>
+                <outlet property="fileTransferTitleLabel" destination="v94-Rd-cgA" id="c0F-tB-boI"/>
                 <outlet property="fileTransferView" destination="bV8-bh-vaR" id="G9J-9a-7ba"/>
                 <outlet property="nameLabel" destination="l0V-cS-fgv" id="Bhh-aX-5AO"/>
                 <outlet property="sendPhotoView" destination="Tp6-I4-Gyt" id="MpL-E1-0qe"/>
+                <outlet property="sendingProgressLabel" destination="gX1-sU-09h" id="OxR-eD-lQe"/>
+                <outlet property="sendingProgressView" destination="FLx-as-qsN" id="FKL-rq-m1e"/>
+                <outlet property="sendingView" destination="EgK-I2-pqi" id="2p4-Ar-66F"/>
+                <outlet property="sendingViewHeightConstraint" destination="AVw-Lw-Qfz" id="nlb-fy-Bk2"/>
+                <outlet property="sendingViewTopConstraint" destination="fyx-7H-MYH" id="Tdv-s6-zQM"/>
                 <outlet property="view" destination="RA0-fE-toV" id="97A-vR-lFM"/>
             </connections>
         </placeholder>
@@ -116,6 +122,59 @@
                                     <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgK-I2-pqi" userLabel="文件传输中">
+                                    <rect key="frame" x="20" y="244" width="313" height="0.0"/>
+                                    <subviews>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FLx-as-qsN">
+                                            <rect key="frame" x="20" y="-2" width="172" height="4"/>
+                                        </progressView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gX1-sU-09h">
+                                            <rect key="frame" x="204" y="-8" width="21" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRF-RK-Gy0">
+                                            <rect key="frame" x="237" y="-17" width="64" height="34"/>
+                                            <color key="backgroundColor" red="0.90588235294117647" green="0.96470588235294119" blue="0.96862745098039216" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="34" id="WHS-MD-UM1"/>
+                                                <constraint firstAttribute="width" constant="64" id="fQK-B2-a7R"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="取消">
+                                                <color key="titleColor" red="0.34509803921568627" green="0.42352941176470588" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                            </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="12"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
+                                            <connections>
+                                                <action selector="onCancelSendFileWithSender:" destination="-1" eventType="touchUpInside" id="RcD-Cw-MsT"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="FLx-as-qsN" firstAttribute="centerY" secondItem="EgK-I2-pqi" secondAttribute="centerY" id="1PL-pV-rSe"/>
+                                        <constraint firstItem="FLx-as-qsN" firstAttribute="leading" secondItem="EgK-I2-pqi" secondAttribute="leading" constant="20" id="8up-aB-8It"/>
+                                        <constraint firstAttribute="height" id="AVw-Lw-Qfz"/>
+                                        <constraint firstItem="lRF-RK-Gy0" firstAttribute="centerY" secondItem="EgK-I2-pqi" secondAttribute="centerY" id="FkD-lk-5Qn"/>
+                                        <constraint firstItem="gX1-sU-09h" firstAttribute="centerY" secondItem="EgK-I2-pqi" secondAttribute="centerY" id="GaX-uJ-oWy"/>
+                                        <constraint firstAttribute="trailing" secondItem="lRF-RK-Gy0" secondAttribute="trailing" constant="12" id="fXD-Tg-a52"/>
+                                        <constraint firstItem="gX1-sU-09h" firstAttribute="leading" secondItem="FLx-as-qsN" secondAttribute="trailing" constant="12" id="jRi-EC-ugc"/>
+                                        <constraint firstItem="lRF-RK-Gy0" firstAttribute="leading" secondItem="gX1-sU-09h" secondAttribute="trailing" constant="12" id="y9X-T0-uI0"/>
+                                    </constraints>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="16"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tp6-I4-Gyt" userLabel="发送照片">
                                     <rect key="frame" x="20" y="254" width="105" height="120"/>
                                     <subviews>
@@ -221,10 +280,10 @@
                             <constraints>
                                 <constraint firstItem="Tp6-I4-Gyt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="00u-hP-ynN"/>
                                 <constraint firstItem="Jdv-b1-7ip" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="2dv-Jy-tOI"/>
-                                <constraint firstItem="Tp6-I4-Gyt" firstAttribute="top" secondItem="v94-Rd-cgA" secondAttribute="bottom" constant="10" id="4ln-G5-sJS"/>
+                                <constraint firstItem="Tp6-I4-Gyt" firstAttribute="top" secondItem="EgK-I2-pqi" secondAttribute="bottom" constant="10" id="4ln-G5-sJS"/>
                                 <constraint firstItem="koq-t6-q7x" firstAttribute="top" secondItem="Jdv-b1-7ip" secondAttribute="bottom" constant="10" id="4s8-NT-a0Y"/>
                                 <constraint firstItem="koq-t6-q7x" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="5Tm-Vc-4RK"/>
-                                <constraint firstItem="bV8-bh-vaR" firstAttribute="top" secondItem="v94-Rd-cgA" secondAttribute="bottom" constant="10" id="9nR-e1-ngP"/>
+                                <constraint firstItem="bV8-bh-vaR" firstAttribute="top" secondItem="EgK-I2-pqi" secondAttribute="bottom" constant="10" id="9nR-e1-ngP"/>
                                 <constraint firstItem="l0V-cS-fgv" firstAttribute="centerY" secondItem="Eai-do-Bfr" secondAttribute="centerY" id="FV9-IU-dGA"/>
                                 <constraint firstItem="koq-t6-q7x" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="JCL-4f-EN1"/>
                                 <constraint firstItem="Jdv-b1-7ip" firstAttribute="top" secondItem="qhW-c5-mTb" secondAttribute="bottom" constant="24" id="LkP-bz-jcy"/>
@@ -234,12 +293,15 @@
                                 <constraint firstItem="bV8-bh-vaR" firstAttribute="leading" secondItem="Tp6-I4-Gyt" secondAttribute="trailing" constant="20" id="c7l-aS-Zw1"/>
                                 <constraint firstItem="Jos-Vk-RCW" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="cyj-4x-EJS"/>
                                 <constraint firstItem="qhW-c5-mTb" firstAttribute="top" secondItem="Jos-Vk-RCW" secondAttribute="bottom" constant="24" id="e5f-Wm-Yiy"/>
+                                <constraint firstItem="EgK-I2-pqi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="eAp-B2-r8l"/>
                                 <constraint firstAttribute="trailing" secondItem="Eai-do-Bfr" secondAttribute="trailing" constant="20" id="eGz-Ak-A3q"/>
+                                <constraint firstItem="EgK-I2-pqi" firstAttribute="top" secondItem="v94-Rd-cgA" secondAttribute="bottom" id="fyx-7H-MYH"/>
                                 <constraint firstAttribute="trailing" secondItem="qhW-c5-mTb" secondAttribute="trailing" constant="20" id="gek-2g-NTq"/>
                                 <constraint firstItem="v94-Rd-cgA" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="niQ-n3-0uG"/>
                                 <constraint firstItem="Jos-Vk-RCW" firstAttribute="top" secondItem="l0V-cS-fgv" secondAttribute="bottom" constant="8" symbolic="YES" id="q7F-Rm-ukJ"/>
                                 <constraint firstItem="qhW-c5-mTb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="vVV-Du-fp1"/>
                                 <constraint firstAttribute="bottom" secondItem="bV8-bh-vaR" secondAttribute="bottom" constant="22" id="vwt-RU-SX9"/>
+                                <constraint firstItem="EgK-I2-pqi" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yQ0-eF-sxi"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>

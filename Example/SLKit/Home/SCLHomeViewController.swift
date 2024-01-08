@@ -227,14 +227,38 @@ class SCLHomeViewController: SCLBaseViewController {
         guard let fileVc = UIApplication.shared.currentController() as? SCLFileHistoryViewController else {
             return
         }
-        fileVc.updateReceivingFiles()
+        DispatchQueue.main.async {
+            fileVc.updateReceivingFiles()
+        }
     }
     
-    private func updateSendingFiels() {
+    private func updateReceivedFiles() {
         guard let fileVc = UIApplication.shared.currentController() as? SCLFileHistoryViewController else {
             return
         }
-        fileVc.updateSendingFiles()
+        DispatchQueue.main.async {
+            fileVc.updateFileRecords(type: .receive)
+        }
+    }
+    
+    private func updateSendingFiels() {
+//        guard let fileVc = UIApplication.shared.currentController() as? SCLFileHistoryViewController else {
+//            return
+//        }
+//        fileVc.updateSendingFiles()
+        let deviceVc = childViewControllers.first { item in
+            item.isKind(of: SCLDeviceViewController.self)
+        } as? SCLDeviceViewController
+        if let sendFile = SLTransferManager.share().currentSendFileTransfer(), !sendFile.files.isEmpty {
+            let sendModel = SCLTransferringModel(taskId: sendFile.taskId, type: .send, fileType: SCLFileTypeMapper[sendFile.files.first!.fileType()] ?? .unknown, name: sendFile.files.first!.name, count: sendFile.files.count, progress: sendFile.currentProgress, status: "%\(Int(sendFile.currentProgress * 100))")
+            DispatchQueue.main.async {
+                deviceVc?.updateSendingProgress(sendFile.currentProgress, taskId: sendFile.taskId)
+            }
+        } else {
+            DispatchQueue.main.async {
+                deviceVc?.hideSendingView()
+            }
+        }
     }
 }
 
@@ -305,7 +329,7 @@ extension SCLHomeViewController {
     }
     
     func startAdvertising(port: UInt16) -> String? {
-        guard let macBytes = SCLUtil.getDeviceMac().macBytes() else {
+        guard let macBytes = SCLUtil.getTempMac().macBytes() else {
             return "无法获取mac"
         }
         let macData = Data(bytes: macBytes)
@@ -332,6 +356,7 @@ extension SCLHomeViewController {
         stopAdvertising()
         do {
             try  SLPeripheralManager.shared.startAdvertising(["kCBAdvDataAppleBeaconKey":ipPageData])
+            SLLog.debug("广播数据(deviveId:\(SCLUtil.getTempMac()),ip:\(ipv4 ?? ""),port:\(port))")
         } catch let e {
             return e.localizedDescription
         }
@@ -385,6 +410,9 @@ extension SCLHomeViewController {
             self?.updateTransferringFilesCount()
             self?.updateReceivingFiles()
             self?.toast("文件接收完成")
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                self?.updateReceivedFiles()
+            })
         }
         
         SLTransferManager.share().receiveFileFailBlock = {[weak self] _,taskId,_ in
@@ -411,6 +439,12 @@ extension SCLHomeViewController {
             SLLog.debug("SLTransferManager.share().startSendFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
+            DispatchQueue.main.async {
+                let deviceVc = self?.childViewControllers.first { item in
+                    item.isKind(of: SCLDeviceViewController.self)
+                } as? SCLDeviceViewController
+                deviceVc?.showSendingView()
+            }
         }
         
         SLTransferManager.share().sendFileProgressBlock = { [weak self] _,taskId,progress in

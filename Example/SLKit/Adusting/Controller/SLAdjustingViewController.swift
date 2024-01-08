@@ -279,10 +279,14 @@ class SLAdjustingViewController: SCLBaseViewController {
                 self?.status = .fail
                 return
             }
-            SLSocketManager.shared.send(
-                SCLSyncMovePointReq(step: step, x: x, y: y),
-                from: socket,
-                for: SCLSyncMovePointResp.self) { _ in }
+            SLSocketManager.shared.send(request: SCLSyncMovePointReq(step: step, x: x, y: y), from: socket) { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let e):
+                    SLLog.debug("同步校准步长失败\n\(e.localizedDescription)")
+                }
+            }
         }
         
         manager.adjustingResultBlock = { [weak self] (result, adjustingData) in

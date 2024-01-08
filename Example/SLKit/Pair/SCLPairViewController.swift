@@ -108,14 +108,10 @@ class SCLPairViewController: SCLBaseViewController {
                             old == new
                         }
                     }
-                    SLLog.debug("newDevices.count = \(newDevices.count)")
-                    if newDevices.count == 1 {
-                        // MARK:认为pc新增的这个配对设备就是本机，判断a2dp的uid与pc mac是否相等，相等则配对成功
+                    if newDevices.count == 1 && deviceList.count > pcPairedDevices.count {
+                        // MARK:pc新增的这个配对设备就是本机，田工认为不需要判断a2dp的uid与pc mac是否相等，直接上报配对成功
+//                        let result = compareDeviceMacWithA2dp()
 //                        self.requestPairVerification(device: newDevices.first!, button: btn)
-                        var result = false
-                        if let a2dpDevice = self.a2dpDevice, a2dpDevice.uid.elementsEqual(device?.mac ?? "") {
-                            result = true
-                        }
                         self.submitPairResult(device: newDevices.first!, result: true)
                     } else {
                         // MARK: diff两次列表，相差不为1，让用户选择
@@ -136,6 +132,23 @@ class SCLPairViewController: SCLBaseViewController {
                 self.dismiss(animated: true, completion: nil)
             }
         }
+    }
+    
+    private func compareDeviceMacWithA2dp() -> Bool {
+        var result = false
+        let a2dpUid = SLA2DPMonitor.shared.getA2DPDevice()?.uid ?? ""
+        let connectedDeviceMac = device?.mac ?? ""
+        if !a2dpUid.isEmpty && !connectedDeviceMac.isEmpty {
+            if a2dpUid.contains(":") && connectedDeviceMac.contains(":") {
+                result = a2dpUid.elementsEqual(connectedDeviceMac)
+            } else if a2dpUid.contains(":") {
+                result = a2dpUid.split(separator: ":").joined().elementsEqual(connectedDeviceMac)
+            } else if connectedDeviceMac.contains(":") {
+                result = a2dpUid.elementsEqual(connectedDeviceMac.split(separator: ":").joined())
+            }
+        }
+        SLLog.debug("对比A2DP uid:\(a2dpUid)与已连接设备mac地址:\(connectedDeviceMac)，\(result ? "相同" : "不相同")")
+        return result
     }
     
     private func requestPairVerification(device: SCLPCPairedDevice, button: UIButton?) {
@@ -214,16 +227,16 @@ class SCLPairViewController: SCLBaseViewController {
         }
         transitionToChild(SCLPhonePickerAlertViewController(socket: socket, devices: devices, onVerified: { [weak self] device in
             // MARK: 配对成功，标记为已投屏过
-            SCLUtil.setFirstAirPlay(false)
-                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
+//            SCLUtil.setFirstAirPlay(false)
+//                            if self?.a2dpDevice?.uid.elementsEqual(device.mac) == true {
                 self?.submitPairResult(device: device, result: true)
                 let presentingVc = self?.presentingViewController
                 presentingVc?.dismiss(animated: true, completion: {
                     presentingVc?.toast("配对校验通过")
                 })
-                            } else {
-                                self?.toast("配对校验未通过")
-                            }
+//                            } else {
+//                                self?.toast("配对校验未通过")
+//                            }
         }, onBack: { [weak self] in
             if let self {
                 // MARK: 取消配对，标记为已投屏过
