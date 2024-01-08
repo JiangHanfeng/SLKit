@@ -53,6 +53,7 @@ class SLSocketDataResponseHandler {
                     timeoutHandler()
                 }
             })
+            timeoutChecker?.start(at: DispatchQueue.global())
         }
     }
     

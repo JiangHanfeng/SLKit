@@ -85,7 +85,7 @@ public class SLA2DPMonitor {
         isEnable = false
     }
     
-    private func getA2DPDevice() -> SLA2DPDevice? {
+    public func getA2DPDevice() -> SLA2DPDevice? {
         let outputs = AVAudioSession.sharedInstance().currentRoute.outputs
         if let portDescription = outputs.first(where: { description in
             return description.portType == AVAudioSessionPortBluetoothA2DP || description.portType == AVAudioSessionPortBluetoothHFP

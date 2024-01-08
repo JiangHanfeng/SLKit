@@ -92,6 +92,7 @@ public class SLSocketClient : NSObject {
                 }
             } catch let error {
                 self.state = .initilized
+                self.server = nil
                 completion(.failure(.socketConnectionFailure(error)))
             }
         }
@@ -172,7 +173,7 @@ public class SLSocketClient : NSObject {
             let timeout = Int(heartbeatRule.timeout)
             heartbeatTimeoutChecker?.cancel()
             heartbeatTimeoutChecker = nil
-            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 300))) { [weak self] in
+            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 600))) { [weak self] in
                 if let lastHeartbeatTime = self?.lastHeartbeatTime {
                     let currentTime = ProcessInfo.processInfo.systemUptime
                     let passedTime = Int(round(currentTime - lastHeartbeatTime))
