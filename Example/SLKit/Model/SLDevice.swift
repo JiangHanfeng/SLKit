@@ -52,4 +52,8 @@ import SLKit
     public static func == (lhs: SLDevice, rhs: SLDevice) -> Bool {
         return lhs.id.elementsEqual(rhs.id) && lhs.name.elementsEqual(rhs.name) && lhs.mac.elementsEqual(rhs.mac) && lhs.localClient == rhs.localClient
     }
+    
+    deinit {
+        print("\(self) deinit")
+    }
 }

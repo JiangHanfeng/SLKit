@@ -62,6 +62,12 @@ static SLTransferManager *singleton = nil;
             self.receiveFileRequestBlock(self.sendDeviceId,taskId,files);
         }
     };
+    self.fileTransferManager.receivingFileUpdateStatusBlock = ^(NSString * _Nonnull taskId, SLFileIOModelStatusType statusType) {
+        @strongify(self);
+        if(self.cancelReceiveFileBlock){
+            self.cancelReceiveFileBlock(self.sendDeviceId, taskId, statusType == CancelInitiativeTransfer);
+        }
+    };
 }
 
 - (void)configSendInfoWithDeviceId:(NSString *)deviceId Ip:(NSString *)ip controlPort:(int)controlPort dataPort:(int)dataPort {

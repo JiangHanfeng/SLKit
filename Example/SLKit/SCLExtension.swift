@@ -9,9 +9,10 @@
 import Foundation
 import UIKit
 import Toast_Swift
+import SLKit
 
 extension UIApplication {
-    func toast(_ msg: String, duration: TimeInterval, tag: Int = 0) throws {
+    func toast(_ msg: String, image: UIImage? = nil, duration: TimeInterval = ToastManager.shared.duration, tag: Int = 0) throws {
         var window: UIWindow?
 //        if #available(iOS 15.0, *) {
 //            
@@ -28,7 +29,21 @@ extension UIApplication {
         style.messageColor = .white
         style.backgroundColor = .init(red: 70/255.0, green: 72/255.0, blue: 82/255.0, alpha: 0.8)
         style.messageFont = .systemFont(ofSize: 14)
-        window.makeToast(msg, duration: duration, position: .bottom, style: style)
+        if let image {
+            // 修复Toast_Swift图片和message垂直不居中的bug
+            style.imageSize = image.size
+            if let toast = try? window.toastViewForMessage(msg, title: nil, image: image, style: style) {
+                for subview in toast.subviews {
+                    if let label = subview as? UILabel, label.bounds.height < image.size.height {
+                        label.frame = CGRect(x: label.frame.origin.x, y: label.frame.origin.y + (image.size.height - label.bounds.height) / 2.0, width: label.bounds.width, height: label.bounds.height)
+                        break
+                    }
+                }
+                window.showToast(toast, duration: duration, position: .bottom, completion: nil)
+            }
+        } else {
+            window.makeToast(msg, duration: duration, position: .bottom, image: nil, style: style)
+        }
     }
     
     public func currentWindow() -> UIWindow {
@@ -50,9 +65,11 @@ extension UIApplication {
         return window
     }
     
-    public func currentController() -> UIViewController {
+    public func currentController() -> UIViewController? {
         guard let root = currentWindow().rootViewController else {
-            fatalError("can not get rootViewController at this moment!!!")
+//            fatalError("can not get rootViewController at this moment!!!")
+            SLLog.debug("can not get rootViewController at this moment!!!")
+            return nil
         }
         return getCurrentViewController(root)
     }
@@ -87,7 +104,7 @@ extension UIViewController {
 //        style.messageFont = .systemFont(ofSize: 14)
 //        view.makeToast(msg, duration: 3.0, position: .bottom, image: image, style: style)
         DispatchQueue.main.async {
-            try? UIApplication.shared.toast(msg, duration: 3)
+            try? UIApplication.shared.toast(msg, image: image)
         }
     }
     

@@ -220,6 +220,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
 
     @IBAction private func onDisconnect() {
+        SLLog.debug(#function)
         if let sock = device?.localClient {
             SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
@@ -276,9 +277,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                 SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLSocketGenericContent(cmd: .startAirplay)), from: socket) { _ in }
                 present(SCLAirPlayGuideViewController(onCancel: {
                     let completion = {
-                        SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .stopAirplay)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { _ in
-                            
-                        }
+                        self.cancelScreen()
                     }
                     self.dismiss(animated: true, completion: completion)
                 }), animated: true)
@@ -304,39 +303,23 @@ class SCLDeviceViewController: SCLBaseViewController {
     private func submitPairResult(pairedDevice: SCLPCPairedDevice, result: Bool) {
         SLLog.debug("提交蓝牙配对校验结果：\(result ? "通过" : "未通过")")
         defer {
-            if result {
-                SLLog.debug("保存蓝牙mac:\(pairedDevice.mac)")
-                _ = SCLUtil.setBTMac(pairedDevice.mac)
+            if result && SCLUtil.setBTMac(pairedDevice.mac) {
+                SLLog.debug("已保存蓝牙mac:\(pairedDevice.mac)")
                 _ = SCLUtil.setDeviceName(pairedDevice.deviceName)
             }
         }
         
         if let socket = device?.localClient {
-//            SLSocketManager.shared.send(SCLSocketRequest(content: SCLSyncPairReq(device: pairedDevice, state: result ? 1 : 0)), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
-//                guard let self else { return }
-//                switch result {
-//                case .success(let resp):
-//                    if resp.state == 1 {
-//                        // MARK: 蓝牙配对校验通过
-//                        self.toast("已完成蓝牙配对，回控功能已启用")
-//                    } else {
-//                        // MARK: 蓝牙配对校验未通过
-//                        self.toast("蓝牙配对校验未通过")
-//                    }
-//                case .failure(_):
-//                    break
-//                }
-//            }
             // MARK: 本机确认配对成功，只发送，无需等pc回复
             SLSocketManager.shared.send(request: SCLSyncPairReq(device: pairedDevice, pairResult: result), from: socket) { [weak self] resp in
                     guard let self else { return }
                     switch resp {
                     case .success(_):
                         // MARK: 蓝牙配对校验通过
-                        self.toast("已上报蓝牙配对成功，等待PC启用回控功能")
+                        self.toast("已完成蓝牙配对，回控功能已启用", image: UIImage(named: "icon_correct_circle_blue"))
                     case .failure(_):
                         // MARK: 蓝牙配对校验未通过
-                        self.toast("已完成蓝牙配对，上报结果失败")
+                        self.toast("已完成蓝牙配对，pc同步失败")
                     }
             }
         }
@@ -425,8 +408,6 @@ class SCLDeviceViewController: SCLBaseViewController {
             self?.sendingView.alpha = 0
             self?.sendingView.isHidden = true
             self?.sendingProgressLabel.text = "0%"
-            self?.sendingProgressView.alpha = 0
-            self?.sendingProgressLabel.isHidden = true
             self?.sendingProgressView.progress = 0
         }
     }

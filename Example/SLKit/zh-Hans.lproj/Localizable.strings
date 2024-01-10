@@ -6,6 +6,20 @@
   Copyright © 2024 CocoaPods. All rights reserved.
 */
 
+"SLAboutTitle" = "关于超级互联 Lite";
+"SLAboutUpdateTitle" = "版本更新";
+"SLAboutCollectTitle" = "允许联想收集匿名数据以改进我们的产品和服务";
+"SLAboutPrivacyString" = "《隐私》";
+"SLAboutPrivacyStatementString" = "《联想隐私声明》";
+"SLAboutPermissionString" = "《联想许可协议》";
+"SLAboutSourceString" = "《开源信息》";
+"SLAboutCopyrightString" = "联想集团 版权所有\n2023 Lenovo SmartConnect lite Version 2.0-0.0.1";
+
+"SLPrivacyTitle" = "隐私";
+"SLPrivacyStatementTitle" = "联想隐私声明";
+"SLPermissionTitle" = "联想许可协议";
+"SLSourceTitle" = "开源信息";
+
 "SLNextTitle" = "下一步";
 "SLCancelTitle" = "取消";
 "SLAffirmTitle" = "确认";
@@ -78,7 +92,7 @@
 "SLAboutPrivacyStatementString" = "《联想隐私声明》";
 "SLAboutPermissionString" = "《联想许可协议》";
 "SLAboutSourceString" = "《开源信息》";
-"SLAboutCopyrightString" = "联想集团 版权所有\n2023 Lenovo Freestyle lite Version 2.0-1.0.0";
+"SLAboutCopyrightString" = "联想集团 版权所有\n2023 Lenovo Freestyle lite Version 2.0-0.0.1";
 
 "SLSettingTitleString" = "设置";
 "SLSettingNameTitleString" = "设备名称";

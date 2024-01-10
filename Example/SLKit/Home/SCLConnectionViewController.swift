@@ -50,6 +50,7 @@ class SCLConnectionViewController: SCLBaseViewController {
                     Task {
                         do {
                             let sock = try await SLSocketManager.shared.connect(host: info.ip, port: UInt16(info.port)!, heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestValue: "ping", reponseValue: "pong"))
+                            SLLog.debug("socket已连接，发送cmd0，等待cmd0响应")
                             sock.unexpectedDisconnectHandler = { [weak self] error in
                                 DispatchQueue.main.async {
                                     self?.state = .initialize
@@ -59,12 +60,14 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 }
                             }
                             let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
+                            SLLog.debug("已收到cmd0响应：state = \(resp.state)")
                             guard resp.state == 1 else {
                                 self.state = .initialize
                                 self.toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
                                 sock.disconnect()
                                 return
                             }
+                            SLLog.debug("发送cmd26，等待cmd26响应")
                             let sync = SCLSyncReq(
                                 deviceName: SCLUtil.getDeviceName(),
                                 deviceId: SCLUtil.getTempMac().split(separator: ":").joined(),
@@ -76,12 +79,14 @@ class SCLConnectionViewController: SCLBaseViewController {
                                 SCLSocketRequest(content: sync),
                                 from: sock,
                                 for: SCLSyncResp.self)
+                            SLLog.debug("已收到cmd26响应：state = \(syncResp.state)")
                             guard syncResp.state == 1 else {
                                 self.state = .initialize
                                 self.toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
                                 sock.disconnect()
                                 return
                             }
+                            SLLog.debug("与pc成功建立业务通信")
                             let device = SLDevice(
                                 id: resp.dev_id,
                                 name: resp.dev_name,

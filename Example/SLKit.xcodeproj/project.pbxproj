@@ -59,6 +59,10 @@
 		4B4AF96C2B391459001C8214 /* SCLFileRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4AF96A2B391459001C8214 /* SCLFileRecordCell.swift */; };
 		4B4AF96D2B391459001C8214 /* SCLFileRecordCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */; };
 		4B5960982B4C1CD8007DB65B /* SCLSetDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5960972B4C1CD8007DB65B /* SCLSetDeviceNameViewController.swift */; };
+		4B59609D2B4CDE6B007DB65B /* SCLAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B59609C2B4CDE6B007DB65B /* SCLAboutViewController.swift */; };
+		4B5960A52B4D3B66007DB65B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5960A42B4D3B66007DB65B /* ShareViewController.swift */; };
+		4B5960A82B4D3B66007DB65B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B5960A62B4D3B66007DB65B /* MainInterface.storyboard */; };
+		4B5960AC2B4D3B66007DB65B /* FileShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4B5960A22B4D3B66007DB65B /* FileShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4B72F5CA2B45B3EC00074E28 /* SLFileIOModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C52B45B3EC00074E28 /* SLFileIOModel.m */; };
 		4B72F5CB2B45B3EC00074E28 /* SLFileTransferManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C62B45B3EC00074E28 /* SLFileTransferManager.mm */; };
 		4B72F5CC2B45B3EC00074E28 /* SLFileTransferFileModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4B72F5C72B45B3EC00074E28 /* SLFileTransferFileModel.mm */; };
@@ -127,6 +131,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4B5960AA2B4D3B66007DB65B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4B5960A12B4D3B66007DB65B;
+			remoteInfo = FileShare;
+		};
 		607FACE61AFB9204008FA782 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
@@ -135,6 +146,20 @@
 			remoteInfo = SLKit;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4B5960B02B4D3B66007DB65B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4B5960AC2B4D3B66007DB65B /* FileShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		077DEFF2690EF5300F2D240F /* Pods-SLKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SLKit_Example.release.xcconfig"; path = "Target Support Files/Pods-SLKit_Example/Pods-SLKit_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +187,7 @@
 		4B14ACA22B3AB34F00FD0F9A /* SCLSocketRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketRequest.swift; sourceTree = "<group>"; };
 		4B14ACA42B3ABC7000FD0F9A /* SCLSocketResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLSocketResponse.swift; sourceTree = "<group>"; };
 		4B1916ED2B4C06BD0042D89D /* SCLFunctionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLFunctionViewController.swift; sourceTree = "<group>"; };
+		4B1EB8302B4D477B00137232 /* FileShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FileShare.entitlements; sourceTree = "<group>"; };
 		4B23D1ED2B330381008724E5 /* SCLGetAppPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLGetAppPromptViewController.swift; sourceTree = "<group>"; };
 		4B23D1EE2B330381008724E5 /* SCLGetAppPromptViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLGetAppPromptViewController.xib; sourceTree = "<group>"; };
 		4B23D1F12B3306D8008724E5 /* SCLRequestPermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLRequestPermissionViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +227,12 @@
 		4B4AF96A2B391459001C8214 /* SCLFileRecordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCLFileRecordCell.swift; sourceTree = "<group>"; };
 		4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SCLFileRecordCell.xib; sourceTree = "<group>"; };
 		4B5960972B4C1CD8007DB65B /* SCLSetDeviceNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLSetDeviceNameViewController.swift; sourceTree = "<group>"; };
+		4B59609C2B4CDE6B007DB65B /* SCLAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAboutViewController.swift; sourceTree = "<group>"; };
+		4B5960A22B4D3B66007DB65B /* FileShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FileShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B5960A42B4D3B66007DB65B /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		4B5960A72B4D3B66007DB65B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		4B5960A92B4D3B66007DB65B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4B5960B12B4D3E3C007DB65B /* SLKit_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SLKit_Example.entitlements; sourceTree = "<group>"; };
 		4B72F5A82B45B3EC00074E28 /* SLFileIOModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileIOModel.h; sourceTree = "<group>"; };
 		4B72F5A92B45B3EC00074E28 /* SLFileTransferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLFileTransferManager.h; sourceTree = "<group>"; };
 		4B72F5AE2B45B3EC00074E28 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
@@ -305,6 +337,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4B59609F2B4D3B66007DB65B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCD1AFB9204008FA782 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -347,6 +386,7 @@
 		4B0EC3822B4795DF00E01BBE /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				4B59609C2B4CDE6B007DB65B /* SCLAboutViewController.swift */,
 				4B5960972B4C1CD8007DB65B /* SCLSetDeviceNameViewController.swift */,
 				4B1916ED2B4C06BD0042D89D /* SCLFunctionViewController.swift */,
 				4B2694EC2B30437400B116BA /* SCLSettingViewController.swift */,
@@ -398,6 +438,26 @@
 				4B2CA38D2B301DCA00D7F024 /* SCLDeviceViewController.xib */,
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		4B5960992B4CD628007DB65B /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */,
+				4B4290E92B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib */,
+			);
+			path = Screen;
+			sourceTree = "<group>";
+		};
+		4B5960A32B4D3B66007DB65B /* FileShare */ = {
+			isa = PBXGroup;
+			children = (
+				4B1EB8302B4D477B00137232 /* FileShare.entitlements */,
+				4B5960A42B4D3B66007DB65B /* ShareViewController.swift */,
+				4B5960A62B4D3B66007DB65B /* MainInterface.storyboard */,
+				4B5960A92B4D3B66007DB65B /* Info.plist */,
+			);
+			path = FileShare;
 			sourceTree = "<group>";
 		};
 		4B72F5A72B45B3EC00074E28 /* FileTransfer */ = {
@@ -641,9 +701,11 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				4B5960B12B4D3E3C007DB65B /* SLKit_Example.entitlements */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for SLKit */,
 				607FACE81AFB9204008FA782 /* Tests */,
+				4B5960A32B4D3B66007DB65B /* FileShare */,
 				607FACD11AFB9204008FA782 /* Products */,
 				E989BADB4BB23FCB1FED2BB0 /* Pods */,
 				E952471906C32F9934199486 /* Frameworks */,
@@ -655,6 +717,7 @@
 			children = (
 				607FACD01AFB9204008FA782 /* SLKit_Example.app */,
 				607FACE51AFB9204008FA782 /* SLKit_Tests.xctest */,
+				4B5960A22B4D3B66007DB65B /* FileShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -683,15 +746,14 @@
 				4BA0385F2B46901E00F43214 /* AppGuide */,
 				4BA6B05B2B4B900800D35F6A /* Uitls */,
 				4BCE34092B34436C00E14D40 /* SCLQRResult.swift */,
-				4B4290E82B3874BF000EE7AD /* SCLAirPlayGuideViewController.swift */,
-				4B4290E92B3874BF000EE7AD /* SCLAirPlayGuideViewController.xib */,
+				4B5960992B4CD628007DB65B /* Screen */,
+				4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */,
+				4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */,
 				4B4AF9682B391255001C8214 /* SCLFileRecordViewController.swift */,
 				4B4AF96A2B391459001C8214 /* SCLFileRecordCell.swift */,
 				4B4AF96B2B391459001C8214 /* SCLFileRecordCell.xib */,
 				4BA6B0322B4ACBFC00D35F6A /* SCLTransferringCell.swift */,
 				4BA6B0332B4ACBFC00D35F6A /* SCLTransferringCell.xib */,
-				4B2E00142B394B8D00E2191E /* SCLFileHistoryViewController.swift */,
-				4B2E00152B394B8D00E2191E /* SCLFileHistoryViewController.xib */,
 				4BE3B94C2B3BF46F00C48A71 /* SCLDBManager.swift */,
 				4BE3B9522B3C353700C48A71 /* SLKit.entitlements */,
 				4BCEEA922B3D068D003C036A /* SCLReconnectViewController.swift */,
@@ -761,6 +823,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4B5960A12B4D3B66007DB65B /* FileShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B5960AD2B4D3B66007DB65B /* Build configuration list for PBXNativeTarget "FileShare" */;
+			buildPhases = (
+				4B59609E2B4D3B66007DB65B /* Sources */,
+				4B59609F2B4D3B66007DB65B /* Frameworks */,
+				4B5960A02B4D3B66007DB65B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FileShare;
+			productName = FileShare;
+			productReference = 4B5960A22B4D3B66007DB65B /* FileShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		607FACCF1AFB9204008FA782 /* SLKit_Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "SLKit_Example" */;
@@ -770,10 +849,12 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				651DB3E51291E9AB39AE0F46 /* [CP] Embed Pods Frameworks */,
+				4B5960B02B4D3B66007DB65B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4B5960AB2B4D3B66007DB65B /* PBXTargetDependency */,
 			);
 			name = SLKit_Example;
 			productName = SLKit;
@@ -805,10 +886,15 @@
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0830;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
+					4B5960A12B4D3B66007DB65B = {
+						CreatedOnToolsVersion = 15.0.1;
+						DevelopmentTeam = 9CYW329KHD;
+						ProvisioningStyle = Automatic;
+					};
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 9CYW329KHD;
@@ -839,11 +925,20 @@
 			targets = (
 				607FACCF1AFB9204008FA782 /* SLKit_Example */,
 				607FACE41AFB9204008FA782 /* SLKit_Tests */,
+				4B5960A12B4D3B66007DB65B /* FileShare */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4B5960A02B4D3B66007DB65B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B5960A82B4D3B66007DB65B /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCE1AFB9204008FA782 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -975,6 +1070,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4B59609E2B4D3B66007DB65B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B5960A52B4D3B66007DB65B /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		607FACCC1AFB9204008FA782 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1035,6 +1138,7 @@
 				4BE1FA9F2B2B0CC100F7A4B1 /* StringExtension.swift in Sources */,
 				4B33D2542B457106002B0C5B /* SCLScreenReq.swift in Sources */,
 				4B33D25A2B457901002B0C5B /* SCLInitResp.swift in Sources */,
+				4B59609D2B4CDE6B007DB65B /* SCLAboutViewController.swift in Sources */,
 				4BE140112B48271C00606BE6 /* SLAdjustingImageView.swift in Sources */,
 				4B2694ED2B30437400B116BA /* SCLSettingViewController.swift in Sources */,
 				4B9996CB2B204CFB00F74D34 /* SLVehicleDevice.swift in Sources */,
@@ -1085,6 +1189,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4B5960AB2B4D3B66007DB65B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4B5960A12B4D3B66007DB65B /* FileShare */;
+			targetProxy = 4B5960AA2B4D3B66007DB65B /* PBXContainerItemProxy */;
+		};
 		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 607FACCF1AFB9204008FA782 /* SLKit_Example */;
@@ -1093,6 +1202,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4B5960A62B4D3B66007DB65B /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B5960A72B4D3B66007DB65B /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		4BE13FFB2B4826AC00606BE6 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1123,6 +1240,83 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4B5960AE2B4D3B66007DB65B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = FileShare/FileShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 9CYW329KHD;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FileShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FileShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 CocoaPods. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite.FileShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4B5960AF2B4D3B66007DB65B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = FileShare/FileShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9CYW329KHD;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FileShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FileShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 CocoaPods. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.igrs.demo.sclite.FileShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		607FACED1AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1226,9 +1420,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 15B067252E1A253BE7E7AFE1 /* Pods-SLKit_Example.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CURRENT_PROJECT_VERSION = 11;
+				CODE_SIGN_ENTITLEMENTS = SLKit_Example.entitlements;
+				CURRENT_PROJECT_VERSION = 122;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
@@ -1253,9 +1448,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 077DEFF2690EF5300F2D240F /* Pods-SLKit_Example.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CURRENT_PROJECT_VERSION = 11;
+				CODE_SIGN_ENTITLEMENTS = SLKit_Example.entitlements;
+				CURRENT_PROJECT_VERSION = 122;
 				DEFINES_MODULE = NO;
 				DEVELOPMENT_TEAM = 9CYW329KHD;
 				INFOPLIST_FILE = SLKit/Info.plist;
@@ -1323,6 +1519,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4B5960AD2B4D3B66007DB65B /* Build configuration list for PBXNativeTarget "FileShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B5960AE2B4D3B66007DB65B /* Debug */,
+				4B5960AF2B4D3B66007DB65B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "SLKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

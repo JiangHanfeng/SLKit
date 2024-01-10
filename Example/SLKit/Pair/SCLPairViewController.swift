@@ -165,54 +165,35 @@ class SCLPairViewController: SCLBaseViewController {
             btn?.isEnabled = true
             switch result {
             case .success(let resp):
-                if resp.state == 1 {
-                    // MARK: 蓝牙配对校验通过
-                    self.presentingViewController?.toast("已完成蓝牙配对，回控功能已启用")
-                } else {
-                    // MARK: 蓝牙配对校验未通过
-                    self.presentingViewController?.toast("蓝牙配对校验未通过")
-                }
-                self.presentingViewController?.dismiss(animated: true)
+                self.submitPairResult(device: device, result: resp.state == 1)
             case .failure(let e):
-                self.presentingViewController?.toast(e.localizedDescription)
-                self.dismiss(animated: true)
+                let msg = "蓝牙配对校验异常:\(e.localizedDescription)"
+                SLLog.debug(msg)
+                self.presentingViewController?.toast(msg)
+                self.submitPairResult(device: device, result: false)
             }
         }
     }
     
     private func submitPairResult(device: SCLPCPairedDevice, result: Bool) {
         defer {
-            if result {
-                SLLog.debug("保存蓝牙mac:\(device.mac)")
-                _ = SCLUtil.setBTMac(device.mac)
+            var msg = "蓝牙配对校验失败"
+            var image: UIImage?
+            if result && SCLUtil.setBTMac(device.mac) {
+                msg = "已完成蓝牙配对，回控功能已启用"
+                image = UIImage(named: "icon_correct_circle_blue")
+                SLLog.debug("已保存蓝牙mac:\(device.mac)")
             }
             let presentingVc = presentingViewController
-            let completion = {
-                if !result {
-                    presentingVc?.toast("蓝牙配对校验失败")
-                }
+            let completion: (() -> Void) = {
+                presentingVc?.toast(msg, image: image)
             }
             presentingViewController?.dismiss(animated: true, completion: completion)
         }
         
         if let socket = self.device?.localClient {
-            SLSocketManager.shared.send(SCLSyncPairReq(device: device, pairResult: result), from: socket, for: SCLSocketResponse<SCLSocketGenericContent>.self) { [weak self] result in
-                guard let self else { return }
-                switch result {
-                case .success(let resp):
-                    if resp.state == 1 {
-                        // MARK: 蓝牙配对校验通过
-                        self.presentingViewController?.toast("已完成蓝牙配对，回控功能已启用")
-                    } else {
-                        // MARK: 蓝牙配对校验未通过
-                        self.presentingViewController?.toast("蓝牙配对校验未通过")
-                    }
-                    self.presentingViewController?.dismiss(animated: true)
-                case .failure(_):
-    //                self.presentingViewController?.toast(e.localizedDescription)
-    //                self.dismiss(animated: true)
-                    break
-                }
+            SLSocketManager.shared.send(request: SCLSyncPairReq(device: device, pairResult: result), from: socket) { _ in
+                
             }
         }
     }

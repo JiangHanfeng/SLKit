@@ -18,7 +18,7 @@ class SCLHomeViewController: SCLBaseViewController {
     @IBOutlet weak var transferringCountLabel: UILabel!
     private var ipv4: String?
     private var localServer: SLSocketServer?
-    private var device: SLDevice? {
+    var device: SLDevice? {
         didSet {
             if device != oldValue {
                 deviceUpdatedHandler?(device)
@@ -61,10 +61,10 @@ class SCLHomeViewController: SCLBaseViewController {
         }
         Observable.combineLatest(ipSignal, bleStateSignal, deviceSignal)
             .observe(on: MainScheduler()).subscribe(onNext: { [weak self] (ip, bleAvailable, connected) in
-                SLLog.debug("ip/ble/连接状态发生变化")
+                SLLog.debug("ip/ble/设备状态发生变化:\n当前ip:\(ip)，蓝牙开关：\(bleAvailable ? "开" : "关")，设备状态：\(connected ? "已连接" : "未连接")")
                 if connected {
-//                    self?.stopListenPort()
                     SLLog.debug("已连接到设备，准备停止广播")
+                    self?.stopListenPort()
                     self?.stopAdvertising()
                     guard let self, let device = self.device else {
                         SLLog.debug("主页或已连接设备不存在")
@@ -206,14 +206,13 @@ class SCLHomeViewController: SCLBaseViewController {
         let transferringCount = sendingFilesCount + receivingFilesCount
         SLLog.debug("发送文件个数：\(sendingFilesCount), 接收文件个数： \(receivingFilesCount)，总共：\(transferringCount)")
         transferringCountLabel.text = "\(transferringCount)"
-        if transferringCount == 0 && !transferringCountLabel.isHidden {
+        if transferringCount == 0 {
             transferringCountLabel.alpha = 1
             UIView.animate(withDuration: 0.25) {
                 self.transferringCountLabel.alpha = 0
             } completion: { _ in
                 self.transferringCountLabel.isHidden = true
             }
-
         } else if transferringCountLabel.isHidden {
             transferringCountLabel.alpha = 0
             transferringCountLabel.isHidden = false
@@ -398,11 +397,14 @@ extension SCLHomeViewController {
             self?.updateReceivingFiles()
         }
         
-        SLTransferManager.share().cancelReceiveFileBlock = {[weak self] _,taskId,_ in
+        SLTransferManager.share().cancelReceiveFileBlock = {[weak self] _,taskId, isInitiative in
             SLLog.debug("SLTransferManager.share().cancelReceiveFileBlock executed with taskId:\(taskId)")
             self?.updateTransferringFilesCount()
             self?.updateReceivingFiles()
-            self?.toast("已取消接收文件")
+            if !isInitiative, let vc = UIApplication.shared.currentController() as? FileDecisionViewController {
+                vc.presentingViewController?.dismiss(animated: true)
+                self?.toast("对方已取消发送文件")
+            }
         }
         
         SLTransferManager.share().completeReceiveFileBlock = {[weak self] _,taskId in
@@ -493,47 +495,5 @@ extension SCLHomeViewController {
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
         }
-    }
-    
-    func test() {
-        let connect = Observable.create { subscriber in
-            Task {
-                do {
-                    let sock = try await SLSocketManager.shared.connect(host: "192.168.3.170", port: 8088)
-                    subscriber.onNext(sock)
-                    subscriber.onCompleted()
-                } catch let e {
-                    subscriber.onError(e)
-                }
-            }
-            return Disposables.create()
-        }
-        // MARK: 测试：并发100个请求
-        let concurrencyRequests: ((_ sock: SLSocketClient) -> Observable) = { sock in
-            return Observable.create { subscriber in
-                for _ in 0..<100 {
-                    DispatchQueue.global().async {
-                        Task {
-                            do {
-                                let response = try await SLSocketManager.shared.send(SCLSocketRequest(content: SCLSocketGenericContent(cmd: .login)), from: sock, for: SCLSocketResponse<SCLSocketGenericContent>.self)
-                            } catch _ {}
-                        }
-                    }
-                }
-                subscriber.onNext(Void())
-                subscriber.onCompleted()
-                return Disposables.create()
-            }
-        }
-        connect.flatMap { sock in
-            print("socket连接成功")
-            return concurrencyRequests(sock)
-        }.subscribe (onNext: {
-    
-        }, onError: { _ in
-            
-        }, onCompleted: {
-            
-        }).disposed(by: disposeBag)
     }
 }

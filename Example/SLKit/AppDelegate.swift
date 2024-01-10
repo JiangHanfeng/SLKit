@@ -17,6 +17,11 @@ enum SCLUserDefaultKey: String {
 public let enterForegroundNoti: Notification.Name =  NSNotification.Name.init("enterForeground")
 public let enterBackgroundNoti: Notification.Name =  NSNotification.Name.init("enterBackground")
 
+private let k_Send_file = "group.com.igrs.SmartConnect"
+private let k_Send_file_path = "sendFilePaths"
+private let k_Can_Send_file = "canSendFilePaths"
+private let k_SmartConnect_url = "smartconnect://"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -63,6 +68,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+//        if (url.scheme?.elementsEqual("file") == true) {
+//            SLLog.debug("app open url:\(url)")
+//            guard let nav = UIApplication.shared.currentController() as? UINavigationController else {
+//                return true
+//            }
+//            guard let homeVc = nav.viewControllers.first as? SCLHomeViewController else {
+//                return true
+//            }
+//            guard let _ = homeVc.device?.localClient else {
+//                try? UIApplication.shared.toast("请连接设备后再发送文件", duration: 3)
+//                return true
+//            }
+//            return true
+//        }
+        return true
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -97,6 +120,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        guard let userDefaults = UserDefaults.init(suiteName: k_Send_file) else {
+            return
+        }
+        SLLog.debug("k_Can_Send_file = \(userDefaults.bool(forKey: k_Can_Send_file))")
+        SLLog.debug("k_Send_file_path = \(String(describing: userDefaults.object(forKey: k_Send_file_path)))")
+        guard let newShare = userDefaults.object(forKey: k_Can_Send_file) as? Bool,
+            newShare == true,
+            let paths = userDefaults.object(forKey: k_Send_file_path) as? [String],
+            paths.count > 0  else{
+            return
+        }
+        let list:[String] = []
+        userDefaults.set(list, forKey: k_Send_file_path)
+        userDefaults.set(false, forKey: k_Can_Send_file)
+        DispatchQueue.main.async {
+            guard let homeVc = UIApplication.shared.currentController() as? SCLHomeViewController else {
+                return
+            }
+            guard let _ = homeVc.device?.localClient else {
+                try? UIApplication.shared.toast("请连接设备后再发送文件", duration: 3)
+                return
+            }
+            let sendFile = SLTransferManager.share().currentSendFileTransfer()
+            guard sendFile == nil || sendFile!.files.isEmpty else {
+                try? UIApplication.shared.toast("请等待当前文件发送完成", duration: 3)
+                return
+            }
+//            SLAnalyticsManager.share().sendFile(with: .freestyleSendFileShare)
+            var models: [SLFileModel] = []
+            _ = paths.map { url in
+                if let model = SLTransferManager.share().createSendFileModel(withPath: url) {
+                    models.append(model)
+                }
+            }
+            SLTransferManager.share().sendFiles(models) { _, _ in
+                
+            }
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -154,7 +215,7 @@ extension AppDelegate {
         vc.modalPresentationStyle = .fullScreen
         vc.delegate = self
         vc.allowsMultipleSelection = true
-        UIApplication.shared.currentController().present(vc, animated: true)
+        UIApplication.shared.currentController()?.present(vc, animated: true)
     }
     
     func sendPhoto(){
@@ -184,7 +245,7 @@ extension AppDelegate {
         vc.needCircleCrop = false //是否带边框裁剪
         vc.allowCameraLocation = false
         vc.modalPresentationStyle = .custom
-        rootVc.present(vc, animated: true)
+        rootVc?.present(vc, animated: true)
         //选中图片后做相应的处理
         vc.didFinishPickingPhotosHandle = { photos,assets,isSelectOriginalPhoto in
             if let imgs = photos {

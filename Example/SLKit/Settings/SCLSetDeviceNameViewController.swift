@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class SCLSetDeviceNameViewController: SCLBaseViewController {
     
     var updataNameBlock:((String)->Void)?

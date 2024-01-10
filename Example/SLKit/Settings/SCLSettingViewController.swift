@@ -26,7 +26,8 @@ class SCLSettingViewController: SCLBaseViewController {
         ],
         [
             SCLSettingCellModel(image: UIImage(named: "icon_feature_introduce"), title: "功能介绍", content: ""),
-            SCLSettingCellModel(image: UIImage(named: "icon_about"), title: "关于超级互联Lite", content: "")
+            SCLSettingCellModel(image: UIImage(named: "icon_about"), title: "关于超级互联Lite", content: (Bundle.main.infoDictionary![
+            "CFBundleShortVersionString"] as? String) ?? "")
         ]
     ]
     
@@ -101,7 +102,11 @@ extension SCLSettingViewController : UICollectionViewDelegate {
                 self.navigationController?.present(vc, animated: false)
             case 1:
                 // MARK: 屏幕校准
-                break
+                if let homeVc = navigationController?.viewControllers.first as? SCLHomeViewController, let device = homeVc.device {
+                    present(SLAdjustingViewController(initiative: false, device: device), animated: true)
+                } else {
+                    toast("请连接设备并开启投屏后进行屏幕校准")
+                }
             default:
                 break
             }
@@ -112,7 +117,7 @@ extension SCLSettingViewController : UICollectionViewDelegate {
                 navigationController?.show(SCLFunctionViewController(), sender: nil)
             case 1:
                 // MARK: 关于
-                break
+                navigationController?.show(SCLAboutViewController(), sender: nil)
             default:
                 break
             }
