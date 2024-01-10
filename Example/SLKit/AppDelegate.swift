@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Bugly
 import SLKit
 import TZImagePickerController
 
@@ -34,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         SLLog.prepare()
+        Bugly.start(withAppId: "f5ee4f3bf5")
 //        if SCLUtil.isFirstLaunch() {
 //            SCLUtil.setFirstAirPlay(true)
 //            SCLUtil.markNotFirstLaunch()

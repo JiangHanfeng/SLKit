@@ -123,7 +123,7 @@ public class SLSocketClient : NSObject {
     
     public func send(_ value: Data, type: UInt8, timeout: SLTimeInterval = .seconds(15)) throws {
         if type != SLSocketSessionItemType.heartbeat.rawValue, let string = String(data: value, encoding: .utf8) {
-            SLLog.debug("socket发送:\n\(string)\n")
+            SLLog.debug("发送:\n\(string)")
         }
         var data = Data()
         data.append(Data(bytes: [type]))
@@ -278,26 +278,29 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
             cachedData = Data(bytes: leftBytes)
             let valueBytes = bytes[5...bytes.index(before: 5+Int(length))]
             let valueData = Data(bytes: valueBytes)
-            #if DEBUG
+            let gbkEncoding = CFStringConvertEncodingToNSStringEncoding(UInt32(CFStringEncodings.GB_18030_2000.rawValue))
             if let valueString = String(data: valueData, encoding: .utf8) {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes):\n\(valueString)")
+                dataHandler?(valueData)
+            } else if let valueString = String(data: valueData, encoding: String.Encoding(rawValue: gbkEncoding)) {
+                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes，需进行gbk转utf8):\n\(valueString)")
+                if let newValueData = valueString.data(using: .utf8) {
+                    dataHandler?(newValueData)
+                } else {
+                    dataHandler?(valueData)
+                }
             } else {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes)无法解析")
+                dataHandler?(valueData)
             }
-            #else
-            #endif
-            dataHandler?(valueData)
         } else {
             cachedData?.removeAll()
-            #if DEBUG
             if type == SLSocketSessionItemType.heartbeat.rawValue {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的心跳包(\(length)bytes)")
                 sendHeartbeat()
             } else {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的无效数据")
             }
-            #else
-            #endif
         }
     }
 }

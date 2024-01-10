@@ -17,6 +17,8 @@
                 <outlet property="fileTransferTitleLabel" destination="v94-Rd-cgA" id="c0F-tB-boI"/>
                 <outlet property="fileTransferView" destination="bV8-bh-vaR" id="G9J-9a-7ba"/>
                 <outlet property="nameLabel" destination="l0V-cS-fgv" id="Bhh-aX-5AO"/>
+                <outlet property="sendFileMaskView" destination="83f-HC-Nqh" id="y6r-Ys-zx9"/>
+                <outlet property="sendPhotoMaskView" destination="roW-UX-xaV" id="je0-fM-qt3"/>
                 <outlet property="sendPhotoView" destination="Tp6-I4-Gyt" id="MpL-E1-0qe"/>
                 <outlet property="sendingProgressLabel" destination="gX1-sU-09h" id="OxR-eD-lQe"/>
                 <outlet property="sendingProgressView" destination="FLx-as-qsN" id="FKL-rq-m1e"/>
@@ -35,10 +37,10 @@
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_device_example" translatesAutoresizingMaskIntoConstraints="NO" id="6KG-km-D0G">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="200"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="166"/>
                         </imageView>
                         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i5M-Pr-FkT" userLabel="Content View">
-                            <rect key="frame" x="20" y="200" width="353" height="396"/>
+                            <rect key="frame" x="20" y="166" width="353" height="396"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eai-do-Bfr">
                                     <rect key="frame" x="263" y="24" width="70" height="30"/>
@@ -175,7 +177,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tp6-I4-Gyt" userLabel="发送照片">
+                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tp6-I4-Gyt" userLabel="发送照片">
                                     <rect key="frame" x="20" y="254" width="105" height="120"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0ko-TV-ENE" userLabel="Image container">
@@ -208,14 +210,22 @@
                                             <color key="textColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="roW-UX-xaV">
+                                            <rect key="frame" x="0.0" y="0.0" width="105" height="120"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstItem="0ko-TV-ENE" firstAttribute="top" secondItem="Tp6-I4-Gyt" secondAttribute="top" constant="26" id="EsR-4u-dAi"/>
+                                        <constraint firstItem="roW-UX-xaV" firstAttribute="centerY" secondItem="Tp6-I4-Gyt" secondAttribute="centerY" id="IKq-SD-FeK"/>
                                         <constraint firstItem="39k-Kp-Hpa" firstAttribute="centerX" secondItem="Tp6-I4-Gyt" secondAttribute="centerX" id="KON-3E-hc8"/>
                                         <constraint firstItem="39k-Kp-Hpa" firstAttribute="top" secondItem="Tp6-I4-Gyt" secondAttribute="top" constant="79" id="Tj2-aQ-86k"/>
                                         <constraint firstItem="0ko-TV-ENE" firstAttribute="centerX" secondItem="Tp6-I4-Gyt" secondAttribute="centerX" id="U1u-54-pcx"/>
+                                        <constraint firstItem="roW-UX-xaV" firstAttribute="centerX" secondItem="Tp6-I4-Gyt" secondAttribute="centerX" id="Und-EX-Prb"/>
+                                        <constraint firstItem="roW-UX-xaV" firstAttribute="height" secondItem="Tp6-I4-Gyt" secondAttribute="height" id="XTf-ad-7wZ"/>
                                         <constraint firstAttribute="width" constant="105" id="dZ5-q1-3z8"/>
+                                        <constraint firstItem="roW-UX-xaV" firstAttribute="width" secondItem="Tp6-I4-Gyt" secondAttribute="width" id="jvU-eN-rE7"/>
                                         <constraint firstAttribute="height" constant="120" id="rS9-7B-mlT"/>
                                     </constraints>
                                     <userDefinedRuntimeAttributes>
@@ -225,7 +235,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </view>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bV8-bh-vaR" userLabel="发送文件">
+                                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bV8-bh-vaR" userLabel="发送文件">
                                     <rect key="frame" x="145" y="254" width="105" height="120"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XA8-5r-s5c" userLabel="Image container">
@@ -258,15 +268,23 @@
                                             <color key="textColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="83f-HC-Nqh">
+                                            <rect key="frame" x="0.0" y="0.0" width="105" height="120"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
+                                        <constraint firstItem="83f-HC-Nqh" firstAttribute="centerY" secondItem="bV8-bh-vaR" secondAttribute="centerY" id="1xf-uM-zQa"/>
                                         <constraint firstItem="XA8-5r-s5c" firstAttribute="top" secondItem="bV8-bh-vaR" secondAttribute="top" constant="26" id="Lqd-pI-jWK"/>
                                         <constraint firstItem="ixv-e4-VTg" firstAttribute="top" secondItem="bV8-bh-vaR" secondAttribute="top" constant="79" id="TaA-wV-iVx"/>
                                         <constraint firstItem="ixv-e4-VTg" firstAttribute="centerX" secondItem="bV8-bh-vaR" secondAttribute="centerX" id="TiY-do-1Ha"/>
                                         <constraint firstItem="XA8-5r-s5c" firstAttribute="centerX" secondItem="bV8-bh-vaR" secondAttribute="centerX" id="WEM-C5-4vN"/>
+                                        <constraint firstItem="83f-HC-Nqh" firstAttribute="centerX" secondItem="bV8-bh-vaR" secondAttribute="centerX" id="WiY-Ad-gwL"/>
                                         <constraint firstAttribute="height" constant="120" id="fbo-JO-ITC"/>
                                         <constraint firstAttribute="width" constant="105" id="lS5-mC-6Gq"/>
+                                        <constraint firstItem="83f-HC-Nqh" firstAttribute="width" secondItem="bV8-bh-vaR" secondAttribute="width" id="nlB-zR-LhW"/>
+                                        <constraint firstItem="83f-HC-Nqh" firstAttribute="height" secondItem="bV8-bh-vaR" secondAttribute="height" id="oOX-98-43n"/>
                                     </constraints>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
@@ -339,7 +357,7 @@
         <image name="icon_folder" width="20" height="20"/>
         <image name="icon_img" width="15.666666984558105" height="13.666666984558105"/>
         <image name="icon_mirror" width="25.666666030883789" height="26"/>
-        <image name="img_device_example" width="375" height="200"/>
+        <image name="img_device_example" width="295.33334350585938" height="166"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

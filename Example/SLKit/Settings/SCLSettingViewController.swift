@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SLKit
 import SnapKit
 
 class SCLSettingViewController: SCLBaseViewController {
@@ -18,18 +19,6 @@ class SCLSettingViewController: SCLBaseViewController {
     private var collectionView: UICollectionView!
     private var dataSource: UICollectionViewDiffableDataSource<Section, SCLSettingCellModel>!
     private var snapshot: NSDiffableDataSourceSnapshot<Section, SCLSettingCellModel>!
-    
-    private var items = [
-        [
-            SCLSettingCellModel(image: UIImage(named: "icon_phone"), title: "设备名称", content: UIDevice.current.name),
-            SCLSettingCellModel(image: UIImage(named: "icon_ calibration"), title: "屏幕校准", content: "")
-        ],
-        [
-            SCLSettingCellModel(image: UIImage(named: "icon_feature_introduce"), title: "功能介绍", content: ""),
-            SCLSettingCellModel(image: UIImage(named: "icon_about"), title: "关于超级互联Lite", content: (Bundle.main.infoDictionary![
-            "CFBundleShortVersionString"] as? String) ?? "")
-        ]
-    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +55,17 @@ class SCLSettingViewController: SCLBaseViewController {
             return cell
         }
         
+        let items = [
+            [
+                SCLSettingCellModel(image: UIImage(named: "icon_phone"), title: "设备名称", content: SCLUtil.getDeviceName()),
+                SCLSettingCellModel(image: UIImage(named: "icon_ calibration"), title: "屏幕校准", content: "")
+            ],
+            [
+                SCLSettingCellModel(image: UIImage(named: "icon_feature_introduce"), title: "功能介绍", content: ""),
+                SCLSettingCellModel(image: UIImage(named: "icon_about"), title: "关于超级互联Lite", content: (Bundle.main.infoDictionary![
+                "CFBundleShortVersionString"] as? String) ?? "")
+            ]
+        ]
         snapshot = NSDiffableDataSourceSnapshot<Section, SCLSettingCellModel>()
         snapshot.appendSections([.one, .two])
         snapshot.appendItems(items.first!, toSection: .one)
@@ -92,9 +92,17 @@ extension SCLSettingViewController : UICollectionViewDelegate {
                 // MARK: 设备名
                 let vc = SCLSetDeviceNameViewController()
                 vc.updataNameBlock = { [weak self] name in
-                    self?.items[0][0].content = name
-                    self?.collectionView.reloadItems(at: [indexPath])
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                    if SCLUtil.setDeviceName(name) {
+                        SLLog.debug("保存设备名:\(name) 成功")
+                    } else {
+                        SLLog.debug("保存设备名:\(name) 失败")
+                    }
+                    if var item = self?.dataSource.itemIdentifier(for: indexPath), var snapshot = self?.dataSource.snapshot() {
+                        item.content = name
+                        snapshot.reloadItems([item])
+                        self?.dataSource.apply(snapshot)
+                    }
+                    guard UIApplication.shared.delegate is AppDelegate else {
                         return
                     }
                     self?.toast(NSLocalizedString("SLSettingSetDeviceNameSuccessString", comment: ""))
@@ -102,8 +110,19 @@ extension SCLSettingViewController : UICollectionViewDelegate {
                 self.navigationController?.present(vc, animated: false)
             case 1:
                 // MARK: 屏幕校准
-                if let homeVc = navigationController?.viewControllers.first as? SCLHomeViewController, let device = homeVc.device {
-                    present(SLAdjustingViewController(initiative: false, device: device), animated: true)
+                var device: SLDevice?
+                var airplaySuccess = false
+                if let homeVc = navigationController?.viewControllers.first as? SCLHomeViewController {
+                    device = homeVc.device
+                    for child in homeVc.childViewControllers {
+                        if child is SCLDeviceViewController {
+                            airplaySuccess = (child as! SCLDeviceViewController).airplaySuccess
+                            break
+                        }
+                    }
+                }
+                if airplaySuccess && device != nil {
+                    present(SLAdjustingViewController(initiative: false, device: device!), animated: true)
                 } else {
                     toast("请连接设备并开启投屏后进行屏幕校准")
                 }

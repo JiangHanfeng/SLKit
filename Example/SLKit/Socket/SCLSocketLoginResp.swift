@@ -20,18 +20,24 @@ struct SCLSocketLoginResp: SLSocketDataMapper {
     
     init(data: Data) {
         self.data = data
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else {
+        var json: [String : Any]?
+        do {
+            json = try JSONSerialization.jsonObject(with: data) as? [String : Any]
+        } catch let e {
+            SLLog.debug("反序列化cmd0响应数据异常:\n\(e.localizedDescription)")
+        }
+        guard let json else {
             return
         }
         let stateRange = 0...1
         if
-            let cmd = dict["cmd"] as? Int,
+            let cmd = json["cmd"] as? Int,
             cmd == 0,
-            let state = dict["state"] as? Int,
+            let state = json["state"] as? Int,
             stateRange.contains(state),
-            let dev_id = dict["dev_id"] as? String,
+            let dev_id = json["dev_id"] as? String,
             !dev_id.isEmpty,
-            let dev_name = dict["dev_name"] as? String
+            let dev_name = json["dev_name"] as? String
         {
             self.id = "0"
             self.state = state

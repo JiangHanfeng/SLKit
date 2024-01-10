@@ -23,6 +23,8 @@ class SCLDeviceViewController: SCLBaseViewController {
     @IBOutlet weak var disconenctBtn: UIButton!
     @IBOutlet weak var airplayBtn: UIButton!
     @IBOutlet weak var sendPhotoView: UIView!
+    @IBOutlet weak var sendPhotoMaskView: UIView!
+    @IBOutlet weak var sendFileMaskView: UIView!
     @IBOutlet weak var fileTransferView: UIView!
     @IBOutlet weak var fileTransferTitleLabel: UILabel!
     @IBOutlet weak var sendingView: UIView!
@@ -38,7 +40,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     private var socketDataListener: SLSocketClientUnhandledDataHandler?
     private var requestPairByDevice = false // 是否从pc发起配对
     private var pcPairedDevices: [SCLPCPairedDevice] = []
-    private var airplaySuccess = false {
+    var airplaySuccess = false {
         didSet {
             airplayBtn.setTitle(airplaySuccess ? "停止投屏" : "开始投屏", for: .normal)
             if airplaySuccess && hidConnected {
@@ -247,7 +249,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @objc private func onSendPhoto() {
         if
             let transfer = SLTransferManager.share().currentSendFileTransfer(),
-            transfer.files.count > 0 {
+            transfer.files.count > 0 || !SLTransferManager.share().currentReceiveFileTransfer().isEmpty {
             toast("当前文件传输中，请在传输结束后发送")
             return
         }
@@ -257,7 +259,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     @objc private func onFileTransfer() {
         if
             let transfer = SLTransferManager.share().currentSendFileTransfer(),
-            transfer.files.count > 0 {
+            transfer.files.count > 0 || !SLTransferManager.share().currentReceiveFileTransfer().isEmpty {
             toast("当前文件传输中，请在传输结束后发送")
             return
         }
@@ -409,6 +411,16 @@ class SCLDeviceViewController: SCLBaseViewController {
             self?.sendingView.isHidden = true
             self?.sendingProgressLabel.text = "0%"
             self?.sendingProgressView.progress = 0
+        }
+    }
+    
+    func switchSendable(_ sendable: Bool) {
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            self?.sendPhotoMaskView.isHidden = sendable
+            self?.sendFileMaskView.isHidden = sendable
+        } completion: { [weak self] _ in
+            self?.sendPhotoMaskView.isHidden = sendable
+            self?.sendFileMaskView.isHidden = sendable
         }
     }
     

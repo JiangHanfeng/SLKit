@@ -153,11 +153,18 @@ class SCLHomeViewController: SCLBaseViewController {
             }).disposed(by: disposeBag)
         deviceUpdatedHandler?(nil)
         configFileTransfer()
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: enterForegroundNoti, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: enterBackgroundNoti, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    deinit {
+        print("\(self) deinit")
+        NotificationCenter.default.removeObserver(self)
     }
     
     @IBAction private func onFileTransfer() {
@@ -213,11 +220,23 @@ class SCLHomeViewController: SCLBaseViewController {
             } completion: { _ in
                 self.transferringCountLabel.isHidden = true
             }
+            for child in childViewControllers {
+                if child.isKind(of: SCLDeviceViewController.self) {
+                    (child as! SCLDeviceViewController).switchSendable(true)
+                    break
+                }
+            }
         } else if transferringCountLabel.isHidden {
             transferringCountLabel.alpha = 0
             transferringCountLabel.isHidden = false
             UIView.animate(withDuration: 0.25) {
                 self.transferringCountLabel.alpha = 1
+            }
+            for child in childViewControllers {
+                if child.isKind(of: SCLDeviceViewController.self) {
+                    (child as! SCLDeviceViewController).switchSendable(false)
+                    break
+                }
             }
         }
     }
@@ -274,6 +293,30 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
 }
 
 extension SCLHomeViewController {
+    @objc func willEnterForeground() {
+        if let _ = device?.localClient {
+        } else {
+            let serverPort = UInt16.random(in: 10000..<65535)
+            SLLog.debug("app 进入前台，重新监听端口\(serverPort)并广播")
+            startListenPort(serverPort, success: {
+                if SLPeripheralManager.shared.available() {
+                    if let advertiseError = self.startAdvertising(port: serverPort) {
+                        SLLog.debug("广播错误:\(advertiseError)")
+                        self.toast(advertiseError)
+                    }
+                } else {
+                    SLLog.debug("ble状态不可用，暂不广播")
+                }
+            })
+        }
+    }
+    
+    @objc func didEnterBackground() {
+        SLLog.debug("app 进入后台,取消监听端口并停止广播")
+        stopAdvertising()
+        stopListenPort()
+    }
+    
     func startListenPort(_ port: UInt16, success: () -> Void) {
         SLSocketManager.shared.startListen(port: port, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
             return .access(nil)
