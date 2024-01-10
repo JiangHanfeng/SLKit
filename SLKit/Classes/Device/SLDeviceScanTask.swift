@@ -115,10 +115,10 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
             }
             self.bleScanTaskId = task.id
             switch self.timeout {
-            case .seconds(let value):
+            case .seconds(let timeout):
                 self.checkWork?.cancel()
                 self.checkWork = nil
-                self.checkWork = SLCancelableWork(delayTime: .seconds(value), closure: { [weak self] in
+                self.checkWork = SLCancelableWork(delayTime: .seconds(Int(timeout)), closure: { [weak self] in
                     if let _ = self?.bleScanTaskId {
                         SLLog.debug("扫描超时")
                         self?.bleScanTaskId = nil

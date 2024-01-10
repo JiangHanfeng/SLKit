@@ -33,8 +33,8 @@ public class SLCentralConnection : SLTask {
             switch timeout {
             case .infinity:
                 break
-            case .seconds(let int):
-                checkStateWork = SLCancelableWork(delayTime: .seconds(int)) { [weak self] in
+            case .seconds(let timeout):
+                checkStateWork = SLCancelableWork(delayTime: .seconds(Int(timeout))) { [weak self] in
                     if let self {
                         switch self.state {
                         case .connecting:

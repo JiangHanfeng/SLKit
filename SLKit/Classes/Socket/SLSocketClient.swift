@@ -84,12 +84,13 @@ public class SLSocketClient : NSObject {
             self.server = GCDAsyncSocket(delegate: self, delegateQueue: Self.queue)
             do {
                 self.state = .connecting
-                switch timeout {
-                case .infinity:
-                    try self.server?.connect(toHost: self.host, onPort: self.port)
-                case .seconds(let value):
-                    try self.server?.connect(toHost: self.host, onPort: self.port, withTimeout: TimeInterval(value))
-                }
+                try self.server?.connect(toHost: self.host, onPort: self.port)
+//                switch timeout {
+//                case .infinity:
+//                    try self.server?.connect(toHost: self.host, onPort: self.port)
+//                case .seconds(let value):
+//                    try self.server?.connect(toHost: self.host, onPort: self.port, withTimeout: TimeInterval(value))
+//                }
             } catch let error {
                 self.state = .initilized
                 self.server = nil
@@ -204,26 +205,26 @@ public class SLSocketClient : NSObject {
 
 extension SLSocketClient: GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        SLLog.debug("连接\(host):\(port)成功")
-        server!.readData(withTimeout: -1, tag: 0)
+        SLLog.debug("本机\(sock.localHost ?? ""):\(sock.localPort)已连接服务器\(self.host):\(self.port)")
+        cachedData?.removeAll()
         state = .connected
         connectionCompletion?(.success(Void()))
-        if heartbeatRule != nil {
-            DispatchQueue.global().async { [weak self] in
-                guard let self else { return }
-                self.heartbeatTimer?.invalidate()
-                self.heartbeatTimer = nil
-                self.heartbeatTimer = Timer(timeInterval: TimeInterval(1), target: self, selector: #selector(Self.sendHeartbeat), userInfo: nil, repeats: true)
-                RunLoop.current.add(self.heartbeatTimer!, forMode: .commonModes)
-                RunLoop.current.run()
-            }
-        }
+        server?.readData(withTimeout: -1, tag: 0)
+//        if heartbeatRule != nil {
+//            DispatchQueue.global().async { [weak self] in
+//                guard let self else { return }
+//                self.heartbeatTimer?.invalidate()
+//                self.heartbeatTimer = nil
+//                self.heartbeatTimer = Timer(timeInterval: TimeInterval(1), target: self, selector: #selector(Self.sendHeartbeat), userInfo: nil, repeats: true)
+//                RunLoop.current.add(self.heartbeatTimer!, forMode: .commonModes)
+//                RunLoop.current.run()
+//            }
+//        }
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         server = nil
-        
-        cachedData = nil
+        cachedData?.removeAll()
         if state == .connecting {
             SLLog.debug("\(serverDesc ?? "socket")连接失败")
             state = .initilized
@@ -235,6 +236,8 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
             }
             state = .disconnectedUnexpected
             unexpectedDisconnectHandler?(.socketDisconnected(err))
+        } else {
+            SLLog.debug("\(serverDesc ?? "socket")正常断开")
         }
         heartbeatTimer?.invalidate()
         heartbeatTimer = nil
@@ -248,12 +251,12 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
     
     public func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         Self.queue.async {
-            self.didReceived(data: data)
+            self.didReceived(data: data, from: sock)
         }
     }
     
-    private func didReceived(data: Data) {
-        server!.readData(withTimeout: -1, tag: 0)
+    private func didReceived(data: Data, from: GCDAsyncSocket) {
+        server?.readData(withTimeout: -1, tag: 0)
         lastReadTime = ProcessInfo.processInfo.systemUptime
         if cachedData == nil {
             cachedData = Data()
@@ -265,52 +268,57 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         let bytes = cachedData!.withUnsafeBytes {
             [UInt8](UnsafeBufferPointer(start: $0, count: data.count))
         }
-//        SLLog.debug("bytes.count = \(bytes.count)")
         guard bytes.count > 4 else {
             return
         }
         let type = bytes.first!
         let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
-        let packetLength = 1 + 4 + length
-        let start = cachedData!.startIndex
-        if packetLength == cachedData!.count {
-            // 如果读取的数据长度与当前保存的字节流长度一致，说明是一次完成的数据
-            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
-                let totalData = cachedData![5..<cachedData!.count]
-                let string = String(data: totalData, encoding: .utf8)
-                SLLog.debug("收到:\(string ?? "")")
-                dataHandler?(totalData)
+        if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
+            let leftBytes = bytes[bytes.index(after: 4+Int(length))..<bytes.endIndex]
+            cachedData = Data(bytes: leftBytes)
+            let valueBytes = bytes[5...bytes.index(before: 5+Int(length))]
+            let valueData = Data(bytes: valueBytes)
+            #if DEBUG
+            if let valueString = String(data: valueData, encoding: .utf8) {
+                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes):\n\(valueString)")
+            } else {
+                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes)无法解析")
             }
-            cachedData!.removeAll()
-        } else if packetLength < cachedData!.count {
-            if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
-                let totalData = cachedData![cachedData!.index(start, offsetBy: 5)..<cachedData!.index(start, offsetBy: 5 + Int(length))]
-                let string = String(data: totalData, encoding: .utf8)
-                SLLog.debug("收到:\(string ?? "")")
-                dataHandler?(totalData)
+            #else
+            #endif
+            dataHandler?(valueData)
+        } else {
+            cachedData?.removeAll()
+            #if DEBUG
+            if type == SLSocketSessionItemType.heartbeat.rawValue {
+                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的心跳包(\(length)bytes)")
+                sendHeartbeat()
+            } else {
+                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的无效数据")
             }
-            cachedData = cachedData![cachedData!.index(start, offsetBy: 5 + Int(length))..<cachedData!.endIndex]
+            #else
+            #endif
         }
     }
 }
 
-import RxSwift
-extension Reactive where Base : SLSocketClient {
-    public var connection: Observable<SLSocketClient> {
-        return Observable<SLSocketClient>.create { observer in
-            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(15), execute: {
-                observer.onNext(base)
-//                observer.onCompleted()
-            })
-            return Disposables.create()
-        }
-    }
-    
-    public var listen: Observable<String> {
-        return Observable<String>.create { observer in
-            observer.onNext("hello world")
-//            observer.onCompleted()
-            return Disposables.create ()
-        }
-    }
-}
+//import RxSwift
+//extension Reactive where Base : SLSocketClient {
+//    public var connection: Observable<SLSocketClient> {
+//        return Observable<SLSocketClient>.create { observer in
+//            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(15), execute: {
+//                observer.onNext(base)
+////                observer.onCompleted()
+//            })
+//            return Disposables.create()
+//        }
+//    }
+//    
+//    public var listen: Observable<String> {
+//        return Observable<String>.create { observer in
+//            observer.onNext("hello world")
+////            observer.onCompleted()
+//            return Disposables.create ()
+//        }
+//    }
+//}

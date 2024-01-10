@@ -45,15 +45,16 @@ class SLSocketDataResponseHandler {
         switch timeout {
         case .infinity:
             break
-        case .seconds(let value):
-            timeoutChecker = SLCancelableWork(id: self.id, delayTime: .seconds(value), closure: { [weak self] in
+        case .seconds(let timeout):
+            timeoutChecker = SLCancelableWork(id: self.id, delayTime: .seconds(Int(timeout)), closure: { [weak self] in
                 if let completed = self?.completed, !completed {
                     self?.completed = true
+                    SLLog.debug("socket data handler(id: \(self?.id ?? "")) timeout")
                     // 超时
                     timeoutHandler()
                 }
             })
-//            timeoutChecker?.start(at: DispatchQueue.global())
+            timeoutChecker?.start(at: DispatchQueue.global())
         }
     }
     
@@ -77,9 +78,9 @@ class SLSocketDataHandler<T: SLSocketDataMapper> {
 
 public class SLSocketClientUnhandledDataHandler {
     let id: String
-    let handle: (_ data: Data, _ from: SLSocketClient) -> Void
+    let handle: (_ data: Data, _ from: SLSocketClient?) -> Void
     
-    public init(id: String, handle: @escaping (_: Data, _: SLSocketClient) -> Void) {
+    public init(id: String, handle: @escaping (_: Data, _: SLSocketClient?) -> Void) {
         self.id = id
         self.handle = handle
     }
@@ -419,7 +420,11 @@ public final class SLSocketManager: NSObject {
     
     /// 连接
     public func connect(host: String, port: UInt16, timeout: SLTimeInterval = .seconds(10), heartbeatRule: SLSocketHeartbeatRule? = nil) async throws -> SLSocketClient {
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: SLError.socketHasBeenReleased)
+                return
+            }
             self.getSocketClient(host: host, port: port) { socket in
                 var sock = socket
                 let configSock: ((SLSocketClient) -> Void) = {
@@ -430,21 +435,23 @@ public final class SLSocketManager: NSObject {
                         }
                         switch result {
                         case .success(_):
-                            socket.dataHandler = { [weak self] data in
+                            socket.dataHandler = { [weak manager = self, weak thisSock = socket] data in
                                 var dataHandled = false
-                                if let proxys = self?.clients[socket] {
-                                    proxys.forEach { item in
+                                if let manager, let thisSock, let proxys = manager.clients[thisSock] {
+                                    for item in proxys {
                                         let result = item.handle?(data)
                                         item.finished()
                                         if result == true {
                                             dataHandled = true
+                                            break
                                         }
                                     }
                                 }
                                 if !dataHandled {
                                     // 未被处理的数据
-                                    self?.unhandledDataHandlers.forEach({ item in
-                                        item.handle(data, socket)
+                                    manager?.unhandledDataHandlers.forEach({ item in
+                                        item.handle(data, thisSock)
+//                                        item.handle(data, socket)
                                     })
                                 }
                             }
@@ -502,12 +509,22 @@ public final class SLSocketManager: NSObject {
     
     /// 断开连接
     public func disconnect(_ sock: SLSocketClient) async {
-        return await withCheckedContinuation { continuation in
-            Self.socketQueue.async {
+        SLLog.debug("SLSocketManager主动断开与\(sock.host):\(sock.port)的连接")
+        return await withCheckedContinuation { [weak self] continuation in
+            guard let self else {
+                continuation.resume(returning: ())
+                return
+            }
+            self.removeSockeClient(sock) {
                 sock.disconnect()
-                self.clients.removeValue(forKey: sock)
                 continuation.resume(returning: ())
             }
+//            Self.socketQueue.async {
+//                sock.disconnect()
+//                
+//                self.clients.removeValue(forKey: sock)
+//                
+//            }
         }
     }
     
@@ -532,18 +549,28 @@ public final class SLSocketManager: NSObject {
     /// 从某个socket client发送请求，无需响应
     public func send<T: SLSocketRequest>(request: T, from sock: SLSocketClient, completion: @escaping ((SLResult<Void, Error>) -> Void)) {
         self.getSocketClient(host: sock.host, port: sock.port) { socket in
+            let mainQueue = DispatchQueue.main
             guard let socket, socket.isConnected else {
-                completion(.failure(SLError.socketSendFailureNotConnected))
+                mainQueue.async {
+                    completion(.failure(SLError.socketSendFailureNotConnected))
+                }
                 return
             }
             guard let data = request.data, !data.isEmpty else {
-                completion(.failure(SLError.socketSendFailureEmptyData))
+                mainQueue.async {
+                    completion(.failure(SLError.socketSendFailureEmptyData))
+                }
                 return
             }
             do {
                 try socket.send(data, type: request.type.rawValue)
+                mainQueue.async {
+                    completion(.success(()))
+                }
             } catch let e {
-                completion(.failure(e))
+                mainQueue.async {
+                    completion(.failure(e))
+                }
             }
         }
     }
@@ -567,7 +594,11 @@ public final class SLSocketManager: NSObject {
     
     /// 从某个socket client发送请求，并指定响应类型
     public func send<T: SLSocketRequest, U: SLSocketDataMapper>(_ request: T, from client: SLSocketClient, for responseType: U.Type, timeout: SLTimeInterval = .seconds(10)) async throws -> U {
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self else {
+                continuation.resume(throwing: SLError.socketHasBeenReleased)
+                return
+            }
             self.getSocketClient(host: client.host, port: client.port) { socket in
                 guard let socket, socket.isConnected else {
                     continuation.resume(throwing: SLError.socketSendFailureNotConnected)
@@ -581,37 +612,29 @@ public final class SLSocketManager: NSObject {
                 let proxy = SLSocketDataResponseHandler(id: request.id) {
                     continuation.resume(throwing: SLError.taskCanceled)
                 }
+                proxy.handle = { [weak manager = self, weak proxy] data in
+                    guard let proxy else {
+                        continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
+                        return false
+                    }
+                    do {
+                        let response = U.init(data: data)
+                        if response.id.elementsEqual(request.id) {
+                            manager?.removeProxy(proxy, for: socket) { array in
+                                continuation.resume(returning: response)
+                            }
+                            return true
+                        } else {
+                            // MARK: wait until socket write and receive timeout
+                            SLLog.debug("wait until socket write and receive timeout with request id : \(request.id)")
+                            return false
+                        }
+                    }
+                }
                 self.getProxys(for: socket) { proxys in
                     guard proxys != nil else {
                         continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
                         return
-                    }
-                    proxy.handle = { [weak self, weak proxy] data in
-                        guard let self, let proxy else {
-                            continuation.resume(throwing: SLError.socketDisconnectedWaitingForResponse)
-                            return false
-                        }
-                        do {
-//                            let response = try U.init(data: data)
-                            let response = U.init(data: data)
-                            if response.id.elementsEqual(request.id) {
-                                self.removeProxy(proxy, for: socket) { array in
-                                    continuation.resume(returning: response)
-                                }
-                                return true
-                            } else {
-                                // MARK: wait until socket write and receive timeout
-                                SLLog.debug("wait until socket write and receive timeout")
-                                return false
-                            }
-                        }
-//                        catch let error {
-//                            // MARK: 还需要优化当socket返回无法序列化的数据时，如何从data中取出id进行对应的响应处理，否则会出现异常不匹配的bug，比如如果socket把心跳数据抛到这一层的话，就大概率会出现请求A刚发送完就因为收到心跳响应，而心跳响应无法解析成期望的返回类型，请求就被提前终止了，问题的关键在于data和id的关联方法是交给上层处理的，实际上应该在内部生成，可以考虑socket发送数据时的tag
-//                            self.removeProxy(proxy, for: socket) { array in
-//                                continuation.resume(throwing: error)
-//                            }
-//                            return false
-//                        }
                     }
                     self.addProxy(proxy, for: socket) { array in
                         do {

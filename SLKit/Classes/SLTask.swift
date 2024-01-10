@@ -9,7 +9,7 @@ import Foundation
 
 public enum SLTimeInterval {
     case infinity
-    case seconds(Int)
+    case seconds(TimeInterval)
 }
 
 
