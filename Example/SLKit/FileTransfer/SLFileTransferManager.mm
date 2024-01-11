@@ -179,7 +179,12 @@ int receivingFiles(FileTransferRequestInfo info) {
         for(p1=flist.begin();p1!=flist.end();p1++){
             SLFileModel *model = [[SLFileModel alloc] init];
             model.name = [NSString stringWithWString:p1->name];
-            model.extensionName = [[NSString stringWithWString:p1->extensionName] substringFromIndex:1];
+            NSString *extensionName = [NSString stringWithWString:p1->extensionName];
+            if (extensionName.length > 1) {
+                model.extensionName = [extensionName substringFromIndex:1];
+            } else {
+                model.extensionName = @"";
+            }
             [models addObject:model];
         }
         if(singleton.receiveFileRequestBlock) {
@@ -269,9 +274,14 @@ int fileStatusChanged(FileTransferState state) {
                 sizet+=(p1->size);
                 if (p1->stat == f_TransferDone || file.ioModel.status == CompleteTransfer) {
                     NSString *name = [NSString stringWithWString:p1->name];
-                    NSString *exname = [[NSString stringWithWString:p1->extensionName] substringFromIndex:1];
+                    NSString *extensionName = [NSString stringWithWString:p1->extensionName];
+                    if (extensionName.length > 1) {
+                        extensionName = [extensionName substringFromIndex:1];
+                    } else {
+                        extensionName = @"";
+                    }
                     [file.ioModel.fileModels enumerateObjectsUsingBlock:^(SLFileModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                        if ([obj.name isEqualToString:name] && [obj.extensionName isEqualToString:exname]) {
+                        if ([obj.name isEqualToString:name] && [obj.extensionName isEqualToString:extensionName]) {
                             if(file.ioModel.completeSendFileBlock){
                                 file.ioModel.completeSendFileBlock(obj);
                             }

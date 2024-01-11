@@ -83,7 +83,7 @@ private:
     void NoticeCurrentStateChange(TaskState state);
     int SendFileTransferDone(TransferFileInfo &fi);
     TaskState getType(ResponseType type);
-    void DelayProgressChange();
+    int DelayProgressChange();
     int TryStopDoneSubTask();//清理已经完成的子任务
     /// @brief 获取指定文件路径的文件信息
     /// @param basePath 当前文件相对于基目录的路径，用于拼装文件的相对路径

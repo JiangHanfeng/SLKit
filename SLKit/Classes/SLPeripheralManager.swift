@@ -56,7 +56,6 @@ public class SLPeripheralManager : NSObject {
     
     public func stopAdvertising() {
         manager.stopAdvertising()
-        SLLog.debug("已停止广播")
     }
 }
 

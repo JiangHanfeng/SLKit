@@ -78,7 +78,10 @@ public:
 	}
 	
 private:
-	std::map<Key, Val> dataMap_;	
+	std::map<Key, Val> dataMap_;
+	#ifdef ANDROID	
+	mutable
+	#endif
 	std::mutex mtx_;
 };
  

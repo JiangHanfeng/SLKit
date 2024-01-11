@@ -108,7 +108,7 @@ extension UIViewController {
         }
     }
     
-    func transitionToChild(_ controller: UIViewController, removeCurrent: Bool = true, configChildViewRect: ((_ childView: UIView) -> Void)) {
+    func transitionToChild(_ controller: UIViewController, removeCurrent: Bool = true, configChildViewRect: ((_ childView: UIView) -> Void), completion: (() -> Void)? = nil) {
         let currentChild = childViewControllers.last
         if currentChild?.isEqual(controller) == true {
             return
@@ -164,6 +164,7 @@ extension UIViewController {
                 if removeCurrent {
                     currentChildView?.removeFromSuperview()
                 }
+                completion?()
             }
         }
     }

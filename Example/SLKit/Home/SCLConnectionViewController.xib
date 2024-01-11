@@ -14,6 +14,7 @@
                 <outlet property="bottomButton" destination="rfH-kX-xS6" id="Y4e-pn-LbG"/>
                 <outlet property="cameraView" destination="CFU-PE-3WA" id="DS1-yp-SiQ"/>
                 <outlet property="connectingAnimationImageView" destination="ycV-xb-DUF" id="jZQ-Q3-Pte"/>
+                <outlet property="connectingLabel" destination="3Hc-9N-S1d" id="RoP-h5-JVz"/>
                 <outlet property="connectingView" destination="QGF-Yn-h1f" id="yBi-Vu-3Hk"/>
                 <outlet property="view" destination="fFO-aR-MPM" id="AGF-Sh-iLr"/>
             </connections>

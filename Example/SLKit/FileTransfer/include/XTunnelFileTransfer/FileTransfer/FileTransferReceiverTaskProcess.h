@@ -80,7 +80,7 @@ private:
     int SendMsg(ControlTopic topic,std::string msg);
 
     bool CreateTransferSubTask();
-    int CreateTransferSubTask(TransferFileInfo *fi);
+    ErrorCode CreateTransferSubTask(TransferFileInfo *fi);
 
     int SubTaskErrorEventCallback(SubFileTransferError e);//2.3.2	传输任务异常事件
     int SubProgressChangeEventCallback(SubFileTransferProgress e);//2.3.3	传输任务进度变化事件

@@ -34,7 +34,7 @@
 #include <windows.h>
 // Need to link with Ws2_32.lib
 #pragma comment(lib,"WS2_32.lib")
-
+#include <string.h>
 #else
 #include <arpa/inet.h>
 #include <errno.h>
@@ -42,11 +42,8 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef ANDROID
 #include <string>
-#else 
-#include <string.h>
-#endif
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -73,7 +70,7 @@ public:
    struct SocketInfo
    {
       Socket socket;
-       char *ip;
+      std::string ip;
       int port;
    };
    

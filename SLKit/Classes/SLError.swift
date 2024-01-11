@@ -17,7 +17,7 @@ public enum SLError: Error, LocalizedError {
     case locationNotAllowed
     case socketWrongRole
     case socketWrongClientState
-    case socketConnectionFailure(Error)
+    case socketConnectionFailure(Error?)
     case socketConnectionTimeout
     case socketDisconnectedHeartbeatTimeout
     case socketDisconnected(Error?)
@@ -51,7 +51,7 @@ public enum SLError: Error, LocalizedError {
         case .socketWrongClientState:
             return "socket wrong state"
         case .socketConnectionFailure(let error):
-            return error.localizedDescription
+            return error?.localizedDescription ?? "socket connect failed"
         case .socketConnectionTimeout:
             return "socket connect timeout"
         case .socketDisconnectedHeartbeatTimeout:

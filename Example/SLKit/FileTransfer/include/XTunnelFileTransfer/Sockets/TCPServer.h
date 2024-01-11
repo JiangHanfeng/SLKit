@@ -26,7 +26,14 @@
 #undef min
 #undef max
 #endif
-
+#ifdef IOS
+#ifndef F_SETFL
+#define F_SETFL 4
+#endif
+#ifndef O_NONBLOCK
+#define O_NONBLOCK 0x00000004
+#endif
+#endif
 class CTCPServer : public ASocket
 {
 public:
@@ -69,7 +76,9 @@ protected:
 
    //std::string m_strHost;
    std::string m_strPort;
-
+   bool bind_failed_Log;
+   bool listen_failed_Log;
+   int listenFailedCount;
    #ifdef WINDOWS
    struct addrinfo* m_pResultAddrInfo;
    struct addrinfo  m_HintsAddrInfo;

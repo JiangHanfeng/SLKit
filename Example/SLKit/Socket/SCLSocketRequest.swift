@@ -55,7 +55,7 @@ struct SCLSocketRequest<T: SCLSocketConetent> {
     let taskId = SCLUtil.getTempMac() + "_\(Date().timeIntervalSince1970)"
     let dev_id = SCLUtil.getTempMac().split(separator: ":").joined()
     let dev_mac = SCLUtil.getBTMac()?.split(separator: ":").joined() ?? SCLUtil.getDeviceMac().split(separator: ":").joined()
-    let deviceName = UIDevice.current.name
+    let deviceName = SCLUtil.getDeviceName()
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
     let dbg_info = "bug"

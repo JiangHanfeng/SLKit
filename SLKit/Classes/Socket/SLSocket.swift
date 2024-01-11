@@ -17,13 +17,13 @@ public typealias SLSocketDataCallback = ((Data) -> Void)
 public struct SLSocketHeartbeatRule {
     public let interval: UInt
     public let timeout: UInt
-    public let requestValue: String
-    public let reponseValue: String
+    public let requestData: Data
+    public let responseData: Data
     
-    public init(interval: UInt, timeout: UInt, requestValue: String, reponseValue: String) {
+    public init(interval: UInt, timeout: UInt, requestData: Data, responseData: Data) {
         self.interval = interval
         self.timeout = timeout
-        self.requestValue = requestValue
-        self.reponseValue = reponseValue
+        self.requestData = requestData
+        self.responseData = responseData
     }
 }

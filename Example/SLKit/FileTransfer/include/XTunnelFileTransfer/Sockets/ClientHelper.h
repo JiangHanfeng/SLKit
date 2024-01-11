@@ -3,14 +3,20 @@
 #include "TCPClient.h"
 #include <thread>
 #include "../Utils/tools.h"
+#include <mutex>
 typedef  int(*MSG_CALLBACK)(void*,std::string sessionId,const char* msgData, int msgLeng);
 #define ControlMsgBeginFlag "XT$$"
 #define ControlMsgEndFlag "XT&&";
 #define HeartbeatMsg "hello"
 #define HeartbeatTimeoutFlag "timeout"
-#define SendTimeout 6000
+#ifdef WINDOWS
+#define SetSendTimeout false
+#else
 #define SetSendTimeout true
+#endif
 #define ReceiveTimeout 250
+#define SourceSessionIdStartFlag "S&$S&S"
+#define SourceSessionIdEndFlag "S$&S&E"
 class ClientHelper
 {
 public:
@@ -23,16 +29,21 @@ public:
     int timeOut;//超时时间
     bool isStart;
     bool isTimeout;//当前是否已经超时
+    bool receiveFlag;//是否正在接收数据
     std::string sessionId;
+    std::string sourceSessionId;//socket发起方得到的sessionId,连接建立后，一定要发送一次这个sessionId
+    int tryGetSourceSessionIdCount;//尝试获取sourceSessionId的次数
     CTCPClient* m_pTCPClient=nullptr;
     MSG_CALLBACK callback=nullptr;
     SocketLog loger=nullptr;
+    std::mutex socketMutex;
 public:
     ClientHelper(std::string ip,int port,int bufferSize,int timeOut=6,bool isControl=false);
     bool SetCallback(void* handle,MSG_CALLBACK invokeFunc);
     /// @brief 开启连接
+    /// @param connectTimeout_usec 连接超时时间，单位毫秒
     /// @return 
-    int Connect();
+    int Connect(int connectTimeout_msec=0);
     int Connect(CTCPClient* client);
     /// @brief 关闭连接 
     /// @return 
@@ -53,11 +64,15 @@ private:
     time_t lastReceiveHeartbeatTime;
     bool isCheckMsgFlag=false;//是否检查消息开始和结束标记
 private:
+    bool logHeartbeat=false;
     void Log(const wchar_t* msg);
     void Log(std::wstring msg);
+    void LogEvent(std::string msg);
     void SendHeartbeat();
     bool CheckIsTimeout();
-    int GetControlMsg(char* szRcvBuffer,int &dataLength, std::list<string> &resultList,const char* beginFlag,int beginFlagLength,const char* endFlag,int endFlagLength);
+    int GetControlMsg(char* szRcvBuffer,int &dataLength, std::list<string> &resultList,const char* beginFlag,int beginFlagLength,const char* endFlag,int endFlagLength, int maxSearch=-1);
+    std::string TryGetSourceSessionId(char* msgData, int &msgLeng);
+    int SendSourceSessionId(std::string sourceSessionId);
 };
 
 #endif

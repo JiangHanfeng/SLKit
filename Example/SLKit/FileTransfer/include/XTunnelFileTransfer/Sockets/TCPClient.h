@@ -8,6 +8,7 @@
 
 #ifndef INCLUDE_TCPCLIENT_H_
 #define INCLUDE_TCPCLIENT_H_
+#define IOS
 
 #include <algorithm>
 #include <cstddef>   // size_t
@@ -27,11 +28,21 @@
 #include <sys/types.h>   
 #include <sys/socket.h>
 #include <libgen.h>
+#ifdef IOS
 #include <netinet/tcp.h>
+#else
+#include <linux/tcp.h>
+#endif
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#define SOCKET_ERROR            (-1)
+#ifdef IOS
+#define tcp_info tcp_connection_info
+#define TCP_INFO 11
 #endif
-
+#endif
+#define SendTimeout 6000
+#define ConnectTimeOut 6000 //连接超时时间 单位毫秒
 using SocketLog=std::function<void(const wchar_t*)>;//日志
 class CTCPSSLClient;
 // typedef  int(*MSG_CALLBACK)(void*,std::string sessionId,char* msgData, int msgLeng);
@@ -47,20 +58,13 @@ public:
    CTCPClient(const CTCPClient&) = delete;
    CTCPClient& operator=(const CTCPClient&) = delete;
 
-   // Setters - Getters (for unit tests)
-   /*inline*/// void SetProgressFnCallback(void* pOwner, const ProgressFnCallback& fnCallback);
-   /*inline*/// void SetProxy(const std::string& strProxy);
-   /*inline auto GetProgressFnCallback() const
-   {
-      return m_fnProgressCallback.target<int(*)(void*, double, double, double, double)>();
-   }
-   inline void* GetProgressFnCallbackOwner() const { return m_ProgressStruct.pOwner; }*/
-   //inline const std::string& GetProxy() const { return m_strProxy; }
-   //inline const unsigned char GetSettingsFlags() const { return m_eSettingsFlags; }
+// #ifdef WINDOWS
+   bool Connect(const std::string strServer, const int strPort);// connect to a TCP server
+// #else
+//    bool Connect(const std::string strServer, const std::string strPort);// connect to a TCP server
+// #endif // WINDOWS
 
-	// Session
-   bool Connect(const std::string& strServer, const std::string& strPort); // connect to a TCP server
-   bool SetSocket(Socket connectSocket,const std::string& strServer, const std::string& strPort);
+   bool SetSocket(Socket connectSocket,const std::string strServer, const std::string strPort);
    bool Disconnect(); // disconnect from the TCP server
    bool Send(const char* pData, const size_t uSize) ; // send data to a TCP server
    bool Send(const std::string& strData) ;
@@ -70,7 +74,6 @@ public:
    // To disable timeout, set msec_timeout to 0.
    bool SetRcvTimeout(unsigned int msec_timeout);
    bool SetSndTimeout(unsigned int msec_timeout);
-   bool GetRomoteIPAndPort(std::string remoteIp,int &port);
 #ifndef WINDOWS
    bool SetRcvTimeout(struct timeval Timeout);
    bool SetSndTimeout(struct timeval Timeout);
@@ -85,6 +88,7 @@ public:
    std::string remoteIp;
    int remotePort;
    int localPort;
+   int connectTimeOut;
 protected:
    enum SocketStatus
    {
@@ -96,13 +100,21 @@ protected:
    Socket m_ConnectSocket; // ConnectSocket
    //unsigned m_uRetryCount;
    //unsigned m_uRetryPeriod;
-
-   struct addrinfo* m_pResultAddrInfo;
+#ifndef WINDOWS
+   struct addrinfo* m_pResultAddrInfo = nullptr;
    struct addrinfo  m_HintsAddrInfo;
+   bool tryFreeAddrinfo(addrinfo* addr_info);
+   bool checkAddrinfo(addrinfo* addr_info);
+#else
+   void setSocketBlock(unsigned long long  sck, bool bBlock);
+
+#endif // !WINDOWS
+
 private:
    void overlook_SIGPIPE();
    int checkIsConnected();
    void changeSocketStat();
+   
 };
 
 #endif

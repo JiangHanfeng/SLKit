@@ -44,7 +44,7 @@ struct SCLInitReq : SLSocketRequest, HandyJSON {
     let taskId = SCLUtil.getTempMac() + "_\(Date().timeIntervalSince1970)"
     let dev_id : String = SCLUtil.getTempMac().split(separator: ":").joined()
     let mac : String
-    let deviceName = UIDevice.current.name
+    let deviceName = SCLUtil.getDeviceName()
     let os = 1
     let version = Int(((Bundle.main.infoDictionary?["CFBundleVersion"] as? String) ?? "0")) ?? 0
     let dbg_info = "bug"

@@ -43,6 +43,8 @@ public class SLSocketClient : NSObject {
         }
     }
     
+    private var connectionTimeoutChecker: SLCancelableWork?
+    
     var dataHandler: SLSocketDataCallback?
     
     private var heartbeatTimer: Timer?
@@ -53,6 +55,7 @@ public class SLSocketClient : NSObject {
     
     private var heartbeatTimeoutChecker: SLCancelableWork?
     
+    /// 存储socket read收到的二进制流
     private var cachedData: Data?
     
     public var isConnected : Bool {
@@ -85,12 +88,22 @@ public class SLSocketClient : NSObject {
             do {
                 self.state = .connecting
                 try self.server?.connect(toHost: self.host, onPort: self.port)
-//                switch timeout {
-//                case .infinity:
-//                    try self.server?.connect(toHost: self.host, onPort: self.port)
-//                case .seconds(let value):
-//                    try self.server?.connect(toHost: self.host, onPort: self.port, withTimeout: TimeInterval(value))
-//                }
+                self.connectionTimeoutChecker?.cancel()
+                self.connectionTimeoutChecker = nil
+                switch timeout {
+                case .infinity:
+                    break
+                case .seconds(let seconds):
+                    self.connectionTimeoutChecker = SLCancelableWork(id: "\(Date.now())开启的连接超时检测任务", delayTime: .seconds(Int(seconds)), closure: { [weak self] in
+                        guard let self else { return }
+                        if self.state != .connected {
+                            self.state = .initilized
+                            self.server?.disconnect()
+                            completion(.failure(.socketConnectionTimeout))
+                        }
+                    })
+                    self.connectionTimeoutChecker?.start(at: Self.queue)
+                }
             } catch let error {
                 self.state = .initilized
                 self.server = nil
@@ -100,11 +113,15 @@ public class SLSocketClient : NSObject {
     }
     
     public func disconnect() {
+        disconnectInternal(with: nil)
+    }
+    
+    private func disconnectInternal(with error: Error?) {
         heartbeatTimer?.invalidate()
         heartbeatTimer = nil
         heartbeatTimeoutChecker?.cancel()
         heartbeatTimeoutChecker = nil
-        state = .initilized
+        error == nil ? state = .initilized : nil
         server?.disconnect()
         server = nil
         cachedData = nil
@@ -152,50 +169,27 @@ public class SLSocketClient : NSObject {
         socket.write(data, withTimeout: time, tag: 0)
     }
     
-    @objc private func sendHeartbeat() {
-        if let socket = server, socket.isConnected, let heartbeatRule {
-            var bytes: [UInt8] = []
-            let type = UInt8(0x00)
-            bytes.append(type)
-            let length = UInt32(0)
-            withUnsafeBytes(of: length.bigEndian) {
-                bytes.append(contentsOf: $0)
-            }
-            try? send(Data(bytes: bytes))
-            let currentTime = ProcessInfo.processInfo.systemUptime
-            if let lastReadTime, Int(round(currentTime - lastReadTime)) < heartbeatRule.interval {
-                // 当上次接收数据和本次心跳之间间隔不超过一个心跳周期，比如心跳周期为3秒，第0秒发送了一次心跳，第2秒收到一次业务数据响应，那么本该在第三秒发送的心跳就没必要发了
-                return
-            }
-            guard lastHeartbeatTime == nil else {
-                return
-            }
-            lastHeartbeatTime = currentTime
-            let timeout = Int(heartbeatRule.timeout)
-            heartbeatTimeoutChecker?.cancel()
-            heartbeatTimeoutChecker = nil
-            heartbeatTimeoutChecker = SLCancelableWork(id: "\(serverDesc ?? "")心跳超时检测", delayTime: .seconds(Int(heartbeatRule.timeout + 900))) { [weak self] in
-                if let lastHeartbeatTime = self?.lastHeartbeatTime {
-                    let currentTime = ProcessInfo.processInfo.systemUptime
-                    let passedTime = Int(round(currentTime - lastHeartbeatTime))
-                    if passedTime >= timeout {
-                        self?.handleHeartbeatTimeout()
-                    }
-                }
-            }
-            heartbeatTimeoutChecker?.start(at: Self.queue)
-        } else if let heartbeatTimer {
-            heartbeatTimer.invalidate()
-            self.heartbeatTimer = nil
+    @objc private func responseHeartbeat() {
+        guard let socket = server, socket.isConnected else {
+            SLLog.debug("回复心跳时异常：socket已被释放")
+            return
         }
-    }
-    
-    private func handleHeartbeatTimeout() {
-        SLLog.debug("\(serverDesc ?? "")心跳已超时")
-        state = .disconnectedUnexpected
-        server?.disconnect()
-        unexpectedDisconnectHandler?(.socketDisconnectedHeartbeatTimeout)
-        state = .initilized
+        guard socket.isConnected else {
+            SLLog.debug("回复心跳时异常：socket未连接")
+            return
+        }
+        var bytes: [UInt8] = []
+        let type = UInt8(0x00)
+        bytes.append(type)
+        let length = UInt32(0)
+        withUnsafeBytes(of: length.bigEndian) {
+            bytes.append(contentsOf: $0)
+        }
+        do {
+            try send(Data(bytes: bytes))
+        } catch let e {
+            SLLog.debug("回复心跳时异常：\(e.localizedDescription)")
+        }
     }
     
     deinit {
@@ -206,20 +200,25 @@ public class SLSocketClient : NSObject {
 extension SLSocketClient: GCDAsyncSocketDelegate {
     public func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         SLLog.debug("本机\(sock.localHost ?? ""):\(sock.localPort)已连接服务器\(self.host):\(self.port)")
+        connectionTimeoutChecker?.cancel()
+        connectionTimeoutChecker = nil
         cachedData?.removeAll()
         state = .connected
         connectionCompletion?(.success(Void()))
         server?.readData(withTimeout: -1, tag: 0)
-//        if heartbeatRule != nil {
-//            DispatchQueue.global().async { [weak self] in
-//                guard let self else { return }
-//                self.heartbeatTimer?.invalidate()
-//                self.heartbeatTimer = nil
-//                self.heartbeatTimer = Timer(timeInterval: TimeInterval(1), target: self, selector: #selector(Self.sendHeartbeat), userInfo: nil, repeats: true)
-//                RunLoop.current.add(self.heartbeatTimer!, forMode: .commonModes)
-//                RunLoop.current.run()
-//            }
-//        }
+        heartbeatTimeoutChecker?.cancel()
+        heartbeatTimeoutChecker = nil
+        let seconds = Int(heartbeatRule?.timeout ?? 10)
+        let timeout = TimeInterval(seconds)
+        heartbeatTimeoutChecker = SLCancelableWork(id: "\(Date.now())开启的心跳超时检测任务", delayTime: .seconds(seconds), closure: { [weak self] in
+            guard let self, let lastReadTime = self.lastReadTime else { return }
+            let currentTime = ProcessInfo.processInfo.systemUptime
+            let passedTime = currentTime - lastReadTime
+            if passedTime >= timeout {
+                SLLog.debug("检测到心跳超时")
+                self.disconnectInternal(with: SLError.socketDisconnectedHeartbeatTimeout)
+            }
+        })
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
@@ -227,15 +226,19 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         cachedData?.removeAll()
         if state == .connecting {
             SLLog.debug("\(serverDesc ?? "socket")连接失败")
+            connectionTimeoutChecker?.cancel()
+            connectionTimeoutChecker = nil
             state = .initilized
-            connectionCompletion?(.failure(.bleConnectionFailure(err)))
+            connectionCompletion?(.failure(.socketConnectionFailure(err)))
         } else if state == .connected {
-            SLLog.debug("\(serverDesc ?? "socket")断开连接")
+            SLLog.debug("与\(host):\(port)的连接已断开")
             if let err {
-                SLLog.debug("异常：\(err.localizedDescription)")
+                SLLog.debug("断连异常:\(err.localizedDescription)")
             }
             state = .disconnectedUnexpected
-            unexpectedDisconnectHandler?(.socketDisconnected(err))
+            DispatchQueue.main.async { [weak self] in
+                self?.unexpectedDisconnectHandler?(.socketDisconnected(err))
+            }
         } else {
             SLLog.debug("\(serverDesc ?? "socket")正常断开")
         }
@@ -273,55 +276,36 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         }
         let type = bytes.first!
         let length = UInt32(bigEndian: Data(bytes: bytes[1...4]).withUnsafeBytes({ $0.pointee }))
+        SLLog.debug("deal data type:\(type), value length = \(length), current received bytes length = \(bytes.count)")
         if length > 0 && type != SLSocketSessionItemType.heartbeat.rawValue {
+            SLLog.debug("will intercept value bytes for range 5...\(bytes.index(before: 5+Int(length))) and left bytes for range \(bytes.index(after: 4+Int(length)))..<\(bytes.endIndex)")
             let leftBytes = bytes[bytes.index(after: 4+Int(length))..<bytes.endIndex]
             cachedData = Data(bytes: leftBytes)
             let valueBytes = bytes[5...bytes.index(before: 5+Int(length))]
             let valueData = Data(bytes: valueBytes)
             let gbkEncoding = CFStringConvertEncodingToNSStringEncoding(UInt32(CFStringEncodings.GB_18030_2000.rawValue))
             if let valueString = String(data: valueData, encoding: .utf8) {
-                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes):\n\(valueString)")
+                SLLog.debug("来自\(host):\(port)的业务消息/系统消息(\(length)bytes):\n\(valueString)")
                 dataHandler?(valueData)
             } else if let valueString = String(data: valueData, encoding: String.Encoding(rawValue: gbkEncoding)) {
-                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes，需进行gbk转utf8):\n\(valueString)")
+                SLLog.debug("来自\(host):\(port)的业务消息/系统消息(\(length)bytes，需进行gbk转utf8):\n\(valueString)")
                 if let newValueData = valueString.data(using: .utf8) {
                     dataHandler?(newValueData)
                 } else {
                     dataHandler?(valueData)
                 }
             } else {
-                SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的业务消息/系统消息(\(length)bytes)无法解析")
+                SLLog.debug("来自\(host):\(port)的业务消息/系统消息(\(length)bytes)无法解析")
                 dataHandler?(valueData)
             }
         } else {
             cachedData?.removeAll()
             if type == SLSocketSessionItemType.heartbeat.rawValue {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的心跳包(\(length)bytes)")
-                sendHeartbeat()
+                responseHeartbeat()
             } else {
                 SLLog.debug("来自\(from.connectedHost ?? ""):\(from.connectedPort)的无效数据")
             }
         }
     }
 }
-
-//import RxSwift
-//extension Reactive where Base : SLSocketClient {
-//    public var connection: Observable<SLSocketClient> {
-//        return Observable<SLSocketClient>.create { observer in
-//            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + .seconds(15), execute: {
-//                observer.onNext(base)
-////                observer.onCompleted()
-//            })
-//            return Disposables.create()
-//        }
-//    }
-//    
-//    public var listen: Observable<String> {
-//        return Observable<String>.create { observer in
-//            observer.onNext("hello world")
-////            observer.onCompleted()
-//            return Disposables.create ()
-//        }
-//    }
-//}

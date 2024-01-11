@@ -15,10 +15,11 @@
 #include <sys/stat.h>//使用stat函数获取文件信息
 #include <ostream>
 #include <future>
-#define sdk_version L"0.1.3.18"
+#define sdk_version L"0.1.3.30"
 #define SocketTimeout 6
 
 #define OrderTaskIdFlag L"__"
+#define DefaultConnectTimeout_MSG 2000 //默认的消息管道连接超时时间，单位毫秒
 class FileTransfer
 {
 public:/* data */
@@ -37,6 +38,7 @@ public:/* data */
     std::map<std::string,FileTransferRequestInfo>fileTransferRequestList;
     std::map<std::wstring, ClientHelper*>MsgLineList;
     std::mutex MsgLineListMutex;
+    std::map<std::string, ClientHelper*>waitReleaseClient;
 public:/* function */
     FileTransfer(/* args */);
     virtual ~FileTransfer();
@@ -58,13 +60,19 @@ public:/* function */
     /// <param name="transferType">文件传输类型 0文件 1文件夹 2文件和文件夹</param>
     /// <param name="nameList">要传输的文件或文件夹的路径列表</param>
     /// <param name="taskId">任务ID，创建任务成功后赋值，创建任务失败会为空</param>
+    /// <param name="pathRoot">期望传输的文件以哪个路径为基准，比如要传入的文件为 F:\a\b\c.txt,pathRoot=F:\，接收端存储路径为 E:\download,
+    ///那么文件在接收端的实际全路径为E:\download\a\b\c.txt,如果pathRoot="",则在接收端的全路径为E:\download\c.txt
+    /// pathRoot 会和传输的文件路径进行取差，取差后的路径（不带文件名和拓展名）即为相对路径
+    /// </param>
     /// <returns>0为创建任务成功</returns>
     //int RequestFileTransfer(std::wstring ip,int transferType,std::list<std::wstring> nameList,std::wstring &taskId);
-    int RequestFileTransfer(std::wstring ip,int controlPort,int dataPort,int transferType,std::list<std::wstring> nameList,std::wstring &taskId);
+    int RequestFileTransfer(std::wstring ip,int controlPort,int dataPort,int transferType,std::list<std::wstring> nameList,std::wstring &taskId,std::wstring pathRoot=L"",std::wstring extraJson=L"");
     int CancelFileTransfer (std::wstring taskId_outward, std::wstring fileId=L"",CancelTaskPolicy policy=CancelTaskPolicy::DoNothing);
     // int ReDownloadFile (std::wstring taskId_outward, std::wstring fileId,std::wstring savePath);
     int StopAll(CancelTaskPolicy policy=CancelTaskPolicy::DoNothing);
     bool HasRunTransferTask();
+    int HasRunReceiverTask();
+    int HasRunSenderTask();
     std::list<FileTransferTask>GetSenderTaskList();
     std::list<FileTransferTask>GetReceiveTaskList();
     int GetTask (std::wstring taskId_outward,FileTransferTask &taskInfo);
@@ -81,6 +89,7 @@ public:/* function */
     /// <param name="msg"></param>
     /// <returns></returns>
     int MsgLineSend(std::wstring lineId, std::wstring ip,int port, std::wstring msg);
+    int MsgLineDestroy(std::wstring lineId);
 public://不要对外发布
     void ServerMsgReceiveEvent(std::string sessionId , ControlMsg msg );
     //void DealEvent();
@@ -89,6 +98,8 @@ public://不要对外发布
     void Log(logLevel level,std::wstring msg);
     void ControlPortLog(const wchar_t* msg);
     void DataPortLog(const wchar_t* msg);
+    void MsgLineTimeoutEvent(std::string sessionId, std::string json);
+    void SessionClientTimeoutEvent(std::string sessionId, std::string json);
 public: /* event */
     TransferRequestEvent transferRequestEvent=nullptr;
     TaskErrorEvent taskErrorEvent=nullptr;
@@ -99,6 +110,9 @@ public: /* event */
 private:
     /* data */
     bool isInit=false;
+    bool isInInit=false;//是否在走初始化流程
+    bool isInExitProc=false;//是否真在走退出流程
+    bool isMonitorRun=false;
     std::map<std::string,std::future<int>> transferRequestList;
     std::thread housekeeperT;//管家 负责管理本任务的一些杂务 比如定期通知外部一些信息
     ServerHelper* controlServer=nullptr;
@@ -152,6 +166,7 @@ private:
     TaskState getType(ResponseType type);
     std::wstring getTaskTypePrompt(TaskState state);
     int TryStopDoneSubTask();//清理已经完成的子任务
+    int TryReleaseClient();//清理一些没用的超时的socket连接
     void NoticeCurrentStateChange(TaskType type,std::wstring taskId,TaskState state,ErrorCode errorCode,HashCheckState hashCheckState, std::wstring targetDeviceName);
     void ReleaseClientSocket(ClientHelper* client);
     int SendCancelMsg(std::wstring taskId, CancelTaskPolicy cancelTaskPolicy);

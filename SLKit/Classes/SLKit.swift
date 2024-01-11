@@ -109,3 +109,11 @@ public func stackAddress(of: UnsafeRawPointer) -> Int {
 public func headAddress<T: AnyObject>(of: T) -> Int {
     return unsafeBitCast(of, to: Int.self)
 }
+
+extension Date {
+    static func now(dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> String {
+        let formattor = DateFormatter()
+        formattor.dateFormat = dateFormat
+        return formattor.string(from: Date())
+    }
+}

@@ -169,7 +169,7 @@ public class SLSocketServer : NSObject {
     
     @objc private func heartbeat() {
         if let socket = server, socket.isConnected, let heartbeatRule {
-            try? send(heartbeatRule.requestValue)
+            try? send(heartbeatRule.requestData)
             let timeout = Int(heartbeatRule.timeout)
             heartbeatTimeoutChecker?.cancel()
             heartbeatTimeoutChecker = nil

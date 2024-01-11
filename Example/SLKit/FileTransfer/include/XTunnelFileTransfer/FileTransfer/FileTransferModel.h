@@ -7,17 +7,19 @@
 
 enum ErrorCode
 {
-    NoError=-2,//未设置状态
-    Error=-99,//错误，初始值
-    NetworkError=1,//网络错误
-    IOError=2,//文件读写错误
-    FileNotExist=3,//目标文件不存在
-    FolderNotExist=4,//目标文件夹不存在
-    UnInit=5,//没有初始化
-    Inited=6,//已经初始化过了
-    ConnectUnInit=7,//连接未初始化
-    FileReadLengthAbnormal=8,//文件大小读取异常
-    TaskIsExist=9,//任务已经存在，多用与任务重传时的检查
+    NoError = -2,//未设置状态
+    Error = -99,//错误，初始值
+    NetworkError = 1,//网络错误
+    IOError = 2,//文件读写错误
+    FileNotExist = 3,//目标文件不存在
+    FolderNotExist = 4,//目标文件夹不存在
+    UnInit = 5,//没有初始化
+    Inited = 6,//已经初始化过了
+    ConnectUnInit = 7,//连接未初始化
+    FileReadLengthAbnormal = 8,//文件大小读取异常
+    TaskIsExist = 9,//任务已经存在，多用与任务重传时的检查
+    FileIsExist = 10,//文件已经存在
+    FileIsCreated=11,//文件已经创建,文件大小为0时使用，接收端只需要创建文件，不需要写入数据
 };
 enum ControlTopic
 {
@@ -179,6 +181,8 @@ struct FileTransferRequestInfo
     int senderDataPort;//发送端数据端口
     int receiveControlPort;//接收端控制端口
     int receiveDataPort;//接收端数据端口
+    std::wstring pathRoot;//发送端的基准路径，不传输使用
+    std::wstring extraJson;//附加拓展字段，应当为一个json,默认为空
 };
 struct FileTransferResponseInfo
 {

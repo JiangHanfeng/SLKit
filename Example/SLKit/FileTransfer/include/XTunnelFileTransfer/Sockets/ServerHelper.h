@@ -22,7 +22,7 @@ public:
     int port;//目标端口
     int bufferSize;//数据收发的buffer
     int timeOut;//超时时间
-    
+    std::wstring serviceGuid;//
     // int maxClientNum;//挂起状态的最大连接数
     // socket缓冲队列大小
     const int QUEUE_SIZE = 1024;
@@ -36,10 +36,10 @@ private:
     CTCPServer* m_pTCPServer=nullptr;
     MSG_CALLBACK callback=nullptr;
     std::thread listtenT;
-    
+    bool listtenT_IsExit = true;
     // std::thread receiveT;
 public:
-    ServerHelper(void* handle,std::string ip,int port,int bufferSize,int timeOut=6,bool isCheckMsgFlag=false);
+    ServerHelper(void* handle,int port,int bufferSize,int timeOut=6,bool isCheckMsgFlag=false);
     bool SetCallback(MSG_CALLBACK invokeFunc);
     //开启服务
     int Start();

@@ -39,6 +39,8 @@
 #define _stat64 stat
 #endif
 //using namespace std;
+#define EndFlag_linux  L"/";
+#define EndFlag_win  L"\\";
 
 #define rate_kb 1024
 #define rate_mb 1024*1024
@@ -67,6 +69,7 @@ long long getFileSize (const std::wstring& path);
 // long GetFileSize2(const string filepath);
 // LPCWSTR stringToLPCWSTR(std::string orig);
 std::vector<std::wstring> testSplit(std::wstring srcStr, const std::wstring& flag);
+std::vector<std::wstring> testSplit(std::wstring srcStr, const std::wstring& flag1, const std::wstring& flag2);
 int FindFirstFlag(const char* buffer,int dataLength,const char*endFlag,int endFlagLength);
 int trimLeft(char* buffer,int dataLength,int trimLength);
 int strCopy(char* strDest,const char* strSource,int sourceBegin,int sourceLength);
@@ -107,4 +110,11 @@ std::string GetRateString(long long rate=0);
 
 std::string t_to_string(std::wstring wstr);
 std::wstring t_to_wstring(std::string str);
+std::wstring GetPtrString(void* ptr);
+
+std::wstring replaceString(std::wstring str, std::wstring oldStr, std::wstring newStr);
+#ifdef ANDROID
+void ChangeMode(std::wstring tPath, std::filesystem::perms mode);
+#endif // ANDROID
+std::wstring getRelativePath(std::wstring _path, std::wstring pathRoot);
 #endif

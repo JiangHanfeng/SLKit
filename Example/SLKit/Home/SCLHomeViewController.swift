@@ -71,8 +71,7 @@ class SCLHomeViewController: SCLBaseViewController {
                         return
                     }
                     device.localClient.unexpectedDisconnectHandler = { [weak weakSelf = self] error in
-                        weakSelf?.device = nil
-                        weakSelf?.toast("已断开连接")
+                        weakSelf?.tryReconnect()
                     }
                     self.transitionToChild(self.getDeviceVc(device)) {
                         childView in
@@ -95,44 +94,17 @@ class SCLHomeViewController: SCLBaseViewController {
                     } else {
                         if self?.ipv4 != ip {
                             SLLog.debug("本机ip更新为\(ip)，准备停止监听本地端口并停止广播")
-                            self?.stopListenPort()
-                            self?.stopAdvertising()
                             self?.ipv4 = ip
-                            let serverPort = UInt16.random(in: 10000..<65535)
-                            SLLog.debug("准备重新监听本地端口\(serverPort)")
-                            self?.startListenPort(serverPort, success: {
-                                if bleAvailable {
-                                    if let advertiseError = self?.startAdvertising(port: serverPort) {
-                                        SLLog.debug("广播错误:\(advertiseError)")
-                                        self?.toast(advertiseError)
-                                    }
-                                } else {
-                                    SLLog.debug("ble状态不可用，暂不广播")
-                                }
-                            })
+                            self?.stopListenPortAndAdervertising()
+                            self?.startListenPortAndAdervertising()
                         } else if let server = self?.localServer {
                             SLLog.debug("本机ip未发生变化，本地端口\(server.port)已监听，无需重新监听，准备重新广播")
-                            if bleAvailable {
-                                if let advertiseError = self?.startAdvertising(port: server.port) {
-                                    SLLog.debug("广播错误:\(advertiseError)")
-                                    self?.toast(advertiseError)
-                                }
-                            } else {
-                                SLLog.debug("ble状态不可用，暂不广播")
+                            if let error = self?.startAdvertising(port: server.port) {
+                                SLLog.debug("广播失败:\(error)")
                             }
                         } else {
-                            let serverPort = UInt16.random(in: 10000..<65535)
-                            SLLog.debug("本机ip未发生变化，本地端口\(serverPort)未监听，需开启监听并发起广播")
-                            self?.startListenPort(serverPort, success: {
-                                if bleAvailable {
-                                    if let advertiseError = self?.startAdvertising(port: serverPort) {
-                                        SLLog.debug("广播错误:\(advertiseError)")
-                                        self?.toast(advertiseError)
-                                    }
-                                } else {
-                                    SLLog.debug("ble状态不可用，暂不广播")
-                                }
-                            })
+                            SLLog.debug("本机ip未发生变化，本地端口未监听，需开启监听并发起广播")
+                            self?.startListenPortAndAdervertising()
                         }
                     }
                     guard let self else {
@@ -177,26 +149,45 @@ class SCLHomeViewController: SCLBaseViewController {
     
     private func getConnectionVc() -> SCLConnectionViewController {
         if connectionVc == nil {
-            connectionVc = SCLConnectionViewController { [weak self] device in
+            connectionVc = SCLConnectionViewController(didStartScan: { [weak self] in
+                SLLog.debug("开始扫描二维码")
+                self?.stopAdvertising()
+                self?.stopListenPort()
+            }, didStopScan: { [weak self] scanSuccess in
+                if !scanSuccess {
+                    SLLog.debug("取消扫码或扫码识别失败")
+                    self?.startListenPortAndAdervertising()
+                }
+            }, connectionCompletion: { [weak self] device in
+                let isReconnect = self?.device != nil
+                let connectSuccess = device != nil
+                SLLog.debug("\(isReconnect ? "重连" : "连接")\(connectSuccess ? "成功" : "失败或取消")")
                 self?.device = device
-            }
+            })
         }
         return connectionVc!
     }
     
     private func getDeviceVc(_ device: SLDevice) -> SCLDeviceViewController {
-        return SCLDeviceViewController(device: device) { [weak self] in
-            guard let self else {
-                return
-            }
-            self.device = nil
-            self.transitionToChild(self.getConnectionVc()) { childView in
+        return SCLDeviceViewController(device: device) { [weak self] isInitiative in
+            self?.device = nil
+        }
+    }
+    
+    private func tryReconnect() {
+        if let device {
+            let connectionVc = getConnectionVc()
+            transitionToChild(connectionVc) { childView in
                 childView.snp.makeConstraints { make in
                     make.top.equalTo(self.topBar.snp.bottom)
                     make.left.right.equalTo(0)
                     make.bottom.equalTo(-UIDevice.safeDistanceBottom())
                 }
+            } completion: {
+                connectionVc.startConnect(host: device.localClient.host, port: device.localClient.port, mac: device.mac, name: device.name, isReconnect: true)
             }
+        } else {
+            toast("已断开连接")
         }
     }
     
@@ -294,31 +285,19 @@ extension SCLHomeViewController: UINavigationControllerDelegate {
 
 extension SCLHomeViewController {
     @objc func willEnterForeground() {
-        if let _ = device?.localClient {
+        if let _ = device {
         } else {
-            let serverPort = UInt16.random(in: 10000..<65535)
-            SLLog.debug("app 进入前台，重新监听端口\(serverPort)并广播")
-            startListenPort(serverPort, success: {
-                if SLPeripheralManager.shared.available() {
-                    if let advertiseError = self.startAdvertising(port: serverPort) {
-                        SLLog.debug("广播错误:\(advertiseError)")
-                        self.toast(advertiseError)
-                    }
-                } else {
-                    SLLog.debug("ble状态不可用，暂不广播")
-                }
-            })
+            startListenPortAndAdervertising()
         }
     }
     
     @objc func didEnterBackground() {
-        SLLog.debug("app 进入后台,取消监听端口并停止广播")
-        stopAdvertising()
-        stopListenPort()
+        stopListenPortAndAdervertising()
     }
     
-    func startListenPort(_ port: UInt16, success: () -> Void) {
-        SLSocketManager.shared.startListen(port: port, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
+    func startListenPort(success: @escaping (_ port: UInt16) -> Void, failure: @escaping (_ error: Error) -> Void) {
+        let randomPort = UInt16.random(in: 10000..<65535)
+        SLSocketManager.shared.startListen(port: randomPort, gateway: SLSocketServerGateway(connectionAuthrizationHandler: { socket, acceptedCount in
             return .access(nil)
         }, dataAuthrizationHandler: { [weak self] socket, data in
             do {
@@ -355,8 +334,10 @@ extension SCLHomeViewController {
             case .success(let server):
                 print("监听本地端口:\(server.port)成功")
                 self?.localServer = server
-            case .failure(_):
-                print("监听本地端口:\(port)失败")
+                success(server.port)
+            case .failure(let e):
+                print("监听本地端口:\(randomPort)失败")
+                failure(e)
             }
         }
     }
@@ -371,6 +352,9 @@ extension SCLHomeViewController {
     }
     
     func startAdvertising(port: UInt16) -> String? {
+        guard SLPeripheralManager.shared.available() else {
+            return "蓝牙未开启或未授权"
+        }
         guard let macBytes = SCLUtil.getTempMac().macBytes() else {
             return "无法获取mac"
         }
@@ -407,6 +391,22 @@ extension SCLHomeViewController {
     
     func stopAdvertising() {
         SLPeripheralManager.shared.stopAdvertising()
+    }
+    
+    func startListenPortAndAdervertising() {
+        startListenPort { port in
+            SLLog.debug("已监听端口\(port)")
+            if let error = self.startAdvertising(port: port) {
+                SLLog.debug("广播失败:\(error)")
+            }
+        } failure: { error in
+            SLLog.debug("监听端口失败:\(error.localizedDescription)")
+        }
+    }
+    
+    func stopListenPortAndAdervertising() {
+        stopAdvertising()
+        stopListenPort()
     }
     
     func configFileTransfer(){

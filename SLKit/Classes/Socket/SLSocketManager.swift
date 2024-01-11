@@ -509,7 +509,6 @@ public final class SLSocketManager: NSObject {
     
     /// 断开连接
     public func disconnect(_ sock: SLSocketClient) async {
-        SLLog.debug("SLSocketManager主动断开与\(sock.host):\(sock.port)的连接")
         return await withCheckedContinuation { [weak self] continuation in
             guard let self else {
                 continuation.resume(returning: ())

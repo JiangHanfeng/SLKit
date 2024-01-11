@@ -35,7 +35,7 @@ class SCLDeviceViewController: SCLBaseViewController {
     
     private var device: SLDevice?
     private var sendingTaskId: String?
-    private var disconnectedCallback: (() -> Void)?
+    private var disconnectedCallback: ((_ isInitiative: Bool) -> Void)?
     private var state = State.connected
     private var socketDataListener: SLSocketClientUnhandledDataHandler?
     private var requestPairByDevice = false // 是否从pc发起配对
@@ -57,7 +57,7 @@ class SCLDeviceViewController: SCLBaseViewController {
         }
     }
     
-    convenience init(device: SLDevice, disconnectedCallback: @escaping () -> Void) {
+    convenience init(device: SLDevice, disconnectedCallback: @escaping (_ isInitiative: Bool) -> Void) {
         self.init()
         self.device = device
         self.disconnectedCallback = disconnectedCallback
@@ -82,6 +82,8 @@ class SCLDeviceViewController: SCLBaseViewController {
             }
             DispatchQueue.main.async {
                 switch cmd {
+                case SCLCmd.end.rawValue:
+                    self.disconnect(isInitiative: false)
                 case SCLCmd.requestScreen.rawValue:
                     self.requestScreen()
                 case SCLCmd.stopAirplay.rawValue:
@@ -222,19 +224,8 @@ class SCLDeviceViewController: SCLBaseViewController {
     }
 
     @IBAction private func onDisconnect() {
-        SLLog.debug(#function)
-        if let sock = device?.localClient {
-            SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
-                SLSocketManager.shared.disconnect(sock) { [weak self] in
-                    DispatchQueue.main.async {
-                        self?.disconnectedCallback?()
-                    }
-                }
-            })
-        } else {
-            disconnectedCallback?()
-        }
+        SLLog.debug("点击断开连接")
+        disconnect()
     }
     
     @IBAction private func onAirplay() {
@@ -264,6 +255,30 @@ class SCLDeviceViewController: SCLBaseViewController {
             return
         }
         (UIApplication.shared.delegate as? AppDelegate)?.selectFile()
+    }
+    
+    private func disconnect(isInitiative: Bool = true) {
+        SLLog.debug("断开连接：\(isInitiative ? "主动" : "被动")")
+        if let sock = device?.localClient {
+            if isInitiative {
+                SLSocketManager.shared.send(request: SCLSocketRequest(content: SCLEndReq(state: 0)), from: sock) { _ in }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(125), execute: {
+                    SLSocketManager.shared.disconnect(sock) { [weak self] in
+                        DispatchQueue.main.async {
+                            self?.disconnectedCallback?(isInitiative)
+                        }
+                    }
+                })
+            } else {
+                SLSocketManager.shared.disconnect(sock) { [weak self] in
+                    DispatchQueue.main.async {
+                        self?.disconnectedCallback?(isInitiative)
+                    }
+                }
+            }
+        } else {
+            disconnectedCallback?(isInitiative)
+        }
     }
     
     private func requestScreen(isInitiative: Bool = true) {

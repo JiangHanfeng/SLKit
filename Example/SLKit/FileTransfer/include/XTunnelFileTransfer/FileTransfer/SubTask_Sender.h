@@ -25,7 +25,7 @@ private:
     int bufferSize;
     std::string controlSessionId;
     ClientHelper* dataClient;
-    int isStart;
+    bool isStart;
     std::thread dataTransferT;
     bool dataTransferT_IsExit=true;
     // std::future<int> dataTransferT;
@@ -46,15 +46,14 @@ public:
     SubTaskErrorEvent taskErrorEvent=nullptr;
     SubProgressChangeEvent progressChangeEvent=nullptr;
     SubTaskStateChangeEvent taskStateChangeEvent=nullptr;
+    void Log(logLevel level,const wchar_t* msg);
+    void Log(logLevel level,std::wstring msg);
 private :
     bool CreateReadFileStream();
     bool CloseFileStream();
     void ReleaseResources();
     int SendData(char* buffer, int length);
     void NoticeCurrentStateChange(FileState state);
-
-    void Log(logLevel level,const wchar_t* msg);
-    void Log(logLevel level,std::wstring msg);
 };
 
 
