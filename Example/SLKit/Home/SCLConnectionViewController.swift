@@ -41,73 +41,17 @@ class SCLConnectionViewController: SCLBaseViewController {
     @IBOutlet weak var connectingLabel: UILabel!
     @IBOutlet weak var connectingAnimationImageView: UIImageView!
     @IBOutlet weak var bottomButton: UIButton!
+    private var reconnectCount = 0
     
     private var state = State.initialize {
         didSet {
             if state.rawValue != oldValue.rawValue {
                 updateViews()
                 switch state {
-                case .connecting(let info, _):
-                    Task {
-                        do {
-                            let sock = try await SLSocketManager.shared.connect(host: info.ip, port: UInt16(info.port)!, heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestData: Data(), responseData: Data()))
-                            sock.unexpectedDisconnectHandler = { [weak self] error in
-                                self?.state = .initialize
-                                if let error {
-                                    self?.toast(error.localizedDescription)
-                                }
-                            }
-                            let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
-                            guard resp.state == 1 else {
-                                self.state = .initialize
-                                self.toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
-                                sock.disconnect()
-                                return
-                            }
-                            let sync = SCLSyncReq(
-                                deviceName: SCLUtil.getDeviceName(),
-                                deviceId: SCLUtil.getTempMac().split(separator: ":").joined(),
-                                ip: sock.localHost ?? "",
-                                port1: 0,
-                                port2: UInt16(SLTransferManager.share().controlPort),
-                                port3: UInt16(SLTransferManager.share().dataPort))
-                            let syncResp = try await SLSocketManager.shared.send(
-                                SCLSocketRequest(content: sync),
-                                from: sock,
-                                for: SCLSyncResp.self)
-                            guard syncResp.state == 1 else {
-                                self.state = .initialize
-                                self.toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
-                                sock.disconnect()
-                                return
-                            }
-                            let device = SLDevice(
-                                id: resp.dev_id,
-                                name: resp.dev_name,
-                                mac: info.deviceMac,
-                                bleName: info.bleName.isEmpty ? info.deviceName : info.bleName,
-                                localClient: sock
-                            )
-                            self.connectionCompletion?(device)
-                            self.state = .initialize
-                        } catch let e {
-                            SLLog.debug("TCP登录失败:\(e.localizedDescription)")
-                            self.state = .initialize
-                            if let slError = e as? SLError {
-                                switch slError {
-                                case .taskCanceled:
-                                    break
-                                default:
-                                    self.toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
-                                }
-                            } else {
-                                self.toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
-                            }
-                            self.connectionCompletion?(nil)
-                        }
-                    }
+                case .connecting(let info, let isReconnect):
+                    callConnect(info: info, isReconnect: isReconnect)
                 default:
-                    break
+                    reconnectCount = 0
                 }
             } else {
                 switch state {
@@ -336,6 +280,98 @@ class SCLConnectionViewController: SCLBaseViewController {
         info.deviceName = name
         info.bleName = name
         state = .connecting(info, isReconnect)
+    }
+    
+    private func callConnect(info: SCLQRResult, isReconnect: Bool) {
+        SLLog.debug("准备连接\(info.ip):\(info.port)")
+        Task {
+            do {
+                let socket = try await SLSocketManager.shared.connect(host: info.ip, port: UInt16(info.port)!, timeout: .seconds(5), heartbeatRule: SLSocketHeartbeatRule(interval: 3, timeout: 10, requestData: Data(), responseData: Data()))
+                login(with: socket, deviceMac: info.deviceMac, deviceName: info.bleName.isEmpty ? info.deviceName : info.bleName)
+            } catch let e {
+                SLLog.debug("连接\(info.ip):\(info.port)失败:\(e.localizedDescription)")
+                if isReconnect && state.rawValue == 3 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: { [weak self] in
+                        if let connecting = self?.state {
+                            switch connecting {
+                            case .connecting(let infoAtThisMoment, let isReconnectAtThisMoment):
+                                if isReconnectAtThisMoment {
+                                    self?.reconnectCount += 1
+                                    if let reconnectCount = self?.reconnectCount {
+                                        if reconnectCount > 15 {
+                                            self?.toast("重新连接\(infoAtThisMoment.deviceName)失败")
+                                            self?.state = .initialize
+                                            self?.connectionCompletion?(nil)
+                                        } else {
+                                            self?.callConnect(info: info, isReconnect: true)
+                                        }
+                                    }
+                                }
+                            default:
+                                break
+                            }
+                        }
+                    })
+                } else {
+                    state = .initialize
+                    connectionCompletion?(nil)
+                }
+            }
+        }
+    }
+    
+    private func login(with sock: SLSocketClient, deviceMac: String, deviceName: String) {
+        Task {
+            do {
+                let resp = try await SLSocketManager.shared.send(SCLSocketLoginReq(retry: false), from: sock, for: SCLSocketLoginResp.self, timeout: .seconds(10))
+                guard resp.state == 1 else {
+                    state = .initialize
+                    toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
+                    sock.disconnect()
+                    return
+                }
+                let sync = SCLSyncReq(
+                    deviceName: SCLUtil.getDeviceName(),
+                    deviceId: SCLUtil.getTempMac().split(separator: ":").joined(),
+                    ip: sock.localHost ?? "",
+                    port1: 0,
+                    port2: UInt16(SLTransferManager.share().controlPort),
+                    port3: UInt16(SLTransferManager.share().dataPort))
+                let syncResp = try await SLSocketManager.shared.send(
+                    SCLSocketRequest(content: sync),
+                    from: sock,
+                    for: SCLSyncResp.self)
+                guard syncResp.state == 1 else {
+                    state = .initialize
+                    toast(NSLocalizedString( resp.state == 0 ? "SLConnectionRefused" : "SLConnectionFailedGeneralHint", comment: ""))
+                    sock.disconnect()
+                    return
+                }
+                let device = SLDevice(
+                    id: resp.dev_id,
+                    name: resp.dev_name,
+                    mac: deviceMac,
+                    bleName: deviceName,
+                    localClient: sock
+                )
+                state = .initialize
+                connectionCompletion?(device)
+            } catch let e {
+                SLLog.debug("TCP登录失败:\(e.localizedDescription)")
+                state = .initialize
+                if let slError = e as? SLError {
+                    switch slError {
+                    case .taskCanceled:
+                        break
+                    default:
+                        toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
+                    }
+                } else {
+                    toast(NSLocalizedString("SLConnectionFailedGeneralHint", comment: ""))
+                }
+                connectionCompletion?(nil)
+            }
+        }
     }
     
     private func startAnimation() {

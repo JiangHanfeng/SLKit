@@ -333,8 +333,8 @@ public final class SLSocketManager: NSObject {
                         if let error {
                             continuation.resume(throwing: error)
                         } else {
-                            s.dataHandler = { [weak self] data in
-                                if let proxys = self?.servers[s] {
+                            s.dataHandler = { [weak self, weak serverSocket = s] data in
+                                if let serverSocket, let proxys = self?.servers[serverSocket] {
                                     proxys.forEach { item in
                                         item.handle?(data)
                                     }

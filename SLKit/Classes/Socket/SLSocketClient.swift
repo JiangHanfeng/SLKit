@@ -47,8 +47,6 @@ public class SLSocketClient : NSObject {
     
     var dataHandler: SLSocketDataCallback?
     
-    private var heartbeatTimer: Timer?
-    
     private var lastHeartbeatTime: TimeInterval?
 
     private var lastReadTime: TimeInterval?
@@ -97,8 +95,8 @@ public class SLSocketClient : NSObject {
                     self.connectionTimeoutChecker = SLCancelableWork(id: "\(Date.now())开启的连接超时检测任务", delayTime: .seconds(Int(seconds)), closure: { [weak self] in
                         guard let self else { return }
                         if self.state != .connected {
-                            self.state = .initilized
-                            self.server?.disconnect()
+                            SLLog.debug("检测到连接超时")
+                            self.disconnectInternal(with: nil)
                             completion(.failure(.socketConnectionTimeout))
                         }
                     })
@@ -117,10 +115,7 @@ public class SLSocketClient : NSObject {
     }
     
     private func disconnectInternal(with error: Error?) {
-        heartbeatTimer?.invalidate()
-        heartbeatTimer = nil
-        heartbeatTimeoutChecker?.cancel()
-        heartbeatTimeoutChecker = nil
+        stopHeartbeatTimeoutChecker()
         error == nil ? state = .initilized : nil
         server?.disconnect()
         server = nil
@@ -192,6 +187,33 @@ public class SLSocketClient : NSObject {
         }
     }
     
+    private func stopHeartbeatTimeoutChecker() {
+        heartbeatTimeoutChecker?.cancel()
+        heartbeatTimeoutChecker = nil
+    }
+    
+    private func startCheckHeartbeatTimeout() {
+        let seconds = Int(heartbeatRule?.timeout ?? 10)
+        let timeout = TimeInterval(seconds)
+        heartbeatTimeoutChecker = SLCancelableWork(id: "\(Date.now())开启的心跳超时检测任务", delayTime: .seconds(seconds), closure: { [weak self] in
+            guard let self, self.state == .connected else {
+                return
+            }
+            let currentTime = ProcessInfo.processInfo.systemUptime
+            let passedTime = currentTime - (self.lastReadTime ?? 0)
+            if passedTime >= timeout {
+                SLLog.debug("检测到心跳超时")
+                self.disconnectInternal(with: SLError.socketDisconnectedHeartbeatTimeout)
+            }
+        })
+        heartbeatTimeoutChecker?.start(at: Self.queue)
+    }
+    
+    private func restartCheckHeartbeatTimeout() {
+        stopHeartbeatTimeoutChecker()
+        startCheckHeartbeatTimeout()
+    }
+    
     deinit {
         SLLog.debug("\(self) deinit")
     }
@@ -205,23 +227,12 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
         cachedData?.removeAll()
         state = .connected
         connectionCompletion?(.success(Void()))
+        restartCheckHeartbeatTimeout()
         server?.readData(withTimeout: -1, tag: 0)
-        heartbeatTimeoutChecker?.cancel()
-        heartbeatTimeoutChecker = nil
-        let seconds = Int(heartbeatRule?.timeout ?? 10)
-        let timeout = TimeInterval(seconds)
-        heartbeatTimeoutChecker = SLCancelableWork(id: "\(Date.now())开启的心跳超时检测任务", delayTime: .seconds(seconds), closure: { [weak self] in
-            guard let self, let lastReadTime = self.lastReadTime else { return }
-            let currentTime = ProcessInfo.processInfo.systemUptime
-            let passedTime = currentTime - lastReadTime
-            if passedTime >= timeout {
-                SLLog.debug("检测到心跳超时")
-                self.disconnectInternal(with: SLError.socketDisconnectedHeartbeatTimeout)
-            }
-        })
     }
     
     public func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
+        stopHeartbeatTimeoutChecker()
         server = nil
         cachedData?.removeAll()
         if state == .connecting {
@@ -239,13 +250,10 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
             DispatchQueue.main.async { [weak self] in
                 self?.unexpectedDisconnectHandler?(.socketDisconnected(err))
             }
+            state = .initilized
         } else {
-            SLLog.debug("\(serverDesc ?? "socket")正常断开")
+            SLLog.debug("socket正常断开")
         }
-        heartbeatTimer?.invalidate()
-        heartbeatTimer = nil
-        heartbeatTimeoutChecker?.cancel()
-        heartbeatTimeoutChecker = nil
     }
     
     public func socket(_ sock: GCDAsyncSocket, didWriteDataWithTag tag: Int) {
@@ -259,6 +267,7 @@ extension SLSocketClient: GCDAsyncSocketDelegate {
     }
     
     private func didReceived(data: Data, from: GCDAsyncSocket) {
+        restartCheckHeartbeatTimeout()
         server?.readData(withTimeout: -1, tag: 0)
         lastReadTime = ProcessInfo.processInfo.systemUptime
         if cachedData == nil {
