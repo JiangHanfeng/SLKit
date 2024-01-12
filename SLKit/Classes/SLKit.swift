@@ -32,6 +32,112 @@
 //    return result
 //}
 
+public enum SLError: Error, LocalizedError {
+    case internalStateError(String)
+    case bleNotPowerOn
+    case bleScanTimeout
+    case bleConnectionTimeout
+    case bleConnectionFailure(Error?)
+    case bleDisconnected(Error?)
+    case locationNotAllowed
+    case socketWrongRole
+    case socketWrongClientState
+    case socketConnectionFailure(Error?)
+    case socketConnectionTimeout
+    case socketDisconnectedHeartbeatTimeout
+    case socketDisconnected(Error?)
+    case socketSendFailureNotConnected
+    case socketSendFailureEmptyData
+    case socketSendFailureDataError
+    case socketNotConnectedYet
+    case socketDisconnectedWaitingForResponse
+    case socketHasBeenReleased
+    case socketWrongServerState
+    case socketListenFailure(Error)
+    case taskCanceled
+    case taskTimeout
+    
+    public var errorDescription: String? {
+        switch self {
+        case .internalStateError(let msg):
+            return msg
+        case .bleNotPowerOn:
+            return "the CBManagerState not powerOn at this moment"
+        case .bleScanTimeout:
+            return "scan ble peripheral out of time"
+        case .bleConnectionTimeout:
+            return "connect ble peripheral out of time"
+        case .bleConnectionFailure(let error):
+            return error != nil ? error!.localizedDescription : "ble connection failure"
+        case .bleDisconnected(let error):
+            return error != nil ? error!.localizedDescription : "ble disconnected"
+        case .locationNotAllowed:
+            return "未授予定位权限"
+        case .socketWrongClientState:
+            return "socket wrong state"
+        case .socketConnectionFailure(let error):
+            return error?.localizedDescription ?? "socket connect failed"
+        case .socketConnectionTimeout:
+            return "socket connect timeout"
+        case .socketDisconnectedHeartbeatTimeout:
+            return "socket disconnected because of heartbeat timeout"
+        case .socketDisconnected(let error):
+            return error != nil ? error!.localizedDescription : "socket disconnected"
+        case .socketSendFailureNotConnected:
+            return "send data failed because the socket hasn't been connected yet"
+        case .socketSendFailureEmptyData:
+            return "send data failed because the data can't be empty or nil"
+        case .socketSendFailureDataError:
+            return "send data failed because the string can't convert to Data"
+        case .socketNotConnectedYet:
+            return "socket hasn't been connected yet"
+        case .socketDisconnectedWaitingForResponse:
+            return "socket has disconected when waiting for the response"
+        case .socketHasBeenReleased:
+            return "socket has been released"
+        case .socketWrongServerState:
+            return "socket serve error state"
+        case .socketWrongRole:
+            return "socket wrong role"
+        case .socketListenFailure(let error):
+            return error.localizedDescription
+        case .taskCanceled:
+            return "任务已取消"
+        case .taskTimeout:
+            return "任务超时"
+        }
+    }
+}
+
+public enum SLResult<T, E: Error> {
+    case success(_ value : T)
+    case failure(_ error: E)
+}
+
+public enum SLTimeInterval {
+    case infinity
+    case seconds(TimeInterval)
+}
+
+protocol SLTask: Equatable {
+    associatedtype Exception
+    associatedtype Progress
+    associatedtype Result
+    
+    var id: String { get }
+    
+    func start() throws
+    
+    func exception(e: Exception)
+    
+    func update(progress: Progress)
+    
+    func completed(result: Result)
+    
+    func terminate() throws
+}
+
+
 public class SLCancelableWork {
     var delayTime: DispatchTimeInterval
     var closure: (() -> Void)?
@@ -115,5 +221,77 @@ extension Date {
         let formattor = DateFormatter()
         formattor.dateFormat = dateFormat
         return formattor.string(from: Date())
+    }
+}
+
+
+import CoreLocation
+import CoreBluetooth
+
+public final class SLConnectivityManager {
+    public static let shared = {
+        let singleInstance = SLConnectivityManager()
+        return singleInstance
+    }()
+    
+    private var bleStateUpdatedHandlers: [SLBleStateUpdatedHandler] = []
+    var a2dpDevice: SLA2DPDevice? {
+        get {
+            return SLA2DPMonitor.shared.connectedDevice()
+        }
+    }
+    
+    private var peripheralManager = SLPeripheralManager(queue: DispatchQueue(label: "com.slkit.peripheral"))
+    
+    private init() {}
+    
+    public func connectWifi(ssid: String, passphrase: String, completionHandler: @escaping ((_ error: Error?) -> Void)) {
+        SLNetworkManager.shared.connectWifi(ssid: ssid, passphrase: passphrase, completionHandler: completionHandler)
+    }
+           
+    public func getConnectedWifi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
+        SLNetworkManager.shared.getConnectedWifi(completionHandler: completionHandler)
+    }
+    
+    public func startScan<U: SLDeviceBuilder>(
+        deviceBuilder: U.Type,
+        timeout: SLTimeInterval = .infinity,
+        filter: ((U.Device) -> Bool)? = nil,
+        discovered: @escaping ((_ devices: [U.Device]) -> Bool),
+        errored: @escaping ((SLError) -> Void),
+        finished: @escaping (() -> Void)
+    ) {
+        SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
+            .start(timeout: timeout, filter: filter, discovered: discovered, errored: errored, finished: finished)
+    }
+    
+    public func stopScan() {
+        SLCentralManager.shared.stopScan()
+    }
+    
+    public func connectDevice<T: SLBaseDevice>(_ device: T) {
+        switch device.type {
+        case .freestyle(key: _):
+            let connection = SLCentralConnection(peripheral: device.peripheral) { result in
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    break
+                }
+            } disconnectedCallback: { error in
+                
+            }
+        default:
+            break
+        }
+    }
+    
+    public func disconnectDevice() {
+        SLCentralManager.shared.disconnectAll()
+    }
+    
+    public func bleAvailable() -> Bool {
+        return SLCentralManager.shared.available() && peripheralManager.available()
     }
 }

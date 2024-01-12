@@ -40,7 +40,7 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
    s.dependency 'XCGLogger'
    s.dependency 'CocoaAsyncSocket'
-   s.dependency 'HandyJSON'
-   s.dependency 'RxSwift'
-   s.dependency 'RxCocoa'
+#   s.dependency 'HandyJSON'
+#   s.dependency 'RxSwift'
+#   s.dependency 'RxCocoa'
 end
