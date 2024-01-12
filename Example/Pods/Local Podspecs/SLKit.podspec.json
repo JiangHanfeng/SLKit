@@ -18,7 +18,10 @@
   "platforms": {
     "ios": "13.0"
   },
-  "source_files": "SLKit/Classes/*/*.swift",
+  "source_files": [
+    "SLKit/Classes/*.swift",
+    "SLKit/Classes/*/*.swift"
+  ],
   "dependencies": {
     "XCGLogger": [
 
