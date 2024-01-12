@@ -82,7 +82,7 @@ SPEC CHECKSUMS:
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
-  SLKit: 8799413c8fec36cf971a737cff733ce856acd0b1
+  SLKit: 243eedb431c8f7c5fe1b593997ac516435d5bd2c
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Toast-Swift: dd369e68ee529f542c65bd0d0c6c50cd743cf6f2
   TZImagePickerController: f1c9f1cae6ac0e30b31aaa9698f9bf4a7cf5b84f
