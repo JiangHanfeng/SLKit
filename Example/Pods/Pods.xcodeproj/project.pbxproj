@@ -230,30 +230,30 @@
 		484A92DF2B3F16DFF2C3C0087E729524 /* SubscribeOn.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE5317C7D1689ADD0801EFD72D8F1364 /* SubscribeOn.swift */; };
 		4AC7C93259E46311C8A298D27D88ED58 /* Disposable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29918FAC2FF21A344C2EE6FC7E920BF /* Disposable.swift */; };
 		4AE993E21C5B46158ECF1C93DAB42F2A /* RxSearchBarDelegateProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB190B6D2C295E76375ABDFC80BB057 /* RxSearchBarDelegateProxy.swift */; };
-		4B57576F2B5109000067667F /* SLCentralConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757502B5108FF0067667F /* SLCentralConnection.swift */; };
-		4B5757702B5109000067667F /* SLDiscoverBleServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757512B5108FF0067667F /* SLDiscoverBleServiceTask.swift */; };
-		4B5757712B5109000067667F /* SLDiscoverBleCharacteristicTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757522B5108FF0067667F /* SLDiscoverBleCharacteristicTask.swift */; };
-		4B5757722B5109000067667F /* SLScanPeripheralTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757532B5108FF0067667F /* SLScanPeripheralTask.swift */; };
-		4B5757732B5109000067667F /* SLPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757542B5108FF0067667F /* SLPeripheral.swift */; };
-		4B5757742B5109000067667F /* SLReadBleCharacteristicTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757552B5108FF0067667F /* SLReadBleCharacteristicTask.swift */; };
-		4B5757752B5109000067667F /* SLCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757562B5108FF0067667F /* SLCentralManager.swift */; };
-		4B5757762B5109000067667F /* SLAnyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757582B5108FF0067667F /* SLAnyDevice.swift */; };
-		4B5757772B5109000067667F /* SLDeviceScanTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757592B5108FF0067667F /* SLDeviceScanTask.swift */; };
-		4B5757782B5109000067667F /* SLDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57575A2B5108FF0067667F /* SLDeviceBuilder.swift */; };
-		4B5757792B5109000067667F /* SLA2DPDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57575C2B5108FF0067667F /* SLA2DPDevice.swift */; };
-		4B57577A2B5109000067667F /* SLA2DPMonitorTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57575D2B5108FF0067667F /* SLA2DPMonitorTask.swift */; };
-		4B57577B2B5109000067667F /* SLA2DPMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57575E2B5108FF0067667F /* SLA2DPMonitor.swift */; };
-		4B57577C2B5109000067667F /* SLLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757602B5109000067667F /* SLLog.swift */; };
-		4B57577D2B5109000067667F /* SLPeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757622B5109000067667F /* SLPeripheralManager.swift */; };
-		4B57577E2B5109000067667F /* SLMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757642B5109000067667F /* SLMotionManager.swift */; };
-		4B57577F2B5109000067667F /* SLNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757662B5109000067667F /* SLNetworkManager.swift */; };
-		4B5757802B5109000067667F /* SLSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757682B5109000067667F /* SLSocketServer.swift */; };
-		4B5757812B5109000067667F /* SLSocketSessionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757692B5109000067667F /* SLSocketSessionItem.swift */; };
-		4B5757822B5109000067667F /* SLLocalNetworkAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57576A2B5109000067667F /* SLLocalNetworkAuthorization.swift */; };
-		4B5757832B5109000067667F /* SLSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57576B2B5109000067667F /* SLSocketManager.swift */; };
-		4B5757842B5109000067667F /* SLSocketDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57576C2B5109000067667F /* SLSocketDataMapper.swift */; };
-		4B5757852B5109000067667F /* SLSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57576D2B5109000067667F /* SLSocket.swift */; };
-		4B5757862B5109000067667F /* SLSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57576E2B5109000067667F /* SLSocketClient.swift */; };
+		4B5757A72B5109F30067667F /* SLPeripheralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757882B5109F30067667F /* SLPeripheralManager.swift */; };
+		4B5757A82B5109F30067667F /* SLNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57578A2B5109F30067667F /* SLNetworkManager.swift */; };
+		4B5757A92B5109F30067667F /* SLCentralConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57578C2B5109F30067667F /* SLCentralConnection.swift */; };
+		4B5757AA2B5109F30067667F /* SLDiscoverBleServiceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57578D2B5109F30067667F /* SLDiscoverBleServiceTask.swift */; };
+		4B5757AB2B5109F30067667F /* SLDiscoverBleCharacteristicTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57578E2B5109F30067667F /* SLDiscoverBleCharacteristicTask.swift */; };
+		4B5757AC2B5109F30067667F /* SLScanPeripheralTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57578F2B5109F30067667F /* SLScanPeripheralTask.swift */; };
+		4B5757AD2B5109F30067667F /* SLPeripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757902B5109F30067667F /* SLPeripheral.swift */; };
+		4B5757AE2B5109F30067667F /* SLReadBleCharacteristicTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757912B5109F30067667F /* SLReadBleCharacteristicTask.swift */; };
+		4B5757AF2B5109F30067667F /* SLCentralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757922B5109F30067667F /* SLCentralManager.swift */; };
+		4B5757B02B5109F30067667F /* SLLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757942B5109F30067667F /* SLLog.swift */; };
+		4B5757B12B5109F30067667F /* SLMotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757962B5109F30067667F /* SLMotionManager.swift */; };
+		4B5757B22B5109F30067667F /* SLA2DPDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757982B5109F30067667F /* SLA2DPDevice.swift */; };
+		4B5757B32B5109F30067667F /* SLA2DPMonitorTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757992B5109F30067667F /* SLA2DPMonitorTask.swift */; };
+		4B5757B42B5109F30067667F /* SLA2DPMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57579A2B5109F30067667F /* SLA2DPMonitor.swift */; };
+		4B5757B52B5109F30067667F /* SLAnyDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57579C2B5109F30067667F /* SLAnyDevice.swift */; };
+		4B5757B62B5109F30067667F /* SLDeviceScanTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57579D2B5109F30067667F /* SLDeviceScanTask.swift */; };
+		4B5757B72B5109F30067667F /* SLDeviceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57579E2B5109F30067667F /* SLDeviceBuilder.swift */; };
+		4B5757B82B5109F30067667F /* SLSocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A02B5109F30067667F /* SLSocketServer.swift */; };
+		4B5757B92B5109F30067667F /* SLSocketSessionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A12B5109F30067667F /* SLSocketSessionItem.swift */; };
+		4B5757BA2B5109F30067667F /* SLLocalNetworkAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A22B5109F30067667F /* SLLocalNetworkAuthorization.swift */; };
+		4B5757BB2B5109F30067667F /* SLSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A32B5109F30067667F /* SLSocketManager.swift */; };
+		4B5757BC2B5109F30067667F /* SLSocketDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A42B5109F30067667F /* SLSocketDataMapper.swift */; };
+		4B5757BD2B5109F30067667F /* SLSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A52B5109F30067667F /* SLSocket.swift */; };
+		4B5757BE2B5109F30067667F /* SLSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5757A62B5109F30067667F /* SLSocketClient.swift */; };
 		4B944171BCC31CB8C764EF48CD310C0E /* CombineLatest+arity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A280C1131EE8990F3B0D51987E1B345 /* CombineLatest+arity.swift */; };
 		4BAD99B7394E225CEDBF94B8100BCC7F /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634A3D7A916CAC5A27C61474BFECE40B /* ConstraintRelation.swift */; };
 		4BAF573897710520938345414DD44802 /* RLMAsyncTask_Private.h in Copy . Private Headers */ = {isa = PBXBuildFile; fileRef = F56D65D640B432B6FE9EEB6046CA0F69 /* RLMAsyncTask_Private.h */; };
@@ -1267,30 +1267,30 @@
 		49D88202DA7E59BB57EF47FFBDC43820 /* ControlTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ControlTarget.swift; path = RxCocoa/Common/ControlTarget.swift; sourceTree = "<group>"; };
 		4B2E6A52690D0EF2A7CB0FE2265E40F2 /* RLMFindOneAndModifyOptions.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RLMFindOneAndModifyOptions.mm; path = Realm/RLMFindOneAndModifyOptions.mm; sourceTree = "<group>"; };
 		4B373BE1AAB34891ED39D59DEC36F668 /* Generate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Generate.swift; path = RxSwift/Observables/Generate.swift; sourceTree = "<group>"; };
-		4B5757502B5108FF0067667F /* SLCentralConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLCentralConnection.swift; sourceTree = "<group>"; };
-		4B5757512B5108FF0067667F /* SLDiscoverBleServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDiscoverBleServiceTask.swift; sourceTree = "<group>"; };
-		4B5757522B5108FF0067667F /* SLDiscoverBleCharacteristicTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDiscoverBleCharacteristicTask.swift; sourceTree = "<group>"; };
-		4B5757532B5108FF0067667F /* SLScanPeripheralTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLScanPeripheralTask.swift; sourceTree = "<group>"; };
-		4B5757542B5108FF0067667F /* SLPeripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLPeripheral.swift; sourceTree = "<group>"; };
-		4B5757552B5108FF0067667F /* SLReadBleCharacteristicTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLReadBleCharacteristicTask.swift; sourceTree = "<group>"; };
-		4B5757562B5108FF0067667F /* SLCentralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLCentralManager.swift; sourceTree = "<group>"; };
-		4B5757582B5108FF0067667F /* SLAnyDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAnyDevice.swift; sourceTree = "<group>"; };
-		4B5757592B5108FF0067667F /* SLDeviceScanTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDeviceScanTask.swift; sourceTree = "<group>"; };
-		4B57575A2B5108FF0067667F /* SLDeviceBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDeviceBuilder.swift; sourceTree = "<group>"; };
-		4B57575C2B5108FF0067667F /* SLA2DPDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPDevice.swift; sourceTree = "<group>"; };
-		4B57575D2B5108FF0067667F /* SLA2DPMonitorTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPMonitorTask.swift; sourceTree = "<group>"; };
-		4B57575E2B5108FF0067667F /* SLA2DPMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPMonitor.swift; sourceTree = "<group>"; };
-		4B5757602B5109000067667F /* SLLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLLog.swift; sourceTree = "<group>"; };
-		4B5757622B5109000067667F /* SLPeripheralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLPeripheralManager.swift; sourceTree = "<group>"; };
-		4B5757642B5109000067667F /* SLMotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLMotionManager.swift; sourceTree = "<group>"; };
-		4B5757662B5109000067667F /* SLNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLNetworkManager.swift; sourceTree = "<group>"; };
-		4B5757682B5109000067667F /* SLSocketServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketServer.swift; sourceTree = "<group>"; };
-		4B5757692B5109000067667F /* SLSocketSessionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketSessionItem.swift; sourceTree = "<group>"; };
-		4B57576A2B5109000067667F /* SLLocalNetworkAuthorization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLLocalNetworkAuthorization.swift; sourceTree = "<group>"; };
-		4B57576B2B5109000067667F /* SLSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketManager.swift; sourceTree = "<group>"; };
-		4B57576C2B5109000067667F /* SLSocketDataMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketDataMapper.swift; sourceTree = "<group>"; };
-		4B57576D2B5109000067667F /* SLSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocket.swift; sourceTree = "<group>"; };
-		4B57576E2B5109000067667F /* SLSocketClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketClient.swift; sourceTree = "<group>"; };
+		4B5757882B5109F30067667F /* SLPeripheralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLPeripheralManager.swift; sourceTree = "<group>"; };
+		4B57578A2B5109F30067667F /* SLNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLNetworkManager.swift; sourceTree = "<group>"; };
+		4B57578C2B5109F30067667F /* SLCentralConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLCentralConnection.swift; sourceTree = "<group>"; };
+		4B57578D2B5109F30067667F /* SLDiscoverBleServiceTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDiscoverBleServiceTask.swift; sourceTree = "<group>"; };
+		4B57578E2B5109F30067667F /* SLDiscoverBleCharacteristicTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDiscoverBleCharacteristicTask.swift; sourceTree = "<group>"; };
+		4B57578F2B5109F30067667F /* SLScanPeripheralTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLScanPeripheralTask.swift; sourceTree = "<group>"; };
+		4B5757902B5109F30067667F /* SLPeripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLPeripheral.swift; sourceTree = "<group>"; };
+		4B5757912B5109F30067667F /* SLReadBleCharacteristicTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLReadBleCharacteristicTask.swift; sourceTree = "<group>"; };
+		4B5757922B5109F30067667F /* SLCentralManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLCentralManager.swift; sourceTree = "<group>"; };
+		4B5757942B5109F30067667F /* SLLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLLog.swift; sourceTree = "<group>"; };
+		4B5757962B5109F30067667F /* SLMotionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLMotionManager.swift; sourceTree = "<group>"; };
+		4B5757982B5109F30067667F /* SLA2DPDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPDevice.swift; sourceTree = "<group>"; };
+		4B5757992B5109F30067667F /* SLA2DPMonitorTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPMonitorTask.swift; sourceTree = "<group>"; };
+		4B57579A2B5109F30067667F /* SLA2DPMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLA2DPMonitor.swift; sourceTree = "<group>"; };
+		4B57579C2B5109F30067667F /* SLAnyDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLAnyDevice.swift; sourceTree = "<group>"; };
+		4B57579D2B5109F30067667F /* SLDeviceScanTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDeviceScanTask.swift; sourceTree = "<group>"; };
+		4B57579E2B5109F30067667F /* SLDeviceBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLDeviceBuilder.swift; sourceTree = "<group>"; };
+		4B5757A02B5109F30067667F /* SLSocketServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketServer.swift; sourceTree = "<group>"; };
+		4B5757A12B5109F30067667F /* SLSocketSessionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketSessionItem.swift; sourceTree = "<group>"; };
+		4B5757A22B5109F30067667F /* SLLocalNetworkAuthorization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLLocalNetworkAuthorization.swift; sourceTree = "<group>"; };
+		4B5757A32B5109F30067667F /* SLSocketManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketManager.swift; sourceTree = "<group>"; };
+		4B5757A42B5109F30067667F /* SLSocketDataMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketDataMapper.swift; sourceTree = "<group>"; };
+		4B5757A52B5109F30067667F /* SLSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocket.swift; sourceTree = "<group>"; };
+		4B5757A62B5109F30067667F /* SLSocketClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SLSocketClient.swift; sourceTree = "<group>"; };
 		4BFBBAEE76E0C5549688E9C18856A2DB /* RLMError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RLMError.h; path = include/RLMError.h; sourceTree = "<group>"; };
 		4C44C9114DD7995BB93E3FCCECBBF954 /* Completable+AndThen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Completable+AndThen.swift"; path = "RxSwift/Traits/PrimitiveSequence/Completable+AndThen.swift"; sourceTree = "<group>"; };
 		4C49D9B77A7F3ABE438A705A3DF86E48 /* Infallible+CombineLatest+arity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Infallible+CombineLatest+arity.swift"; path = "RxSwift/Traits/Infallible/Infallible+CombineLatest+arity.swift"; sourceTree = "<group>"; };
@@ -2236,14 +2236,14 @@
 		353962C6681A8929B31B71BF7DDE6577 /* SLKit */ = {
 			isa = PBXGroup;
 			children = (
-				4B57575B2B5108FF0067667F /* A2DP */,
-				4B57574F2B5108FF0067667F /* BleCentral */,
-				4B5757612B5109000067667F /* BlePeripheral */,
-				4B5757572B5108FF0067667F /* Device */,
-				4B57575F2B5109000067667F /* Log */,
-				4B5757652B5109000067667F /* Network */,
-				4B5757632B5109000067667F /* Sensor */,
-				4B5757672B5109000067667F /* Socket */,
+				4B5757972B5109F30067667F /* A2DP */,
+				4B57578B2B5109F30067667F /* BleCentral */,
+				4B5757872B5109F30067667F /* BlePeripheral */,
+				4B57579B2B5109F30067667F /* Device */,
+				4B5757932B5109F30067667F /* Log */,
+				4B5757892B5109F30067667F /* Network */,
+				4B5757952B5109F30067667F /* Sensor */,
+				4B57579F2B5109F30067667F /* Socket */,
 				163BE31443EC6DD774120642BCD05EDE /* SLKit.swift */,
 				1E7CE7171E00F6DA40B37FEF1B053C34 /* Pod */,
 				0655481F76F4573D93272EF03040C811 /* Support Files */,
@@ -2472,89 +2472,89 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4B57574F2B5108FF0067667F /* BleCentral */ = {
+		4B5757872B5109F30067667F /* BlePeripheral */ = {
 			isa = PBXGroup;
 			children = (
-				4B5757502B5108FF0067667F /* SLCentralConnection.swift */,
-				4B5757512B5108FF0067667F /* SLDiscoverBleServiceTask.swift */,
-				4B5757522B5108FF0067667F /* SLDiscoverBleCharacteristicTask.swift */,
-				4B5757532B5108FF0067667F /* SLScanPeripheralTask.swift */,
-				4B5757542B5108FF0067667F /* SLPeripheral.swift */,
-				4B5757552B5108FF0067667F /* SLReadBleCharacteristicTask.swift */,
-				4B5757562B5108FF0067667F /* SLCentralManager.swift */,
-			);
-			name = BleCentral;
-			path = SLKit/Classes/BleCentral;
-			sourceTree = "<group>";
-		};
-		4B5757572B5108FF0067667F /* Device */ = {
-			isa = PBXGroup;
-			children = (
-				4B5757582B5108FF0067667F /* SLAnyDevice.swift */,
-				4B5757592B5108FF0067667F /* SLDeviceScanTask.swift */,
-				4B57575A2B5108FF0067667F /* SLDeviceBuilder.swift */,
-			);
-			name = Device;
-			path = SLKit/Classes/Device;
-			sourceTree = "<group>";
-		};
-		4B57575B2B5108FF0067667F /* A2DP */ = {
-			isa = PBXGroup;
-			children = (
-				4B57575C2B5108FF0067667F /* SLA2DPDevice.swift */,
-				4B57575D2B5108FF0067667F /* SLA2DPMonitorTask.swift */,
-				4B57575E2B5108FF0067667F /* SLA2DPMonitor.swift */,
-			);
-			name = A2DP;
-			path = SLKit/Classes/A2DP;
-			sourceTree = "<group>";
-		};
-		4B57575F2B5109000067667F /* Log */ = {
-			isa = PBXGroup;
-			children = (
-				4B5757602B5109000067667F /* SLLog.swift */,
-			);
-			name = Log;
-			path = SLKit/Classes/Log;
-			sourceTree = "<group>";
-		};
-		4B5757612B5109000067667F /* BlePeripheral */ = {
-			isa = PBXGroup;
-			children = (
-				4B5757622B5109000067667F /* SLPeripheralManager.swift */,
+				4B5757882B5109F30067667F /* SLPeripheralManager.swift */,
 			);
 			name = BlePeripheral;
 			path = SLKit/Classes/BlePeripheral;
 			sourceTree = "<group>";
 		};
-		4B5757632B5109000067667F /* Sensor */ = {
+		4B5757892B5109F30067667F /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				4B5757642B5109000067667F /* SLMotionManager.swift */,
-			);
-			name = Sensor;
-			path = SLKit/Classes/Sensor;
-			sourceTree = "<group>";
-		};
-		4B5757652B5109000067667F /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				4B5757662B5109000067667F /* SLNetworkManager.swift */,
+				4B57578A2B5109F30067667F /* SLNetworkManager.swift */,
 			);
 			name = Network;
 			path = SLKit/Classes/Network;
 			sourceTree = "<group>";
 		};
-		4B5757672B5109000067667F /* Socket */ = {
+		4B57578B2B5109F30067667F /* BleCentral */ = {
 			isa = PBXGroup;
 			children = (
-				4B5757682B5109000067667F /* SLSocketServer.swift */,
-				4B5757692B5109000067667F /* SLSocketSessionItem.swift */,
-				4B57576A2B5109000067667F /* SLLocalNetworkAuthorization.swift */,
-				4B57576B2B5109000067667F /* SLSocketManager.swift */,
-				4B57576C2B5109000067667F /* SLSocketDataMapper.swift */,
-				4B57576D2B5109000067667F /* SLSocket.swift */,
-				4B57576E2B5109000067667F /* SLSocketClient.swift */,
+				4B57578C2B5109F30067667F /* SLCentralConnection.swift */,
+				4B57578D2B5109F30067667F /* SLDiscoverBleServiceTask.swift */,
+				4B57578E2B5109F30067667F /* SLDiscoverBleCharacteristicTask.swift */,
+				4B57578F2B5109F30067667F /* SLScanPeripheralTask.swift */,
+				4B5757902B5109F30067667F /* SLPeripheral.swift */,
+				4B5757912B5109F30067667F /* SLReadBleCharacteristicTask.swift */,
+				4B5757922B5109F30067667F /* SLCentralManager.swift */,
+			);
+			name = BleCentral;
+			path = SLKit/Classes/BleCentral;
+			sourceTree = "<group>";
+		};
+		4B5757932B5109F30067667F /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				4B5757942B5109F30067667F /* SLLog.swift */,
+			);
+			name = Log;
+			path = SLKit/Classes/Log;
+			sourceTree = "<group>";
+		};
+		4B5757952B5109F30067667F /* Sensor */ = {
+			isa = PBXGroup;
+			children = (
+				4B5757962B5109F30067667F /* SLMotionManager.swift */,
+			);
+			name = Sensor;
+			path = SLKit/Classes/Sensor;
+			sourceTree = "<group>";
+		};
+		4B5757972B5109F30067667F /* A2DP */ = {
+			isa = PBXGroup;
+			children = (
+				4B5757982B5109F30067667F /* SLA2DPDevice.swift */,
+				4B5757992B5109F30067667F /* SLA2DPMonitorTask.swift */,
+				4B57579A2B5109F30067667F /* SLA2DPMonitor.swift */,
+			);
+			name = A2DP;
+			path = SLKit/Classes/A2DP;
+			sourceTree = "<group>";
+		};
+		4B57579B2B5109F30067667F /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				4B57579C2B5109F30067667F /* SLAnyDevice.swift */,
+				4B57579D2B5109F30067667F /* SLDeviceScanTask.swift */,
+				4B57579E2B5109F30067667F /* SLDeviceBuilder.swift */,
+			);
+			name = Device;
+			path = SLKit/Classes/Device;
+			sourceTree = "<group>";
+		};
+		4B57579F2B5109F30067667F /* Socket */ = {
+			isa = PBXGroup;
+			children = (
+				4B5757A02B5109F30067667F /* SLSocketServer.swift */,
+				4B5757A12B5109F30067667F /* SLSocketSessionItem.swift */,
+				4B5757A22B5109F30067667F /* SLLocalNetworkAuthorization.swift */,
+				4B5757A32B5109F30067667F /* SLSocketManager.swift */,
+				4B5757A42B5109F30067667F /* SLSocketDataMapper.swift */,
+				4B5757A52B5109F30067667F /* SLSocket.swift */,
+				4B5757A62B5109F30067667F /* SLSocketClient.swift */,
 			);
 			name = Socket;
 			path = SLKit/Classes/Socket;
@@ -4125,32 +4125,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B5757722B5109000067667F /* SLScanPeripheralTask.swift in Sources */,
-				4B5757792B5109000067667F /* SLA2DPDevice.swift in Sources */,
-				4B5757862B5109000067667F /* SLSocketClient.swift in Sources */,
-				4B5757842B5109000067667F /* SLSocketDataMapper.swift in Sources */,
-				4B5757802B5109000067667F /* SLSocketServer.swift in Sources */,
-				4B57577E2B5109000067667F /* SLMotionManager.swift in Sources */,
-				4B5757832B5109000067667F /* SLSocketManager.swift in Sources */,
-				4B5757712B5109000067667F /* SLDiscoverBleCharacteristicTask.swift in Sources */,
-				4B57577A2B5109000067667F /* SLA2DPMonitorTask.swift in Sources */,
-				4B5757742B5109000067667F /* SLReadBleCharacteristicTask.swift in Sources */,
-				4B57577F2B5109000067667F /* SLNetworkManager.swift in Sources */,
-				4B5757762B5109000067667F /* SLAnyDevice.swift in Sources */,
+				4B5757AC2B5109F30067667F /* SLScanPeripheralTask.swift in Sources */,
+				4B5757B12B5109F30067667F /* SLMotionManager.swift in Sources */,
+				4B5757BE2B5109F30067667F /* SLSocketClient.swift in Sources */,
+				4B5757BC2B5109F30067667F /* SLSocketDataMapper.swift in Sources */,
+				4B5757B82B5109F30067667F /* SLSocketServer.swift in Sources */,
+				4B5757B72B5109F30067667F /* SLDeviceBuilder.swift in Sources */,
+				4B5757BB2B5109F30067667F /* SLSocketManager.swift in Sources */,
+				4B5757B62B5109F30067667F /* SLDeviceScanTask.swift in Sources */,
 				1FFB7F86F08BA695E4DE7510EC646363 /* SLKit.swift in Sources */,
-				4B57577C2B5109000067667F /* SLLog.swift in Sources */,
-				4B5757772B5109000067667F /* SLDeviceScanTask.swift in Sources */,
+				4B5757AE2B5109F30067667F /* SLReadBleCharacteristicTask.swift in Sources */,
+				4B5757AB2B5109F30067667F /* SLDiscoverBleCharacteristicTask.swift in Sources */,
+				4B5757B32B5109F30067667F /* SLA2DPMonitorTask.swift in Sources */,
+				4B5757B52B5109F30067667F /* SLAnyDevice.swift in Sources */,
+				4B5757A92B5109F30067667F /* SLCentralConnection.swift in Sources */,
+				4B5757AD2B5109F30067667F /* SLPeripheral.swift in Sources */,
+				4B5757B22B5109F30067667F /* SLA2DPDevice.swift in Sources */,
+				4B5757A82B5109F30067667F /* SLNetworkManager.swift in Sources */,
+				4B5757B02B5109F30067667F /* SLLog.swift in Sources */,
+				4B5757A72B5109F30067667F /* SLPeripheralManager.swift in Sources */,
+				4B5757B42B5109F30067667F /* SLA2DPMonitor.swift in Sources */,
+				4B5757AA2B5109F30067667F /* SLDiscoverBleServiceTask.swift in Sources */,
 				BDA7FF822081A5E88C46301ADA104563 /* SLKit-dummy.m in Sources */,
-				4B57577B2B5109000067667F /* SLA2DPMonitor.swift in Sources */,
-				4B5757702B5109000067667F /* SLDiscoverBleServiceTask.swift in Sources */,
-				4B57576F2B5109000067667F /* SLCentralConnection.swift in Sources */,
-				4B5757732B5109000067667F /* SLPeripheral.swift in Sources */,
-				4B5757782B5109000067667F /* SLDeviceBuilder.swift in Sources */,
-				4B5757752B5109000067667F /* SLCentralManager.swift in Sources */,
-				4B57577D2B5109000067667F /* SLPeripheralManager.swift in Sources */,
-				4B5757812B5109000067667F /* SLSocketSessionItem.swift in Sources */,
-				4B5757852B5109000067667F /* SLSocket.swift in Sources */,
-				4B5757822B5109000067667F /* SLLocalNetworkAuthorization.swift in Sources */,
+				4B5757AF2B5109F30067667F /* SLCentralManager.swift in Sources */,
+				4B5757B92B5109F30067667F /* SLSocketSessionItem.swift in Sources */,
+				4B5757BD2B5109F30067667F /* SLSocket.swift in Sources */,
+				4B5757BA2B5109F30067667F /* SLLocalNetworkAuthorization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
