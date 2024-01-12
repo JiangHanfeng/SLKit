@@ -7,8 +7,8 @@
 
 import Foundation
 import CocoaAsyncSocket
-import RxCocoa
-import RxSwift
+//import RxCocoa
+//import RxSwift
 
 //protocol SLSocketUnhandledDataProcesser {
 //    associatedtype ExpectDataType

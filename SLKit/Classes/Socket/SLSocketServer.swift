@@ -7,7 +7,6 @@
 
 import Foundation
 import CocoaAsyncSocket
-import RxSwift
 
 public class SLAcceptedSocket : Equatable {
     public let host: String?
