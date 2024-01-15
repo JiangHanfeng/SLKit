@@ -64,7 +64,7 @@ public class SLA2DPMonitor {
         SLLog.debug("开始监听A2DP")
         isEnable = true
         NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionRouteChanged(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleAudioSessionRouteChanged(notification:)), name: AVAudioSession.routeChangeNotification, object: nil)
     }
     
     /// 停止监控A2DP的连接状态
@@ -88,7 +88,7 @@ public class SLA2DPMonitor {
     public func getA2DPDevice() -> SLA2DPDevice? {
         let outputs = AVAudioSession.sharedInstance().currentRoute.outputs
         if let portDescription = outputs.first(where: { description in
-            return description.portType == AVAudioSessionPortBluetoothA2DP || description.portType == AVAudioSessionPortBluetoothHFP
+            return description.portType == AVAudioSession.Port.bluetoothA2DP || description.portType == AVAudioSession.Port.bluetoothHFP
         }) {
             return SLA2DPDevice(uid: portDescription.uid, name: portDescription.portName)
         }
