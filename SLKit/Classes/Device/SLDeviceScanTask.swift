@@ -105,6 +105,8 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
                     if let index = self.devices.firstIndex(where: { item in
                         item.device == device
                     }) {
+                        // 仅替换列表中已存在的设备，更新其时间，不对外抛出更新列表事件
+                        self.devices.replaceSubrange(index..<index+1, with: [SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime)])
                         return true
                     } else {
                         self.devices.append(SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime))
