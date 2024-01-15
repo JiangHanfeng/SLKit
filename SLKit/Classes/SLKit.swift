@@ -269,23 +269,23 @@ public final class SLConnectivityManager {
         SLCentralManager.shared.stopScan()
     }
     
-    public func connectDevice<T: SLBaseDevice>(_ device: T) {
-        switch device.type {
-        case .freestyle(key: _):
-            let connection = SLCentralConnection(peripheral: device.peripheral) { result in
-                switch result {
-                case .success(_):
-                    break
-                case .failure(let error):
-                    break
-                }
-            } disconnectedCallback: { error in
-                
-            }
-        default:
-            break
-        }
-    }
+//    public func connectDevice<T: SLBaseDevice>(_ device: T) {
+//        switch device.type {
+//        case .freestyle(key: _):
+//            let connection = SLCentralConnection(peripheral: device.peripheral) { result in
+//                switch result {
+//                case .success(_):
+//                    break
+//                case .failure(let error):
+//                    break
+//                }
+//            } disconnectedCallback: { error in
+//                
+//            }
+//        default:
+//            break
+//        }
+//    }
     
     public func disconnectDevice() {
         SLCentralManager.shared.disconnectAll()

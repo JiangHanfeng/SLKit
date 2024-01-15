@@ -21,7 +21,7 @@ public class SLCentralConnection : SLTask {
     
     typealias Progress = SLCentralConnectionState
     
-    typealias Result = SLResult<CBPeripheral, SLError>
+    typealias Result = SLResult<Void, Error>
     
     var id: String {
         return "\(unsafeBitCast(self, to: Int.self))"
@@ -29,26 +29,20 @@ public class SLCentralConnection : SLTask {
     
     public func start() throws {
         do {
-            try SLCentralManager.shared.startConnection(self)
-            switch timeout {
-            case .infinity:
-                break
-            case .seconds(let timeout):
-                checkStateWork = SLCancelableWork(delayTime: .seconds(Int(timeout))) { [weak self] in
-                    if let self {
-                        switch self.state {
-                        case .connecting:
-                            self.terminate()
-                        default:
-                            break
-                        }
-                    }
+            let completionHandler = completion
+            checkStateWork = SLCancelableWork(delayTime: .milliseconds(Int(timeout * 1000))) { [weak self] in
+                let connected = self?.state == .connected
+                if !connected {
+                    self?.terminate()
                 }
+                completionHandler?(connected ? .success(Void()) : .failure(SLError.bleConnectionTimeout))
             }
+            checkStateWork?.start(at: DispatchQueue.global())
+            try SLCentralManager.shared.startConnection(self)
         } catch let e {
-            (e as? SLError).map { error in
-                completion?(.failure(error))
-            }
+            checkStateWork?.cancel()
+            checkStateWork = nil
+            completion?(.failure(e))
         }
     }
     
@@ -65,7 +59,7 @@ public class SLCentralConnection : SLTask {
         iState = progress
     }
     
-    func completed(result: SLResult<CBPeripheral, SLError>) {
+    func completed(result: SLResult<Void, Error>) {
         completion?(result)
     }
     
@@ -78,10 +72,10 @@ public class SLCentralConnection : SLTask {
     }
     
     let peripheral: CBPeripheral
-    let timeout: SLTimeInterval
+    let timeout: TimeInterval
     private var checkStateWork: SLCancelableWork?
-    let completion: ((_ result: SLResult<CBPeripheral, SLError>) -> Void)?
-    let disconnectedCallback: ((_ error: SLError?) -> Void)?
+    var completion: ((_ result: SLResult<Void, Error>) -> Void)?
+    var disconnectedCallback: ((_ error: SLError?) -> Void)?
     private var iState = SLCentralConnectionState.initial
     
     public var state: SLCentralConnectionState {
@@ -92,13 +86,41 @@ public class SLCentralConnection : SLTask {
     
     public init(
         peripheral: CBPeripheral,
-        timeout: SLTimeInterval = .seconds(15),
-        completion: @escaping ((_ result: SLResult<CBPeripheral, SLError>) -> Void),
-        disconnectedCallback: @escaping ((_ error: SLError?) -> Void)
+        timeout: TimeInterval = 5
     ) {
         self.peripheral = peripheral
         self.timeout = timeout
-        self.completion = completion
-        self.disconnectedCallback = disconnectedCallback
+    }
+    
+    @available(*, renamed: "start(with:)")
+    public func start(with completion: @escaping ((_ result: SLResult<Void, Error>) -> Void)
+    ) {
+        Task {
+            do {
+                try await start()
+                completion(.success(Void()))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    
+    public func start() async throws {
+            return try await withUnsafeThrowingContinuation { continuation in
+                do {
+                    self.completion = { result in
+                        switch result {
+                        case .success(_):
+                            continuation.resume()
+                        case .failure(let e):
+                            continuation.resume(throwing: e)
+                        }
+                    }
+                    try self.start()
+                } catch let error {
+                    continuation.resume(throwing: error)
+                }
+            }
     }
 }

@@ -230,7 +230,7 @@ extension SLCentralManager: CBCentralManagerDelegate {
             item.peripheral.isEqual(peripheral)
         }.forEach { item in
             item.update(progress: .connected)
-            item.completed(result: .success(peripheral))
+            item.completed(result: .success(Void()))
         }
     }
     
@@ -239,7 +239,7 @@ extension SLCentralManager: CBCentralManagerDelegate {
             item.peripheral.isEqual(peripheral)
         }.forEach { item in
             item.update(progress: .initial)
-            item.completed(result: .failure(.bleConnectionFailure(error)))
+            item.completed(result: .failure(SLError.bleConnectionFailure(error)))
         }
     }
     
