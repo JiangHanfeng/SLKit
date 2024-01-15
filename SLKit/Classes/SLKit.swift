@@ -262,7 +262,7 @@ public final class SLConnectivityManager {
         finished: @escaping (() -> Void)
     ) {
         SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
-            .start(timeout: timeout, filter: filter, discovered: discovered, errored: errored, finished: finished)
+            .start(timeout: timeout, refreshInterval: 5, filter: filter, discovered: discovered, errored: errored, finished: finished)
     }
     
     public func stopScan() {
@@ -295,3 +295,56 @@ public final class SLConnectivityManager {
         return SLCentralManager.shared.available() && peripheralManager.available()
     }
 }
+ 
+public class SLLinkNode<Element> {
+    var element: Element
+    var next: SLLinkNode?
+    
+    init(element: Element, next: SLLinkNode? = nil) {
+        self.element = element
+        self.next = next
+    }
+}
+
+public struct SLLinkTable<Element> {
+    var head: SLLinkNode<Element>?
+    var tail: SLLinkNode<Element>?
+    
+    public var isEmpty: Bool {
+        return head == nil
+    }
+    
+    public init() {}
+    
+    public mutating func push(_ ele: Element) {
+        head = SLLinkNode(element: ele, next: head)
+        if tail == nil {
+            tail = head
+        }
+    }
+    
+    public mutating func append(_ ele: Element) {
+        if isEmpty {
+            push(ele)
+        } else {
+            tail!.next = SLLinkNode(element: ele)
+            tail = tail!.next
+        }
+    }
+    
+    public func node(at index: Int) -> SLLinkNode<Element>? {
+        var currentNode = head
+        var currentIndex = 0
+        while currentNode != nil && currentIndex < index {
+            currentNode = currentNode?.next
+            currentIndex += 1
+        }
+        return currentNode
+    }
+    
+    public mutating func insert(_ ele: Element, at: Int) {
+        
+    }
+}
+
+

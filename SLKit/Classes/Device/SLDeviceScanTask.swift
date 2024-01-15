@@ -9,6 +9,11 @@ import Foundation
 
 public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
     
+    struct SLTimedDevice {
+        let device: T
+        let createTime: TimeInterval
+    }
+    
     public typealias SLDeviceFilter = (T) -> Bool
     
     public typealias SLDevicesUpdatedCallback = ([T]) -> Void
@@ -59,10 +64,12 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
         }
     }
     
-    private var devices: [T] = []
+    private var devices: [SLTimedDevice] = []
     
     public var discoveredDevices: [T] {
-        return devices
+        return devices.map { item in
+            item.device
+        }
     }
     
     private var timeout: SLTimeInterval = .infinity
@@ -73,6 +80,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
     private var discovered: (([T]) -> Bool)?
     private var errored: ((SLError) -> Void)?
     private var finished: (() -> Void)?
+    private var refreshTimer: Timer?
     
     public init(anyDevice: SLAnyDevice<T>) {
         self.anyDevice = anyDevice
@@ -80,6 +88,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
     
     public func start(
         timeout: SLTimeInterval = .infinity,
+        refreshInterval: TimeInterval,
         filter: SLDeviceFilter? = nil,
         discovered: @escaping (([T]) -> Bool),
         errored: @escaping ((SLError) -> Void),
@@ -93,11 +102,18 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
         let task = SLScanPeripheralTask { peripheral in
             if let device = self.anyDevice.build(peripheral: peripheral.peripheral, advertisementData: peripheral.advertisementData, rssi: peripheral.rssi) {
                 if filter?(device) != false {
-                    if let index = self.devices.firstIndex(of: device) {
-                        self.devices.remove(at: index)
+                    if let index = self.devices.firstIndex(where: { item in
+                        item.device == device
+                    }) {
+                        self.devices.replaceSubrange(index..<index+1, with: [SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime)])
+                    } else {
+                        self.devices.append(SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime))
                     }
-                    self.devices.append(device)
-                    return discovered(self.devices)
+                    let continueScan = discovered(self.discoveredDevices)
+                    if !continueScan {
+                        self.refreshTimer?.invalidate()
+                    }
+                    return continueScan
                 }
                 return true
             } else {
@@ -106,6 +122,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
         } exceptionHandler: { error in
             self.bleScanTaskId = nil
             errored(error)
+            self.refreshTimer?.invalidate()
         }
         self.bleScanTaskId = task.id
         switch self.timeout {
@@ -117,6 +134,8 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
                     SLLog.debug("扫描超时")
                     self?.bleScanTaskId = nil
                     errored(SLError.bleScanTimeout)
+                    task.terminate()
+                    self?.refreshTimer?.invalidate()
                 }
             })
             self.checkWork?.start(at: DispatchQueue.global(qos: .background))
@@ -125,6 +144,25 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
             self.checkWork = nil
         }
         task.start()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: refreshInterval, repeats: true, block: { [weak self] _ in
+            self?.onRefresh(withTimeInterval: refreshInterval)
+        })
+        refreshTimer?.fire()
+    }
+    
+    private func onRefresh(withTimeInterval: TimeInterval) {
+        let currentTime = ProcessInfo.processInfo.systemUptime
+        var removed = false
+        devices.removeAll { item in
+            let shouldRemove = currentTime - item.createTime >= withTimeInterval
+            if shouldRemove {
+                removed = true
+            }
+            return shouldRemove
+        }
+        if removed {
+            _ = discovered?(discoveredDevices)
+        }
     }
     
     public func start(
