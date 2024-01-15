@@ -13,7 +13,7 @@ class SLBackgroundTask: NSObject {
     
     private var fileName: NSString?
     private var player: AVAudioPlayer?
-    private var bgTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
+    private var bgTask: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var timer: Timer?
     private var target: AnyObject?
     private var selector: Selector?
@@ -24,7 +24,7 @@ class SLBackgroundTask: NSObject {
     init(fileName: NSString) {
         self.fileName = fileName
         self.timer = nil
-        self.bgTask = UIBackgroundTaskInvalid
+        self.bgTask = UIBackgroundTaskIdentifier.invalid
     }
     
     func startTask(time: TimeInterval,target: AnyObject,selector: Selector) {
@@ -57,14 +57,14 @@ class SLBackgroundTask: NSObject {
     }
     
     private func playAudio(){
-        NotificationCenter.default.addObserver(self, selector: #selector(audioInterrupted(noti:)), name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(audioInterrupted(noti:)), name: AVAudioSession.interruptionNotification, object: nil)
         self.bgTask = UIApplication.shared.beginBackgroundTask(expirationHandler: { [weak self] in
             SLLog.debug("后台结束运行")
             guard let identifier = self?.bgTask else {
                 return
             }
             UIApplication.shared.endBackgroundTask(identifier)
-            self?.bgTask = UIBackgroundTaskInvalid
+            self?.bgTask = UIBackgroundTaskIdentifier.invalid
             self?.endTime()
         })
         DispatchQueue.main.async{
@@ -79,7 +79,7 @@ class SLBackgroundTask: NSObject {
                   let selector = self.selector else {
                 return
             }
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSession.CategoryOptions.mixWithOthers)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, options: AVAudioSession.CategoryOptions.mixWithOthers)
             try AVAudioSession.sharedInstance().setActive(true)
             UIApplication.shared.beginReceivingRemoteControlEvents()
             
@@ -105,7 +105,7 @@ class SLBackgroundTask: NSObject {
                                                   selector: selector,
                                                   userInfo: nil,
                                                   repeats: true)
-                RunLoop.current.add(self.timer!, forMode: .commonModes)
+                RunLoop.current.add(self.timer!, forMode: RunLoop.Mode.common)
             }
         } catch {}
     }
@@ -137,16 +137,16 @@ class SLBackgroundTask: NSObject {
     }
     
     func stopTask(){
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+        NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
         self.endTime()
-        if self.bgTask != UIBackgroundTaskInvalid {
+        if self.bgTask != UIBackgroundTaskIdentifier.invalid {
             UIApplication.shared.endBackgroundTask(self.bgTask)
-            self.bgTask = UIBackgroundTaskInvalid
+            self.bgTask = UIBackgroundTaskIdentifier.invalid
         }
     }
     
     func isRunning()->Bool {
-        if self.bgTask == UIBackgroundTaskInvalid {
+        if self.bgTask == UIBackgroundTaskIdentifier.invalid {
             return false
         }
         return true

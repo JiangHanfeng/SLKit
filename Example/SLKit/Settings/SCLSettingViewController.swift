@@ -114,7 +114,7 @@ extension SCLSettingViewController : UICollectionViewDelegate {
                 var airplaySuccess = false
                 if let homeVc = navigationController?.viewControllers.first as? SCLHomeViewController {
                     device = homeVc.device
-                    for child in homeVc.childViewControllers {
+                    for child in homeVc.children {
                         if child is SCLDeviceViewController {
                             airplaySuccess = (child as! SCLDeviceViewController).airplaySuccess
                             break

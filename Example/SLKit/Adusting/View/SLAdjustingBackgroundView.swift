@@ -42,7 +42,7 @@ class SLAdjustingBackgroundView: UIView {
 
         self.layer.addSublayer(self.emitterLayer)
 
-        emitterLayer.emitterShape = kCAEmitterLayerRectangle
+        emitterLayer.emitterShape = CAEmitterLayerEmitterShape.rectangle
         resetFrame()
         let cell = CAEmitterCell()
         cell.contents = image?.cgImage

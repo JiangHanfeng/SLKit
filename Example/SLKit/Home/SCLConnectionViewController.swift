@@ -93,7 +93,7 @@ class SCLConnectionViewController: SCLBaseViewController {
         
         let layer = CAShapeLayer()
         layer.path = path.cgPath
-        layer.fillRule = kCAFillRuleEvenOdd
+        layer.fillRule = CAShapeLayerFillRule.evenOdd
         layer.fillColor = UIColor.black.cgColor
         layer.opacity = 0.6
         

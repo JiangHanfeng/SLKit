@@ -76,8 +76,8 @@ class SCLDeviceViewController: SCLBaseViewController {
         // MARK: 设置pc主动发送的消息监听
         socketDataListener = SLSocketClientUnhandledDataHandler(id: String(describing: self), handle: { [weak self] data, client in
             guard let self else { return }
-            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else { return }
-            guard let cmd = dict["cmd"] as? Int else {
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any] else { return }
+            guard let cmd = json["cmd"] as? Int else {
                 return
             }
             DispatchQueue.main.async {
@@ -92,7 +92,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                 case SCLCmd.airplayUpdated.rawValue:
                     self.dismiss(animated: true)
                     var result = false
-                    if let state = dict["state"] as? Int {
+                    if let state = json["state"] as? Int {
                         result = state == 1
                     }
                     if result {
@@ -141,7 +141,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                 case SCLCmd.requestPair.rawValue:
                     // 从pc发起的配对请求，state 1表示发起配对，0表示取消配对
                     let stateRange = 0...1
-                    guard let state = dict["state"] as? Int, stateRange.contains(state) else {
+                    guard let state = json["state"] as? Int, stateRange.contains(state) else {
                         SLLog.debug("pc配对请求参数错误")
                         break
                     }
@@ -149,7 +149,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                     self.requestPairByDevice = state == 1
                     if 
                         self.requestPairByDevice,
-                        let deviceList = dict["deviceList"] as? [String],
+                        let deviceList = json["deviceList"] as? [String],
                         !deviceList.isEmpty
                     {
                         for deviceJsonString in deviceList {
@@ -160,7 +160,7 @@ class SCLDeviceViewController: SCLBaseViewController {
                     }
                 case SCLCmd.pairCompleted.rawValue:
                     var list: [SCLPCPairedDevice] = []
-                    if let deviceList = dict["deviceList"] as? [String], !deviceList.isEmpty {
+                    if let deviceList = json["deviceList"] as? [String], !deviceList.isEmpty {
                         for deviceJsonString in deviceList {
                             if let device = SCLPCPairedDevice.deserialize(from: deviceJsonString) {
                                 list.append(device)
@@ -187,9 +187,9 @@ class SCLDeviceViewController: SCLBaseViewController {
                     }
                 case SCLCmd.hidConnected.rawValue:
                     var state: Int?
-                    if let intValue = dict["state"] as? Int {
+                    if let intValue = json["state"] as? Int {
                         state = intValue
-                    } else if let stringValue = dict["state"] as? String {
+                    } else if let stringValue = json["state"] as? String {
                         state = Int(stringValue)
                     }
                     self.hidConnected = state == 0

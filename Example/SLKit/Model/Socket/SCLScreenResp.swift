@@ -23,22 +23,22 @@ struct SCLScreenResp : SLSocketDataMapper {
     
     init(data: Data) {
         self.data = data
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any] else {
             return
         }
         let stateRange = 0...1
         if
-            let taskId = dict["taskId"] as? String,
+            let taskId = json["taskId"] as? String,
             !taskId.isEmpty,
-            let cmd = json?["cmd"] as? Int,
-            let state = dict["state"] as? Int,
+            let cmd = json["cmd"] as? Int,
+            let state = json["state"] as? Int,
             stateRange.contains(state),
-            let ip = dict["ip"] as? String,
+            let ip = json["ip"] as? String,
             !ip.isEmpty,
-            let port1 = dict["port1"] as? UInt16,
-            let port2 = dict["port2"] as? UInt16,
+            let port1 = json["port1"] as? UInt16,
+            let port2 = json["port2"] as? UInt16,
             port2 > 0,
-            let port3 = dict["port3"] as? UInt16,
+            let port3 = json["port3"] as? UInt16,
             port3 > 0
         {
             self.cmd = cmd

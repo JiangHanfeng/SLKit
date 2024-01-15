@@ -49,7 +49,7 @@ class SCLWelcomeViewController: SCLBaseViewController {
                     make.bottom.equalTo(self.nsBtn.snp.top).offset(-32)
                 }
             }
-            switch self.childViewControllers.last {
+            switch self.children.last {
             case self.privacyPolicyController:
                 self.transitionToChild(self.requestPermissionController, configChildViewRect: configChildView)
                 self.nsBtn.setTitle("开始吧", for: .normal)

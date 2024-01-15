@@ -96,12 +96,12 @@ class SCLReconnectViewController: SCLBaseViewController {
     
     private func updateText(seconds: Int) {
         let attributedText = NSMutableAttributedString(string: "正在尝试重新连接（\(seconds)s），", attributes: [
-            NSAttributedStringKey.foregroundColor:UIColor.darkText,
-            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 12)
+            NSAttributedString.Key.foregroundColor:UIColor.darkText,
+            NSAttributedString.Key.font:UIFont.systemFont(ofSize: 12)
         ])
         attributedText.append(NSAttributedString(string: "点击此处取消", attributes: [
-            NSAttributedStringKey.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1),
-            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 12)
+            NSAttributedString.Key.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1),
+            NSAttributedString.Key.font:UIFont.systemFont(ofSize: 12)
         ]))
         hintLabel.attributedText = attributedText
     }

@@ -14,7 +14,7 @@ class SLAdustingControlAnimationView: UIView {
     private lazy var showEmitter: CAEmitterLayer = {
         
         let snowEmitter = CAEmitterLayer()
-        snowEmitter.emitterShape = kCAEmitterLayerRectangle
+        snowEmitter.emitterShape = CAEmitterLayerEmitterShape.rectangle
         
         var cells: [CAEmitterCell] = []
         let colors: [UIColor] = [UIColor.init(white: 0.56, alpha: 0.8),

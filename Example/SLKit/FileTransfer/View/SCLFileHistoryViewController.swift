@@ -70,7 +70,7 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         let layer = CAShapeLayer()
         layer.lineWidth = 2
         layer.strokeColor = UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1).cgColor
-        layer.lineCap = kCALineCapRound
+        layer.lineCap = CAShapeLayerLineCap.round
         let path = UIBezierPath()
         path.move(to: .init(x: 0, y: 1))
         path.addLine(to: .init(x: UIScreen.main.bounds.width, y: 1))
@@ -173,8 +173,8 @@ class SCLFileHistoryViewController: SCLBaseViewController {
         navigationItem.title = "选择文件"
         let selectAllBarButtonItem = UIBarButtonItem(title: "全选", style: .plain, target: self, action: nil)
         selectAllBarButtonItem.setTitleTextAttributes([
-            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 15, weight: .medium),
-            NSAttributedStringKey.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
+            NSAttributedString.Key.font:UIFont.systemFont(ofSize: 15, weight: .medium),
+            NSAttributedString.Key.foregroundColor:UIColor(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
         ], for: .normal)
         selectAllBarButtonItem.rx.tap.bind { _ in
             [self.receivedFileVc,self.sendedFileVc][self.currentIndex].selectAll()

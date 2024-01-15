@@ -18,7 +18,7 @@ PODS:
   - RxRelay (6.6.0):
     - RxSwift (= 6.6.0)
   - RxSwift (6.6.0)
-  - SLKit (0.1.2):
+  - SLKit (0.1.3):
     - CocoaAsyncSocket
     - XCGLogger
   - SnapKit (5.6.0)
@@ -82,7 +82,7 @@ SPEC CHECKSUMS:
   RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
   RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
   RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
-  SLKit: e3e3fbdcf4c4247ee77776785ebe021c50e9c145
+  SLKit: 0ec59fe0f2b85aa5a49d224b39aae4182fa77d77
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Toast-Swift: dd369e68ee529f542c65bd0d0c6c50cd743cf6f2
   TZImagePickerController: f1c9f1cae6ac0e30b31aaa9698f9bf4a7cf5b84f

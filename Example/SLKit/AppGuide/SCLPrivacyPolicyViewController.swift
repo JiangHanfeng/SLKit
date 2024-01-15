@@ -44,12 +44,12 @@ class SCLPrivacyPolicyViewController: SCLBaseViewController {
             .disposed(by: disposeBag)
         let clickableColor = UIColor.init(red: 88/255.0, green: 108/255.0, blue: 1, alpha: 1)
         let privacyPolicyText = NSAttributedString(string: "《联想隐私声明》", attributes: [
-            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 12),
-            NSAttributedStringKey.foregroundColor:clickableColor
+            NSAttributedString.Key.font:UIFont.systemFont(ofSize: 12),
+            NSAttributedString.Key.foregroundColor:clickableColor
         ])
         let userAgreementText = NSAttributedString(string: "《用户许可协议》", attributes: [
-            NSAttributedStringKey.font:UIFont.systemFont(ofSize: 12),
-            NSAttributedStringKey.foregroundColor:clickableColor
+            NSAttributedString.Key.font:UIFont.systemFont(ofSize: 12),
+            NSAttributedString.Key.foregroundColor:clickableColor
         ])
         
         let tap1 = UITapGestureRecognizer()

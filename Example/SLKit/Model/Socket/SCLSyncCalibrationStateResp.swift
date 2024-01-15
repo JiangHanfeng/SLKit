@@ -20,8 +20,8 @@ struct SCLSyncCalibrationStateResp: SLSocketDataMapper {
         self.data = data
         if 
             let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any],
-            let dict = json, let cmd = dict["cmd"] as? Int,
-            let state = dict["state"] as? Int{
+            let cmd = json["cmd"] as? Int,
+            let state = json["state"] as? Int{
             self.id = "\(cmd)"
             self.state = state
         } else {

@@ -31,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var dateFormatter = DateFormatter()
     
     private var backgroundId: UIBackgroundTaskIdentifier?
-    fileprivate var backgroundTask = UIBackgroundTaskInvalid
+    fileprivate var backgroundTask = UIBackgroundTaskIdentifier.invalid
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         SLLog.prepare()
         Bugly.start(withAppId: "f5ee4f3bf5")
 //        if SCLUtil.isFirstLaunch() {
@@ -51,8 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().backIndicatorImage = backImage.withRenderingMode(.alwaysOriginal)
             UINavigationBar.appearance().backIndicatorTransitionMaskImage = backImage.withRenderingMode(.alwaysOriginal)
         }
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .normal)
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .highlighted)
         var rootVc: UIViewController?
         if UserDefaults.standard.bool(forKey: SCLUserDefaultKey.agreedPrivacyPolicy.rawValue) {
             SLCentralManager.shared.requestPermission { _ in
@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
 //        if (url.scheme?.elementsEqual("file") == true) {
 //            SLLog.debug("app open url:\(url)")
 //            guard let nav = UIApplication.shared.currentController() as? UINavigationController else {
@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         SLKeepAliveManager.shared.enterForeground()
         NotificationCenter.default.post(Notification(name: enterForegroundNoti))
-        backgroundTask = UIBackgroundTaskInvalid
+        backgroundTask = UIBackgroundTaskIdentifier.invalid
         application.endBackgroundTask(backgroundTask)
     }
 
@@ -181,7 +181,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
                 self?.applyTimeForBackgroundTask()
             })
-            if let backgroundId, backgroundId > 0 {
+            if let backgroundId, backgroundId.rawValue > 0 {
                 SLLog.debug("后台任务开启成功")
             } else {
                 SLLog.debug("后台任务开启失败")
@@ -194,14 +194,14 @@ extension AppDelegate {
     
     func backgroundRun() {
         let application = UIApplication.shared
-        if backgroundTask == UIBackgroundTaskInvalid {
+        if backgroundTask == UIBackgroundTaskIdentifier.invalid {
             let begintime = CFAbsoluteTimeGetCurrent()
             SLLog.debug("申请后台运行:\(begintime)")
             backgroundTask = application.beginBackgroundTask(expirationHandler: {
                 let endtime = CFAbsoluteTimeGetCurrent()
                 SLLog.debug("===========后台任务结束了==========时间： \(endtime - begintime)")
                 application.endBackgroundTask(self.backgroundTask)
-                self.backgroundTask = UIBackgroundTaskInvalid
+                self.backgroundTask = UIBackgroundTaskIdentifier.invalid
             })
         }
     }
@@ -211,8 +211,8 @@ extension AppDelegate {
                              "public.audiovisual-content", "com.adobe.pdf", "com.apple.keynote.key", "com.microsoft.word.doc",
                              "com.microsoft.excel.xls", "com.microsoft.powerpoint.ppt","public.item"]
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .automatic
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.black], for: .normal)
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.black], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.black], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.black], for: .highlighted)
         let vc = UIDocumentPickerViewController.init(documentTypes:documentTypes , in: .open)
         vc.modalPresentationStyle = .fullScreen
         vc.delegate = self
@@ -301,14 +301,14 @@ extension AppDelegate {
 extension AppDelegate : UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .normal)
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .highlighted)
     }
     
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
 //        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .normal)
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor:UIColor.clear], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor:UIColor.clear], for: .highlighted)
         SLTransferManager.share().startSendFile()
         var files:[SLFileModel] = []
         _ = urls.map({ url in

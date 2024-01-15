@@ -109,16 +109,16 @@ extension UIViewController {
     }
     
     func transitionToChild(_ controller: UIViewController, removeCurrent: Bool = true, configChildViewRect: ((_ childView: UIView) -> Void), completion: (() -> Void)? = nil) {
-        let currentChild = childViewControllers.last
+        let currentChild = children.last
         if currentChild?.isEqual(controller) == true {
             return
         }
-        if let targetControllerIndex = childViewControllers.firstIndex(where: {
+        if let targetControllerIndex = children.firstIndex(where: {
             controller.isEqual($0)
         }) {
-            childViewControllers[targetControllerIndex].removeFromParentViewController()
+            children[targetControllerIndex].removeFromParent()
         }
-        addChildViewController(controller)
+        addChild(controller)
         let targetView = controller.view
         if let targetView {
             var targetViewAdded = false
@@ -131,7 +131,7 @@ extension UIViewController {
             if !targetViewAdded {
                 view.addSubview(targetView)
                 configChildViewRect(targetView)
-                if childViewControllers.count > 1 {
+                if children.count > 1 {
                     // 只有在切换两个子controller时才有平移
                     targetView.transform = CGAffineTransform(translationX: view.bounds.width, y: 0)
                 }
@@ -141,7 +141,7 @@ extension UIViewController {
         if let currentChild {
             currentChildView = currentChild.view
             if removeCurrent {
-                currentChild.removeFromParentViewController()
+                currentChild.removeFromParent()
             }
         }
         if targetView != nil || currentChildView != nil {

@@ -211,7 +211,7 @@ class SCLHomeViewController: SCLBaseViewController {
             } completion: { _ in
                 self.transferringCountLabel.isHidden = true
             }
-            for child in childViewControllers {
+            for child in children {
                 if child.isKind(of: SCLDeviceViewController.self) {
                     (child as! SCLDeviceViewController).switchSendable(true)
                     break
@@ -223,7 +223,7 @@ class SCLHomeViewController: SCLBaseViewController {
             UIView.animate(withDuration: 0.25) {
                 self.transferringCountLabel.alpha = 1
             }
-            for child in childViewControllers {
+            for child in children {
                 if child.isKind(of: SCLDeviceViewController.self) {
                     (child as! SCLDeviceViewController).switchSendable(false)
                     break
@@ -255,7 +255,7 @@ class SCLHomeViewController: SCLBaseViewController {
 //            return
 //        }
 //        fileVc.updateSendingFiles()
-        let deviceVc = childViewControllers.first { item in
+        let deviceVc = children.first { item in
             item.isKind(of: SCLDeviceViewController.self)
         } as? SCLDeviceViewController
         if let sendFile = SLTransferManager.share().currentSendFileTransfer(), !sendFile.files.isEmpty {
@@ -485,7 +485,7 @@ extension SCLHomeViewController {
             self?.updateTransferringFilesCount()
             self?.updateSendingFiels()
             DispatchQueue.main.async {
-                let deviceVc = self?.childViewControllers.first { item in
+                let deviceVc = self?.children.first { item in
                     item.isKind(of: SCLDeviceViewController.self)
                 } as? SCLDeviceViewController
                 deviceVc?.showSendingView()

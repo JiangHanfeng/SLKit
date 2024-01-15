@@ -50,7 +50,7 @@ class SCLPhonePickerCell: UITableViewCell {
             progressLayer.lineWidth = 1
             progressLayer.strokeColor = UIColor(red: 54/255.0, green: 120/255.0, blue: 1, alpha: 1).cgColor
             progressLayer.fillColor = UIColor.clear.cgColor
-            progressLayer.lineCap = kCALineCapRound
+            progressLayer.lineCap = CAShapeLayerLineCap.round
             iconView.layer.addSublayer(progressLayer)
         }
         progressBackgroundLayer.isHidden = progress == 0

@@ -18,15 +18,15 @@ struct SCLInitResp : SLSocketDataMapper {
     
     init(data: Data) {
         self.data = data
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any] else {
             return
         }
         let stateRange = 0...1
         if
-            let taskId = dict["taskId"] as? String,
+            let taskId = json["taskId"] as? String,
             !taskId.isEmpty,
-            let cmd = dict["cmd"] as? Int,
-            let state = dict["state"] as? Int,
+            let cmd = json["cmd"] as? Int,
+            let state = json["state"] as? Int,
             stateRange.contains(state)
         {
             self.cmd = cmd

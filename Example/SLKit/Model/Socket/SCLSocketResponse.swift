@@ -21,23 +21,23 @@ struct SCLSocketResponse<T: SCLSocketConetent>: SLSocketDataMapper {
     
     init(data: Data) {
         self.data = data
-        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any], let dict = json else {
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String : Any] else {
             return
         }
         let stateRange = 0...1
         if
-            let taskId = dict["taskId"] as? String,
+            let taskId = json["taskId"] as? String,
             !taskId.isEmpty,
-            let state = dict["state"] as? Int,
+            let state = json["state"] as? Int,
             stateRange.contains(state)
         {
-            let msg = dict["msg"] as? String
-            let dev_mac = dict["dev_mac"] as? String
+            let msg = json["msg"] as? String
+            let dev_mac = json["dev_mac"] as? String
             self.id = taskId
             self.state = state
             self.msg = msg ?? ""
             self.dev_mac = dev_mac ?? ""
-            self.content = T.deserialize(from: dict)
+            self.content = T.deserialize(from: json)
         }
     }
 }

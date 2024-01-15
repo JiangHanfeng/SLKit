@@ -223,8 +223,8 @@ public class SwiftyPing: NSObject {
     #if os(iOS)
     /// Adds notification observers for iOS app state changes.
     private func addAppStateNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didEnterForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterForeground), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
     /// A flag to determine whether the pinger was halted automatically by an app state change.
@@ -363,7 +363,7 @@ public class SwiftyPing: NSObject {
         sequenceStart = Date()
         
         let timer = Timer(timeInterval: self.configuration.timeoutInterval, target: self, selector: #selector(self.timeout), userInfo: nil, repeats: false)
-        RunLoop.main.add(timer, forMode: RunLoopMode.commonModes)
+        RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
         self.timeoutTimer = timer
 
         _serial.async {
