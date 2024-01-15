@@ -105,7 +105,7 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
                     if let index = self.devices.firstIndex(where: { item in
                         item.device == device
                     }) {
-                        self.devices.replaceSubrange(index..<index+1, with: [SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime)])
+//                        self.devices.replaceSubrange(index..<index+1, with: [SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime)])
                     } else {
                         self.devices.append(SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime))
                     }
