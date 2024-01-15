@@ -90,9 +90,44 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
         self.discovered = discovered
         self.errored = errored
         self.finished = finished
+        let task = SLScanPeripheralTask { peripheral in
+            if let device = self.anyDevice.build(peripheral: peripheral.peripheral, advertisementData: peripheral.advertisementData, rssi: peripheral.rssi) {
+                if filter?(device) != false {
+                    if let index = self.devices.firstIndex(of: device) {
+                        self.devices.remove(at: index)
+                    }
+                    self.devices.append(device)
+                    return discovered(self.devices)
+                }
+                return true
+            } else {
+                return true
+            }
+        } exceptionHandler: { error in
+            self.bleScanTaskId = nil
+            errored(error)
+        }
+        self.bleScanTaskId = task.id
+        switch self.timeout {
+        case .seconds(let timeout):
+            self.checkWork?.cancel()
+            self.checkWork = nil
+            self.checkWork = SLCancelableWork(delayTime: .seconds(Int(timeout)), closure: { [weak self] in
+                if let _ = self?.bleScanTaskId {
+                    SLLog.debug("扫描超时")
+                    self?.bleScanTaskId = nil
+                    errored(SLError.bleScanTimeout)
+                }
+            })
+            self.checkWork?.start(at: DispatchQueue.global(qos: .background))
+        case .infinity:
+            self.checkWork?.cancel()
+            self.checkWork = nil
+        }
+        task.start()
     }
     
-    public func asyncStart(
+    public func start(
         timeout: SLTimeInterval = .infinity,
         filter: @escaping SLDeviceFilter
     ) async throws -> T {
