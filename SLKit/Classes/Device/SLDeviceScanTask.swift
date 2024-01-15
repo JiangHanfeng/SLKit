@@ -105,15 +105,16 @@ public class SLDeviceScanTask<T: SLBaseDevice>: SLTask {
                     if let index = self.devices.firstIndex(where: { item in
                         item.device == device
                     }) {
-//                        self.devices.replaceSubrange(index..<index+1, with: [SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime)])
+                        return true
                     } else {
                         self.devices.append(SLTimedDevice(device: device, createTime: ProcessInfo.processInfo.systemUptime))
+                        let continueScan = discovered(self.discoveredDevices)
+                        if !continueScan {
+                            self.refreshTimer?.invalidate()
+                        }
+                        return continueScan
                     }
-                    let continueScan = discovered(self.discoveredDevices)
-                    if !continueScan {
-                        self.refreshTimer?.invalidate()
-                    }
-                    return continueScan
+                    
                 }
                 return true
             } else {
