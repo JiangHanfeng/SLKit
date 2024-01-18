@@ -29,21 +29,19 @@ class SCLHomeViewController: SCLBaseViewController {
     private var connectionVc: SCLConnectionViewController?
     
     public var deviceUpdatedHandler: ((SLDevice?) -> Void)?
-    
+    private let scanDeviceTask = SLDeviceScanTask(anyDevice: SLAnyDevice(base: SLFreeStyleDeviceBuilder.self))
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.delegate = self
         navigationController?.setNavigationBarHidden(true, animated: true)
         let ipSignal = Observable.create { observer in
-            SLNetworkManager.shared.startMonitorWifi()
             SLNetworkManager.shared.ipv4OfWifiUpdated = { ip in
                 observer.onNext(ip ?? "")
             }
             return Disposables.create()
         }
         let bleStateSignal = Observable.create { observer in
-            observer.onNext(SLCentralManager.shared.state == .poweredOn)
             SLPeripheralManager.shared.stateUpdatedHandler = SLBleStateUpdatedHandler(handle: { state in
                 observer.onNext(state == .poweredOn)
             })
@@ -123,6 +121,8 @@ class SCLHomeViewController: SCLBaseViewController {
             }, onCompleted: {
                 
             }).disposed(by: disposeBag)
+        SLNetworkManager.shared.startMonitorWifi()
+        SLPeripheralManager.shared.requestPermission()
         deviceUpdatedHandler?(nil)
         configFileTransfer()
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: enterForegroundNoti, object: nil)
@@ -358,31 +358,44 @@ extension SCLHomeViewController {
         guard let macBytes = SCLUtil.getTempMac().macBytes() else {
             return "无法获取mac"
         }
-        let macData = Data(bytes: macBytes)
+        let macData = Data(macBytes)
         
         guard let ipBytes = ipv4?.ipV4Bytes() else {
             return "无法获取ip"
         }
-        let ipData = Data(bytes: ipBytes)
+        let ipData = Data(ipBytes)
 
         var uint16 = CFSwapInt16BigToHost(port)
         let portBytes = withUnsafeBytes(of: &uint16) { Array($0) }
-        let portData = Data(bytes: portBytes)
+        let portData = Data(portBytes)
         
         let ipHeadBytes: [UInt8] = [0xdd, 0xe7]
         
         var ipPageData = Data()
-        ipPageData.append(Data(bytes: ipHeadBytes))
+        ipPageData.append(Data(ipHeadBytes))
         ipPageData.append(macData)
         ipPageData.append(ipData)
         ipPageData.append(portData)
         while ipPageData.count < 21 {
-            ipPageData.append(Data(bytes: [0x00]))
+            ipPageData.append(Data([0x00]))
         }
         stopAdvertising()
         do {
             try  SLPeripheralManager.shared.startAdvertising(["kCBAdvDataAppleBeaconKey":ipPageData])
             SLLog.debug("广播数据(deviveId:\(SCLUtil.getTempMac()),ip:\(ipv4 ?? ""),port:\(port))")
+            scanDeviceTask.start(
+                timeout: -1,
+                refreshInterval: 10)
+            { device in
+                return !device.name.isEmpty
+            } deviceListUpdatedHandler: { devices in
+                print("已发现ble设备列表")
+                for device in devices {
+                    print("\(device.name)")
+                }
+            } exceptionHandler: { error in
+                print("scan ble peripheral exception:\n\(error.localizedDescription)")
+            }
         } catch let e {
             return e.localizedDescription
         }

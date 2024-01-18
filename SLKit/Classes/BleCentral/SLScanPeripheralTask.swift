@@ -15,7 +15,9 @@ public typealias SLPeripheralDiscoveredCallback = (( _ peripheral: CBPeripheral,
 //    case interruppt
 //}
 
-public class SLScanPeripheralTask: SLTask {
+public class SLScanPeripheralTask: NSObject, SLTask {
+    
+    private static let queue = DispatchQueue(label: "com.slkit.scan_peripheral")
     
     typealias Progress = SLPeripheral
     
@@ -23,34 +25,42 @@ public class SLScanPeripheralTask: SLTask {
     
     typealias Result = Void
     
-    var id: String {
-        let address = unsafeBitCast(self, to: Int.self)
-        return "\(address)"
+    override init() {
+        super.init()
+        centralManager = CBCentralManager(delegate: self, queue: Self.queue)
     }
     
-    let exceptionHandler: (SLError) -> Void
+    deinit {
+        print("\(self) deinit")
+    }
     
-    let progressHandler: (SLPeripheral) -> Bool
+    private lazy var address: Int = {
+        return unsafeBitCast(self, to: Int.self)
+    }()
     
-    private var discoveredPeripherals: Array<SLPeripheral> = []
+    var id: Int {
+        return address
+    }
     
-    private var shouldUpdate = true
+    private var centralManager: CBCentralManager!
+    private var services: [CBUUID]?
+    private var shouldStartScan = false
+    private var isScanning = false
     
-    func start() {
+    var exceptionHandler: ((SLError) -> Void)?
+    
+    var discoveredPeripheralHandler: ((SLPeripheral) -> Void)?
+    
+    internal func start() {
         SLCentralManager.shared.startScanTask(self)
     }
     
     func exception(e: SLError) {
-        exceptionHandler(e)
+        exceptionHandler?(e)
     }
     
     func update(progress: SLPeripheral) {
-        guard shouldUpdate else {
-            terminate()
-            return
-        }
-        shouldUpdate = progressHandler(progress)
-        !shouldUpdate ? terminate() : nil
+        discoveredPeripheralHandler?(progress)
     }
     
     func completed(result: Void) {
@@ -58,26 +68,48 @@ public class SLScanPeripheralTask: SLTask {
     }
     
     func terminate() {
-        SLCentralManager.shared.stopScanTask(self)
+//        SLCentralManager.shared.stopScanTask(self)
+        shouldStartScan = false
+        isScanning = false
+        centralManager.stopScan()
+        centralManager = nil
     }
     
     public static func == (lhs: SLScanPeripheralTask, rhs: SLScanPeripheralTask) -> Bool {
         return lhs.id == rhs.id
     }
     
-    init(
-        progressHandler: @escaping (SLPeripheral) -> Bool,
-        exceptionHandler: @escaping (SLError) -> Void
-    ) {
-        self.progressHandler = progressHandler
-        self.exceptionHandler = exceptionHandler
-    }
-    
-    deinit {
-        print("\(self) deinit")
-    }
-    
-    class func stop(with id: String) {
+    class func stop(with id: Int) {
         SLCentralManager.shared.stopScanTask(id: id)
+    }
+    
+    func start(with services: [CBUUID]? = nil) {
+        self.services = services
+        shouldStartScan = true
+        isScanning = false
+        if centralManager.state == .poweredOn {
+            centralManager.scanForPeripherals(withServices: services)
+        } else {
+            centralManager = nil
+            centralManager = CBCentralManager(delegate: self, queue: Self.queue)
+        }
+    }
+}
+
+extension SLScanPeripheralTask : CBCentralManagerDelegate {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state != .poweredOn {
+            if !isScanning && shouldStartScan || isScanning {
+                exceptionHandler?(SLError.bleNotPowerOn)
+            }
+        } else if shouldStartScan {
+            shouldStartScan = false
+            isScanning = true
+            centralManager.scanForPeripherals(withServices: services, options: [CBCentralManagerScanOptionAllowDuplicatesKey:true])
+        }
+    }
+    
+    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        discoveredPeripheralHandler?(SLPeripheral(peripheral: peripheral, advertisementData: advertisementData, rssi: RSSI))
     }
 }

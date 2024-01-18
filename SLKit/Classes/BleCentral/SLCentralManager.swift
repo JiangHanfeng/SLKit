@@ -81,9 +81,9 @@ public final class SLCentralManager: NSObject {
         }
     }
     
-    func stopScanTask(id: String) {
+    func stopScanTask(id: Int) {
         scanTasks.filter { item in
-            item.id.elementsEqual(id)
+            item.id == id
         }.forEach { item in
             stopScanTask(item)
         }

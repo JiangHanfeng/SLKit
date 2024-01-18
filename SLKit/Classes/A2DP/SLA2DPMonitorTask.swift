@@ -49,8 +49,8 @@ public class SLA2DPMonitorTask: SLTask {
         return unsafeBitCast(self, to: Int.self)
     }()
     
-    var id: String {
-        return "\(address)"
+    var id: Int {
+        return address
     }
     
     public var connectedDevice: SLA2DPDevice? {

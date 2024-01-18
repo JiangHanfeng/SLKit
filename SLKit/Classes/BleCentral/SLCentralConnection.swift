@@ -16,15 +16,19 @@ public enum SLCentralConnectionState {
 }
 
 public class SLCentralConnection : SLTask {
-    
+
     typealias Exception = SLError
     
     typealias Progress = SLCentralConnectionState
     
     typealias Result = SLResult<Void, Error>
     
-    var id: String {
-        return "\(unsafeBitCast(self, to: Int.self))"
+    private lazy var address: Int = {
+        return unsafeBitCast(self, to: Int.self)
+    }()
+    
+    var id: Int {
+        return address
     }
     
     public func start() throws {
@@ -107,9 +111,11 @@ public class SLCentralConnection : SLTask {
     
     
     public func start() async throws {
-            return try await withUnsafeThrowingContinuation { continuation in
+            return try await withCheckedThrowingContinuation { continuation in
                 do {
-                    self.completion = { result in
+                    self.completion = { [weak self]
+                        result in
+                        self?.completion = nil
                         switch result {
                         case .success(_):
                             continuation.resume()
@@ -119,6 +125,7 @@ public class SLCentralConnection : SLTask {
                     }
                     try self.start()
                 } catch let error {
+                    completion = nil
                     continuation.resume(throwing: error)
                 }
             }

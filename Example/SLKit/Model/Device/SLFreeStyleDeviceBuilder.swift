@@ -14,6 +14,10 @@ class SLFreeStyleDeviceBuilder: SLDeviceBuilder {
     static let service_uuid_prefix = "A6DDE8"
     
     static func build(peripheral: CBPeripheral, advertisementData: [String : Any], rssi: NSNumber) -> SLFreeStyleDevice? {
+        guard let name = peripheral.name, name.count > 0 else {
+            return nil
+        }
+        return SLFreeStyleDevice(name: peripheral.name ?? "", mac: [], ip: [], port: 0, blePeripheral: peripheral)
         guard let uuids = advertisementData["kCBAdvDataServiceUUIDs"] as? [CBUUID], !uuids.isEmpty else {
             return nil
         }

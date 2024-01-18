@@ -124,7 +124,7 @@ protocol SLTask: Equatable {
     associatedtype Progress
     associatedtype Result
     
-    var id: String { get }
+    var id: Int { get }
     
     func start() throws
     
@@ -251,22 +251,6 @@ public final class SLConnectivityManager {
            
     public func getConnectedWifi(completionHandler: @escaping ((_ ssid: String?, _ bssid: String?, _ error: Error?) -> Void)) {
         SLNetworkManager.shared.getConnectedWifi(completionHandler: completionHandler)
-    }
-    
-    public func startScan<U: SLDeviceBuilder>(
-        deviceBuilder: U.Type,
-        timeout: SLTimeInterval = .infinity,
-        filter: ((U.Device) -> Bool)? = nil,
-        discovered: @escaping ((_ devices: [U.Device]) -> Bool),
-        errored: @escaping ((SLError) -> Void),
-        finished: @escaping (() -> Void)
-    ) {
-        SLDeviceScanTask(anyDevice: SLAnyDevice(base: deviceBuilder))
-            .start(timeout: timeout, refreshInterval: 5, filter: filter, discovered: discovered, errored: errored, finished: finished)
-    }
-    
-    public func stopScan() {
-        SLCentralManager.shared.stopScan()
     }
     
 //    public func connectDevice<T: SLBaseDevice>(_ device: T) {

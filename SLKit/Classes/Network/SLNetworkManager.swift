@@ -124,6 +124,7 @@ public class SLNetworkManager {
     }
     
     public func startMonitorWifi() {
+//        ipv4OfWifiUpdated?(ipv4OfWifi)
         monitor.start(queue: queue)
     }
     

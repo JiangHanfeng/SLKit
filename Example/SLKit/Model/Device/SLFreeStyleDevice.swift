@@ -49,13 +49,17 @@ import SLKit
         self.port = port
         self.blePeripheral = blePeripheral
     }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard object is Self else {
+            return false
+        }
+        let anotherOne = object as! Self
+        return mac.elementsEqual(anotherOne.mac) && name.elementsEqual(anotherOne.name)
+    }
 }
 
 extension SLFreeStyleDevice: SLBaseDevice {
-    static func == (lhs: SLFreeStyleDevice, rhs: SLFreeStyleDevice) -> Bool {
-        return lhs.deviceMac.elementsEqual(rhs.deviceMac)
-    }
-    
     var type: SLDeviceType {
         return .freestyle(key: key)
     }
